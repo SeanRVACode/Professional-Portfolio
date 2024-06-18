@@ -20,5 +20,5 @@ morse_code_dict = { 'A':'.-', 'B':'-...',
 user_input = input('Enter your phrase that you want converted.\n').upper()
 
 
-morse_string = [morse_code_dict[t] if t != ' ' else ' ' for t in user_input]
+morse_string = [morse_code_dict[t] if t != ' ' else '/' for t in user_input]
 print(' '.join(morse_string))
