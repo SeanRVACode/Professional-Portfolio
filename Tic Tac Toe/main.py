@@ -28,27 +28,7 @@ def play_game():
     def draw_board(board):
         for _ in board:
             print(_,sep="\n")
-    
-    # def check_winner(board,players=('X','O')):
-    #     for player in players:
-            
-    #         # Check rows
-    #         for row in board:
-    #             if all(cell == player for cell in row):
-    #                 return player
-            
-    #         # Check columns
-    #         for col in zip(*board):
-    #             if all(cell == player for cell in col):
-    #                 return player
-    #         # Check diags
-    #         if all(cell == player for cell in board[::4]):
-    #             return player
-    #         if all(cell == player for cell in board[2:-1:2]):
-    #             return player
-    #         # Check draw
-    #         if all(cell for row in board for cell in row):
-    #             return "draw"
+
     def check_winner(board):
         # Check rows
         for row in board:
