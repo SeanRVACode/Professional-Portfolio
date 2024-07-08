@@ -23,11 +23,12 @@ def play_game():
         return player1,player2
 
 
-
+    # Draws current board state
     def draw_board(board):
         for _ in board:
             print(_,sep="\n")
 
+    # Checks winners
     def check_winner(board):
         # Check rows
         for row in board:
@@ -48,8 +49,10 @@ def play_game():
         if board[0][2] == board[1][1] == board[2][0] and board[0][2] != " ":
             winner = board[0][2]
             return (True,winner)
+        # Returns a bool and None if a winner wasn't found so program doesn't crash
         return (False,None)
     
+    # Not totally necessary, but lets players choose within the game. Maybe in later versions include player names
     player1,player2 = player_selection()
     
     board = board()
