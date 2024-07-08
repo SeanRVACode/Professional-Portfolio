@@ -49,6 +49,27 @@ def play_game():
                 
     
     player1,player2 = player_selection()
+    
+    board = board()
+    
+    draw_board(board)
+    
+    winner = False
+    current_turn = 1
+    
+    # Keeps the game going while there isnt a winner
+    while not winner:
+        # Shifts who gets to place a mark based on whose turn it is.
+        if current_turn%2 == 0:
+            current_player = "O"
+        else:
+            current_player = "X"
+        
+        row_move = int(input(f"Player {current_player} which row would you like to put your tic in?\n"))
+        col_move = int(input(f"Player {current_player} which col would you like to put your tic in?\n"))
+        board[row_move-1][col_move-1] = current_player
+        current_turn+=1
+        draw_board(board)
 
     
     
