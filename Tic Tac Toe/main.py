@@ -49,6 +49,15 @@ def play_game():
         if board[0][2] == board[1][1] == board[2][0] and board[0][2] != " ":
             winner = board[0][2]
             return (True,winner)
+        # Handles situation where board is full.
+        check_full = zip(*board)
+        counter=0
+        for _ in check_full:
+            for spot in _:
+                if spot == "X" or spot == "O":
+                    counter+=1
+        if counter == 9:
+            return (True,"Tie")
         # Returns a bool and None if a winner wasn't found so program doesn't crash
         return (False,None)
     
@@ -83,8 +92,12 @@ def play_game():
         current_turn+=1
         draw_board(board)
         winner,player = check_winner(board)
+        print(winner,player)
     
-    print(f'{player} wins!')
+    if player == "Tie":
+        print('Looks like a tie!')
+    else:
+        print(f'{player} wins!')
 
 play_game()
 
