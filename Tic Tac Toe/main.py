@@ -29,24 +29,47 @@ def play_game():
         for _ in board:
             print(_,sep="\n")
     
-    def check_winner(board,players=('X','O')):
-        for player in players:
+    # def check_winner(board,players=('X','O')):
+    #     for player in players:
             
-            # Check rows
-            for row in board:
-                if all(cell == player for cell in row):
-                    return player
+    #         # Check rows
+    #         for row in board:
+    #             if all(cell == player for cell in row):
+    #                 return player
             
-            # Check columns
-            for col in zip(*board):
-                if all(cell == player for cell in col):
-                    return player
-            # Check diags
-            if all(cell == player for cell in board[::4]):
-                return player
-            if all(cell == player for cell in board[2:-1:2]):
-                return player
-                
+    #         # Check columns
+    #         for col in zip(*board):
+    #             if all(cell == player for cell in col):
+    #                 return player
+    #         # Check diags
+    #         if all(cell == player for cell in board[::4]):
+    #             return player
+    #         if all(cell == player for cell in board[2:-1:2]):
+    #             return player
+    #         # Check draw
+    #         if all(cell for row in board for cell in row):
+    #             return "draw"
+    def check_winner(board):
+        # Check rows
+        for row in board:
+            if row[0] == row[1] == row[2] and row[0] != " ":
+                winner = row[0]
+                return (True,winner)
+        
+        # Check columns
+        for col in range(3):
+            if board[0][col] == board[1][col] == board[2][col] and board[0][col] != " ":
+                winner = board[0][col]
+                return (True,winner)
+        
+        # Check diagnols
+        if board[0][0] == board[1][1] == board[2][2] and board[0][0] != " ":
+            winner = board[0][0]
+            return (True,winner)
+        if board[0][2] == board[1][1] == board[2][0] and board[0][2] != " ":
+            winner = board[0][2]
+            return (True,winner)
+        return (False,None)
     
     player1,player2 = player_selection()
     
@@ -64,24 +87,22 @@ def play_game():
             current_player = "O"
         else:
             current_player = "X"
-        
-        row_move = int(input(f"Player {current_player} which row would you like to put your tic in?\n"))
-        col_move = int(input(f"Player {current_player} which col would you like to put your tic in?\n"))
-        board[row_move-1][col_move-1] = current_player
+        valid_move = False
+        while not valid_move:
+            row_move = int(input(f"Player {current_player} which row would you like to put your tic in?\n"))
+            col_move = int(input(f"Player {current_player} which col would you like to put your tic in?\n"))
+            if board[row_move-1][col_move-1] == " ":
+                board[row_move-1][col_move-1] = current_player
+                valid_move = True
+            else:
+                current_tic = board[row_move-1][col_move-1]
+                print(f"\nThere is already a {current_tic} there please choose another area.\n")
+                draw_board(board)
         current_turn+=1
         draw_board(board)
+        winner,player = check_winner(board)
+    
+    print(f'{player} wins!')
 
-    
-    
-    
-        
-    # board = board()        
-    # a = board
-    # choice_row = input("Which row do you want to put your piece in? (1-3)\n")
-    # choice_column = input("Which colum ndo you want to put your piece in? (1-3)\n")
-    # board[int(choice_row)-1][int(choice_column)-1] = "X" 
-    # draw_board(board)
-    # draw_board(a)
-    
 play_game()
 
