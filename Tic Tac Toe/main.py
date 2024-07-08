@@ -2,7 +2,6 @@
 def play_game():
     '''Starts the game,'''
     def board():
-        size = 3
         board = [[" " for _ in range(3)] for _ in range(3)]
         return board
 
