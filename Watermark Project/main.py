@@ -29,8 +29,8 @@ root.geometry('800x600')
 root.protocol('WM_DELETE_WINDOW',on_window_close)
 
 # Global Watermark Image
-watermark_image = None
-watermark_color = '#646464'
+selected_image = None
+watermark_color = (100,100,100,128)
 
 def choose_image_to_watermark():
     '''Lets user select image they wish to watermark and returns the watermarked image.'''
@@ -41,9 +41,7 @@ def choose_image_to_watermark():
         watermark_image(image_path)
 
 def watermark_image(image_path,text=""):
-    global watermark_image,watermark_color
-    size = (75,75)
-    transparancy = 65
+    global selected_image,watermark_color
 
     # Open the chosen image
     image = Image.open(image_path)
@@ -99,7 +97,7 @@ def watermark_image(image_path,text=""):
     app_width,app_height = 500,500
     display_image.thumbnail((app_width,app_height))
     
-    watermark_image = combined.copy()
+    selected_image = combined.copy()
     
     # Convert to TK Image
     tk_img = CTkImage(light_image=display_image,size=display_image.size)
@@ -114,16 +112,25 @@ def choose_color():
     global watermark_color
     color = askcolor(title='Choose Watermark Color')
     if color[1] is not None:
-        watermark_color = color[1]
+        # Combine selected color with the current opacity
+        r,g,b= color[0]
+        watermark_color = (int(r),int(g),int(b),watermark_color[3])
         print(f'Selected color is: {watermark_color}')
+
+def update_opacity(value):
+    '''Update the opacity of the watermark text'''
+    global watermark_color
+    # update the opacity value in the RGBA color
+    watermark_color = (watermark_color[0],watermark_color[1],watermark_color[2],int(round(value,0)))
+
 
 def save_image():
     '''Save the watermarked image.'''
-    global watermark_image
-    if watermark_image is not None:
+    global selected_image
+    if selected_image is not None:
         save_path = filedialog.asksaveasfilename(defaultextension=".png",filetypes=[("PNG files","*.png"),("All Files","*.*")])
         if save_path:
-            watermark_image.save(save_path)
+            selected_image.save(save_path)
             print(f'Image saved to {save_path}')
 
 # Ini Frame
@@ -133,7 +140,7 @@ frame.pack(pady=2,padx=2,fill='both',expand=True)
 # Select Image button
 button_select_image = customtkinter.CTkButton(master=frame,text='Select Image',command=choose_image_to_watermark)
 button_select_image.pack(pady=8,padx=10)
-button_select_image.place(x=2,y=450)
+button_select_image.place(x=2,y=250)
 
 # Watermark Text Entry
 watermark_text = customtkinter.CTkEntry(master=frame,placeholder_text='Watermark Text')
@@ -154,6 +161,19 @@ slider_rotation_label.place(x=2,y=70)
 slider_val = CTkLabel(master=frame,textvariable=var)
 slider_val.place(x=60,y=70)
 
+# Opacity Slider
+o_var = tk.IntVar()
+opacity_slider = CTkSlider(master=frame,from_=0,to=255,variable=o_var,command=update_opacity)
+opacity_slider_label = CTkLabel(master=frame,text="Opacity: ")
+opacity_slider_label.place(x=2,y=20)
+# Opacity Val
+opacity_slider_val = CTkLabel(master=frame,textvariable=o_var)
+opacity_slider_val.place(x=50,y=20)
+# Opacity Slider
+opacity_slider.set(128) # Sets to default opacity
+opacity_slider.pack(pady=8,padx=10)
+opacity_slider.place(x=2,y=50)
+
 # Color Picker Button
 button_choose_color = customtkinter.CTkButton(master=frame,text='Choose Color',command=choose_color)
 button_choose_color.pack(pady=8,padx=10)
@@ -161,8 +181,8 @@ button_choose_color.place(x=2,y=220)
 
 # Save Image Button
 button_save_image = CTkButton(master=frame,text='Save Image',command=save_image)
-button_save_image.pack(pady=8,padx=10)
-button_save_image.place(x=2,y=250)
+button_save_image.pack(pady=2,padx=2)
+button_save_image.place(x=2,y=500)
 
 # Frame for image
 image_frame = customtkinter.CTkFrame(master=frame,width=300,height=300)
