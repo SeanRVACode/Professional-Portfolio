@@ -1,10 +1,13 @@
+from tkinter.colorchooser import askcolor
 import customtkinter
-from customtkinter import filedialog,CTkLabel,CTkImage,CTkSlider
+from customtkinter import filedialog,CTkLabel,CTkImage,CTkSlider,CTkButton
 from PIL import Image,ImageFont,ImageDraw,ImageTk
 import os,sys
 from ctypes import windll
 import matplotlib.pyplot as plt
 import tkinter as tk
+
+from numpy import choose
 
 
 # DPI Scaling
@@ -25,6 +28,10 @@ root.title('Watermark Image')
 root.geometry('800x600')
 root.protocol('WM_DELETE_WINDOW',on_window_close)
 
+# Global Watermark Image
+watermark_image = None
+watermark_color = '#646464'
+
 def choose_image_to_watermark():
     '''Lets user select image they wish to watermark and returns the watermarked image.'''
     image_path = filedialog.askopenfilename(title='Select Image to Watermark')
@@ -34,6 +41,7 @@ def choose_image_to_watermark():
         watermark_image(image_path)
 
 def watermark_image(image_path,text=""):
+    global watermark_image,watermark_color
     size = (75,75)
     transparancy = 65
 
@@ -68,7 +76,7 @@ def watermark_image(image_path,text=""):
     print(f'Text x {text_x} Text y {text_y}')
     
     # Add the watermark to the image
-    draw_img.text((text_x,text_y),text,fill=(100,100,100,128),font=font)
+    draw_img.text((text_x,text_y),text,fill=watermark_color,font=font)
     
     # Create a new image that can accomodate the rotated text
     max_dim = max(image_width,image_height) * 2
@@ -96,9 +104,17 @@ def watermark_image(image_path,text=""):
     tk_img = CTkImage(light_image=display_image,size=display_image.size)
     
     label.configure(image=tk_img)
+    
+    # Keeping a reference of the image
     label.image = tk_img
     
-    
+def choose_color():
+    '''Open a color chooser dialog and update the selected color.'''
+    global watermark_color
+    color = askcolor(title='Choose Watermark Color')
+    if color[1] is not None:
+        watermark_color = color[1]
+        print(f'Selected color is: {watermark_color}')
 
 
 
@@ -111,7 +127,7 @@ button_select_image = customtkinter.CTkButton(master=frame,text='Select Image',c
 button_select_image.pack(pady=8,padx=10)
 button_select_image.place(x=2,y=450)
 
-# Text Entry
+# Watermark Text Entry
 watermark_text = customtkinter.CTkEntry(master=frame,placeholder_text='Watermark Text')
 watermark_text.pack(pady=2,padx=10)
 watermark_text.place(x=2,y=170)
@@ -125,9 +141,15 @@ font_size.place(x=2,y=130)
 var = tk.IntVar()
 slider = CTkSlider(master=frame,from_=0,to=180,variable=var)
 slider.place(x=2,y=100)
+slider_rotation_label = CTkLabel(master=frame,text="Rotation: ")
+slider_rotation_label.place(x=2,y=70)
 slider_val = CTkLabel(master=frame,textvariable=var)
-slider_val.place(x=2,y=70)
+slider_val.place(x=60,y=70)
 
+# Color Picker Button
+button_choose_color = customtkinter.CTkButton(master=frame,text='Choose Color',command=choose_color)
+button_choose_color.pack(pady=8,padx=10)
+button_choose_color.place(x=2,y=220)
 
 # Frame for image
 image_frame = customtkinter.CTkFrame(master=frame,width=300,height=300)
