@@ -1,9 +1,10 @@
 import customtkinter
-from customtkinter import filedialog,CTkLabel
-from PIL import Image,ImageFont,ImageDraw
+from customtkinter import filedialog,CTkLabel,CTkImage,CTkSlider
+from PIL import Image,ImageFont,ImageDraw,ImageTk
 import os,sys
 from ctypes import windll
 import matplotlib.pyplot as plt
+import tkinter as tk
 
 
 # DPI Scaling
@@ -21,7 +22,7 @@ def on_window_close():
 # Set up root
 root = customtkinter.CTk()
 root.title('Watermark Image')
-root.geometry('500x350')
+root.geometry('800x600')
 root.protocol('WM_DELETE_WINDOW',on_window_close)
 
 def choose_image_to_watermark():
@@ -32,7 +33,7 @@ def choose_image_to_watermark():
     else:
         watermark_image(image_path)
 
-def watermark_image(image_path):
+def watermark_image(image_path,text=""):
     size = (75,75)
     transparancy = 65
 
@@ -51,7 +52,7 @@ def watermark_image(image_path):
     draw_img = ImageDraw.Draw(text_image)
     
     # Define Text
-    text = "Sean P"
+    text = watermark_text.get()
     font = ImageFont.truetype('arial.ttf',80)
     
     # Get the size of the text
@@ -75,7 +76,8 @@ def watermark_image(image_path):
     large_canvas.paste(text_image,((max_dim-image_width)//2,(max_dim - image_height)//2))
     
     # Rotate Text Image
-    rotated_text = large_canvas.rotate(60,expand=1)
+    rotation = slider.get()
+    rotated_text = large_canvas.rotate(rotation,expand=1)
     
     
     # Final Adjustments
@@ -85,11 +87,17 @@ def watermark_image(image_path):
     
     # combine the two images
     combined = Image.alpha_composite(image.convert('RGBA'),final_text_image)
+    display_image = combined.copy()
+    app_width,app_height = 500,500
+    display_image.thumbnail((app_width,app_height))
     
-    return combined
     
+    # Convert to TK Image
+    tk_img = CTkImage(light_image=display_image,size=display_image.size)
     
-    # wm_image.show()
+    label.configure(image=tk_img)
+    label.image = tk_img
+    
     
 
 
@@ -101,8 +109,32 @@ frame.pack(pady=2,padx=2,fill='both',expand=True)
 # Select Image button
 button_select_image = customtkinter.CTkButton(master=frame,text='Select Image',command=choose_image_to_watermark)
 button_select_image.pack(pady=8,padx=10)
-button_select_image.place(x=2,y=110)
+button_select_image.place(x=2,y=450)
 
-    
+# Text Entry
+watermark_text = customtkinter.CTkEntry(master=frame,placeholder_text='Watermark Text')
+watermark_text.pack(pady=2,padx=10)
+watermark_text.place(x=2,y=170)
+
+# Font Size 
+font_size = customtkinter.CTkEntry(master=frame,placeholder_text='Font Size')
+font_size.pack(pady=2,padx=10)
+font_size.place(x=2,y=130)
+
+# Rotation Slider
+var = tk.IntVar()
+slider = CTkSlider(master=frame,from_=0,to=180,variable=var)
+slider.place(x=2,y=100)
+slider_val = CTkLabel(master=frame,textvariable=var)
+slider_val.place(x=2,y=70)
+
+
+# Frame for image
+image_frame = customtkinter.CTkFrame(master=frame,width=300,height=300)
+image_frame.pack(side='right',padx=10,pady=10)
+# Display Image
+label = customtkinter.CTkLabel(master=image_frame,text="")
+label.pack()
+
 # Start eventloop
 root.mainloop()
