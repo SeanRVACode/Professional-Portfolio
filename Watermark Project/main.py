@@ -99,6 +99,7 @@ def watermark_image(image_path,text=""):
     app_width,app_height = 500,500
     display_image.thumbnail((app_width,app_height))
     
+    watermark_image = combined.copy()
     
     # Convert to TK Image
     tk_img = CTkImage(light_image=display_image,size=display_image.size)
@@ -116,7 +117,14 @@ def choose_color():
         watermark_color = color[1]
         print(f'Selected color is: {watermark_color}')
 
-
+def save_image():
+    '''Save the watermarked image.'''
+    global watermark_image
+    if watermark_image is not None:
+        save_path = filedialog.asksaveasfilename(defaultextension=".png",filetypes=[("PNG files","*.png"),("All Files","*.*")])
+        if save_path:
+            watermark_image.save(save_path)
+            print(f'Image saved to {save_path}')
 
 # Ini Frame
 frame = customtkinter.CTkFrame(master=root)
@@ -151,9 +159,15 @@ button_choose_color = customtkinter.CTkButton(master=frame,text='Choose Color',c
 button_choose_color.pack(pady=8,padx=10)
 button_choose_color.place(x=2,y=220)
 
+# Save Image Button
+button_save_image = CTkButton(master=frame,text='Save Image',command=save_image)
+button_save_image.pack(pady=8,padx=10)
+button_save_image.place(x=2,y=250)
+
 # Frame for image
 image_frame = customtkinter.CTkFrame(master=frame,width=300,height=300)
 image_frame.pack(side='right',padx=10,pady=10)
+
 # Display Image
 label = customtkinter.CTkLabel(master=image_frame,text="")
 label.pack()
