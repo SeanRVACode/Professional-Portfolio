@@ -1,4 +1,4 @@
-Image Watermarking Application
+**Image Watermarking Application**
 
 Quick watermark application for my professional porfolio.
 
