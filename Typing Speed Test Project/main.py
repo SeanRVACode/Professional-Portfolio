@@ -1,3 +1,4 @@
+from tkinter import END
 import customtkinter as ctk
 from customtkinter import filedialog,CTkLabel,CTkEntry
 import os,sys
@@ -22,27 +23,14 @@ class TypingTest:
         self.root.title('Typing Speed Test')
         self.root.geometry('800x600')
         self.root.protocol('WM_DELETE_WINDOW',self.on_window_close)
+
+        self.sentences = ["The quick brown fox jumps over the lazy dog.","To be or not to be, that is the question.",
+        "I have a dream that one day this nation will rise up.","Four score and seven years ago our fathers brought forth on this continent.","It is a truth universally acknowledged that a single man in possession of a good fortune must be in want of a wife.","It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness."]
+        self.wpm = 0
         self.create_entry()
         self.create_buttons()
         self.create_labels()
-        self.sentences = ["The quick brown fox jumps over the lazy dog.","To be or not to be, that is the question.",
-        "I have a dream that one day this nation will rise up.",
-        "Four score and seven years ago our fathers brought forth on this continent.",
-        "It is a truth universally acknowledged that a single man in possession of a good fortune must be in want of a wife.",
-        "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness."]
         
-    def create_grid(self):
-        self.frames=[]
-        for row in range(4):
-            row_frames = []
-            for col in range(3):
-                
-                # frame = ctk.CTkFrame(self.root)
-                # frame.grid(row=row,column=col,padx=5,pady=5,sticky='nsew')
-                # label = ctk.CTkLabel(frame,text=f'Row {row}, Col {col}',anchor='center')
-                # label.pack(side='top',fill='both',expand=True)
-                row_frames.append(frame)
-            self.frames.append(row_frames)
             
     def on_window_close(self):
         '''Destroys Root'''
@@ -67,35 +55,61 @@ class TypingTest:
     
     def create_labels(self):
         self.sentence_label()
+        self.wpm_label()
     
     def create_entry(self):
-        self.textbox = CTkEntry(master=self.root,placeholder_text='Enter Text here.',width=300)
+        self.var = ctk.StringVar()
+        self.var.trace_add('write',self.check_input)
+        self.textbox = CTkEntry(master=self.root,placeholder_text='Enter Text here.',width=300,textvariable=self.var)
         self.textbox.grid(row=2,column=1,padx=8,pady=8)
         self.textbox.configure(state='disabled')
-    
-    def choose_random_sentence(self):
-        self.sentence = random.choice(self.sentences)
-    
+        
+    def wpm_label(self):
+        self.label_wpm = CTkLabel(master=self.root,text=f'WPM: {self.wpm}',anchor='center')
+        self.label_wpm.grid(row=0,column=3,padx=8,pady=8)
+        
+        
+    def clear_entry(self):
+        self.textbox.configure(state='normal')
+        self.textbox.delete(0,'end')
+        self.textbox.configure(state='disabled')
         
     def start_time(self):
+        self.clear_entry()
         self.start = time.time()
         self.chosen_sentence = random.choice(self.sentences)
         print(self.chosen_sentence)
         self.sentence_l.configure(text=self.chosen_sentence)
         self.textbox.configure(state='normal')
         self.textbox.focus_set()
-        match = False
+        # match = False
         
-        while not match:
-            var = ctk.StringVar(self.root)
-            print(var.trace_add("w",self.check_entry_match()))
+        # while not match:
+        #     print(self.var)
+        #     if self.var == self.chosen_sentence:
+        #         match = True
             
         
-    def check_entry_match(self):
-        user_input = self.textbox.get()
+    def check_input(self,*args):
+        current_input = self.var.get()
+        elapsed_time = time.time() - self.start
+        if elapsed_time > 0:
+            self.wpm = round(len(current_input)/(5*(elapsed_time/60)),2)
+            self.label_wpm.configure(text=f'WPM: {self.wpm}')
+        if current_input == self.chosen_sentence:
+            self.end_time()
+            print('Match Found!')
+            self.textbox.configure(state='disabled')
+            wpm = self.calculate_wpm()
+            self.label_wpm.configure(text=f'WPM: {wpm}')
+    
+    def calculate_wpm(self):
+        elapsed_time = self.end - self.start
+        wpm = round(len(self.chosen_sentence)/(5*(elapsed_time/60)),2)
+        return wpm
         
-        if self.chosen_sentence in user_input:
-            return True
+        
+            
         
         
             
