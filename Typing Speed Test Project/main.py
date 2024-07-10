@@ -11,6 +11,11 @@ import random
 class TypingTest:
     def __init__(self,root):
         self.root = root
+        for i in range(4):
+            self.root.grid_rowconfigure(i,weight=1,minsize=150)
+        for j in range(3):
+            self.root.grid_columnconfigure(j,weight=1,minsize=266)
+        # self.create_grid()
         ctk.set_appearance_mode('dark')
         ctk.set_default_color_theme('dark-blue')
         windll.shcore.SetProcessDpiAwareness(2)
@@ -18,46 +23,86 @@ class TypingTest:
         self.root.geometry('800x600')
         self.root.protocol('WM_DELETE_WINDOW',self.on_window_close)
         self.create_entry()
-        self.game()
-        
-    def on_window_close(self):
-        '''Destroys Root'''
-        print('Window Closed.')
-        self.root.destroy()
-    
-    def start_button(self):
-        pass
-    
-    def create_label(self):
-        pass
-    
-    def create_entry(self):
-        self.textbox = CTkEntry(master=root,placeholder_text='Enter Text here.',width=300)
-        self.textbox.pack(pady=2,padx=10)
-        self.textbox.place(x=200,y=430)
-    
-    def game(self):
+        self.create_buttons()
+        self.create_labels()
         self.sentences = ["The quick brown fox jumps over the lazy dog.","To be or not to be, that is the question.",
         "I have a dream that one day this nation will rise up.",
         "Four score and seven years ago our fathers brought forth on this continent.",
         "It is a truth universally acknowledged that a single man in possession of a good fortune must be in want of a wife.",
         "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness."]
-        self.start = None
-        self.end = None
+        
+    def create_grid(self):
+        self.frames=[]
+        for row in range(4):
+            row_frames = []
+            for col in range(3):
+                
+                # frame = ctk.CTkFrame(self.root)
+                # frame.grid(row=row,column=col,padx=5,pady=5,sticky='nsew')
+                # label = ctk.CTkLabel(frame,text=f'Row {row}, Col {col}',anchor='center')
+                # label.pack(side='top',fill='both',expand=True)
+                row_frames.append(frame)
+            self.frames.append(row_frames)
+            
+    def on_window_close(self):
+        '''Destroys Root'''
+        print('Window Closed.')
+        self.root.destroy()
+        
+    def create_buttons(self):
+        self.start_button()
+        
+
+    def start_button(self):
+        '''Function that sets up the start button.'''
+
+        self.start_button = ctk.CTkButton(master=self.root,text='Start Game',command=self.start_time)
+        self.start_button.grid(row=3,column=1,padx=5,pady=5,sticky='')
     
-        def choose_random_sentence(self):
-            self.sentence = random.choice(self.sentences)
-            return self.sentence
+    def sentence_label(self):
+
+        self.sentence_l= CTkLabel(master=self.root,font=('arial',20),text='Press Start To Begin',anchor='center',wraplength=750)
+        self.sentence_l.grid(row=1,column=0,padx=5,pady=5,sticky='',columnspan=3)
         
-        x = choose_random_sentence(self)
-        print(x)
+    
+    def create_labels(self):
+        self.sentence_label()
+    
+    def create_entry(self):
+        self.textbox = CTkEntry(master=self.root,placeholder_text='Enter Text here.',width=300)
+        self.textbox.grid(row=2,column=1,padx=8,pady=8)
+        self.textbox.configure(state='disabled')
+    
+    def choose_random_sentence(self):
+        self.sentence = random.choice(self.sentences)
+    
         
-        def start_time(self):
-            self.start = time.time()
-            return self.start
+    def start_time(self):
+        self.start = time.time()
+        self.chosen_sentence = random.choice(self.sentences)
+        print(self.chosen_sentence)
+        self.sentence_l.configure(text=self.chosen_sentence)
+        self.textbox.configure(state='normal')
+        self.textbox.focus_set()
+        match = False
         
-        def end_time(self):
-            self.end = time.time()
+        while not match:
+            var = ctk.StringVar(self.root)
+            print(var.trace_add("w",self.check_entry_match()))
+            
+        
+    def check_entry_match(self):
+        user_input = self.textbox.get()
+        
+        if self.chosen_sentence in user_input:
+            return True
+        
+        
+            
+            
+    
+    def end_time(self):
+        self.end = time.time()
             
         
 
