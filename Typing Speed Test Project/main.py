@@ -65,8 +65,8 @@ class TypingTest:
         self.textbox.configure(state='disabled')
         
     def wpm_label(self):
-        self.label_wpm = CTkLabel(master=self.root,text=f'WPM: {self.wpm}',anchor='center')
-        self.label_wpm.grid(row=0,column=3,padx=8,pady=8)
+        self.label_wpm = CTkLabel(master=self.root,text=f'WPM: {self.wpm}',anchor='center',font=('arial',20))
+        self.label_wpm.grid(row=0,column=2,padx=8,pady=8)
         
         
     def clear_entry(self):
