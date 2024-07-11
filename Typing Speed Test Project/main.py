@@ -6,6 +6,7 @@ import os,sys
 from ctypes import windll
 import time
 import random
+from tkinter import ttk
 
 
 class TypingTest:
@@ -63,12 +64,13 @@ class TypingTest:
         '''Creates the labels on the application.'''
         self.sentence_label()
         self.wpm_label()
+        # self.create_progress_bar()
     
     def create_entry(self):
         '''Entry for user.'''
         self.var = ctk.StringVar()
         self.var.trace_add('write',self.check_input)
-        self.textbox = CTkEntry(master=self.root,placeholder_text='Enter Text here.',width=300,textvariable=self.var)
+        self.textbox = CTkEntry(master=self.root,width=300,textvariable=self.var)
         self.textbox.grid(row=2,column=1,padx=8,pady=8)
         self.textbox.configure(state='disabled')
         
@@ -86,6 +88,7 @@ class TypingTest:
         self.clear_entry()
         self.start = time.time()
         self.chosen_sentence = random.choice(self.sentences)
+        self.create_progress_bar()
         print(self.chosen_sentence)
         self.sentence_t.config(state=tk.NORMAL)
         self.sentence_t.delete('1.0',tk.END)
@@ -95,6 +98,7 @@ class TypingTest:
         # self.sentence_l.configure(text=self.chosen_sentence)
         self.textbox.configure(state='normal')
         self.textbox.focus_set()
+        # self.progress_bar.start()
 
         
     def check_input(self,*args):
@@ -123,6 +127,9 @@ class TypingTest:
         self.sentence_t.delete('1.0',tk.END)
         
         for i,char in enumerate(current_input):
+
+            self.progress_bar['value'] = i
+
             if i < len(self.chosen_sentence):
                 if char == self.chosen_sentence[i]:
                     self.sentence_t.insert(tk.END,char,'correct')
@@ -137,7 +144,16 @@ class TypingTest:
     def end_time(self):
         '''Gets end time.'''
         self.end = time.time()
-            
+        
+    def create_progress_bar(self):
+        style = ttk.Style()
+        style.theme_use('clam')
+        style.configure('red.Horizontal.TProgressbar',foreground='red',background='green')
+        print(len(self.chosen_sentence))
+        self.progress_bar = ttk.Progressbar(maximum=len(self.chosen_sentence)-1,style='red.Horizontal.TProgressbar',length=200)
+        self.progress_bar.grid(row=0,column=0,padx=5,pady=5)
+        # self.progress_bar.set(0)
+
         
 
          
