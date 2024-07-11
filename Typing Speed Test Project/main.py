@@ -53,7 +53,7 @@ class TypingTest:
 
         # self.sentence_l= CTkLabel(master=self.root,font=('arial',20),text='Press Start To Begin',anchor='center',wraplength=750)
         # self.sentence_l.grid(row=1,column=0,padx=5,pady=5,sticky='',columnspan=3)
-        self.sentence_t = tk.Text(self.root,font=('arial',20),wrap='word',height=4,width=50,bg='#2B2B2B',fg='white')
+        self.sentence_t = tk.Text(self.root,font=('arial',20),wrap='word',height=4,width=50,bg='#2B2B2B',fg='white',border=0)
         self.sentence_t.grid(row=1,column=0,columnspan=3,padx=5,pady=5,sticky='nsew')
         self.sentence_t.tag_configure('correct',foreground='green')
         self.sentence_t.tag_configure('incorrect',foreground='red')
