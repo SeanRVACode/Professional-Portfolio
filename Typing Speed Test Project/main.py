@@ -1,4 +1,5 @@
 from tkinter import END
+import tkinter as tk
 import customtkinter as ctk
 from customtkinter import filedialog,CTkLabel,CTkEntry
 import os,sys
@@ -50,8 +51,14 @@ class TypingTest:
     def sentence_label(self):
         '''Sentence label to display what the user is supposed to type.'''
 
-        self.sentence_l= CTkLabel(master=self.root,font=('arial',20),text='Press Start To Begin',anchor='center',wraplength=750)
-        self.sentence_l.grid(row=1,column=0,padx=5,pady=5,sticky='',columnspan=3)
+        # self.sentence_l= CTkLabel(master=self.root,font=('arial',20),text='Press Start To Begin',anchor='center',wraplength=750)
+        # self.sentence_l.grid(row=1,column=0,padx=5,pady=5,sticky='',columnspan=3)
+        self.sentence_t = tk.Text(self.root,font=('arial',20),wrap='word',height=4,width=50,bg='#2B2B2B',fg='white')
+        self.sentence_t.grid(row=1,column=0,columnspan=3,padx=5,pady=5,sticky='nsew')
+        self.sentence_t.tag_configure('correct',foreground='green')
+        self.sentence_t.tag_configure('incorrect',foreground='red')
+        self.sentence_t.tag_configure('normal',foreground='white')
+        self.sentence_t.config(state=tk.DISABLED)
         
     
     def create_labels(self):
@@ -82,7 +89,12 @@ class TypingTest:
         self.start = time.time()
         self.chosen_sentence = random.choice(self.sentences)
         print(self.chosen_sentence)
-        self.sentence_l.configure(text=self.chosen_sentence)
+        self.sentence_t.config(state=tk.NORMAL)
+        self.sentence_t.delete('1.0',tk.END)
+        self.sentence_t.insert('1.0',self.chosen_sentence,'normal')
+        self.sentence_t.config(state=tk.DISABLED)
+        
+        # self.sentence_l.configure(text=self.chosen_sentence)
         self.textbox.configure(state='normal')
         self.textbox.focus_set()
 
@@ -90,6 +102,7 @@ class TypingTest:
     def check_input(self,*args):
         '''Constantly checks to see if user input matches the sentence.'''
         current_input = self.var.get()
+        self.update_word_color(current_input)
         elapsed_time = time.time() - self.start
         if elapsed_time > 0:
             self.wpm = round(len(current_input)/(5*(elapsed_time/60)),2)
@@ -106,6 +119,22 @@ class TypingTest:
         elapsed_time = self.end - self.start
         wpm = round(len(self.chosen_sentence)/(5*(elapsed_time/60)),2)
         return wpm
+    
+    def update_word_color(self,current_input):
+        self.sentence_t.config(state=tk.NORMAL)
+        self.sentence_t.delete('1.0',tk.END)
+        
+        for i,char in enumerate(current_input):
+            if i < len(self.chosen_sentence):
+                if char == self.chosen_sentence[i]:
+                    self.sentence_t.insert(tk.END,char,'correct')
+                else:
+                    self.sentence_t.insert(tk.END,self.chosen_sentence[i],'incorrect')
+                    
+        remaining_text = self.chosen_sentence[len(current_input):]
+        self.sentence_t.insert(tk.END,remaining_text,'normal')
+        self.sentence_t.config(state=tk.DISABLED)
+        
         
     def end_time(self):
         '''Gets end time.'''
