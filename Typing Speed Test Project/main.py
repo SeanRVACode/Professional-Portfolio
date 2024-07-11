@@ -7,8 +7,6 @@ from ctypes import windll
 import time
 import random
 
-# # Global Variables
-# x = 0
 
 class TypingTest:
     def __init__(self,root):
