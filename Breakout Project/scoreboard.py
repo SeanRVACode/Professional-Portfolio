@@ -8,4 +8,5 @@ class Scoreboard(Turtle):
         self.color('white')
         self.penup()
         self.hideturtle()
-    
+        self.goto(-230,-330)
+        self.write('Scoreboard!',align='Center',font=('Courier',20,'bold'))
