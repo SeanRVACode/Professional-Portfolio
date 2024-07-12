@@ -44,13 +44,22 @@ class Breakout:
             # Detect Collision with paddle
             if self.ball.distance(self.paddle) < 50 and self.ball.ycor() < -220:
                 self.ball.bounce_y()
-                
+            
+            # Detect collision with brick
+            for brick in self.bricks:
+                if self.ball.distance(brick) < 30:
+                    self.ball.bounce_y()
+                    brick.hideturtle()
+                    self.bricks.remove(brick)
+                    
+                    
                 
             # Detecting hitting top wall
             if self.ball.ycor() > SCREEN_HEIGHT /2  or self.ball.ycor() < -SCREEN_HEIGHT/2:
                 self.game_on = False
                 self.game_over()
                 # self.ball.reset_position()
+                
                 
                 
         self.screen.exitonclick()
@@ -81,7 +90,7 @@ class Breakout:
     def set_up_bricks(self):
         brick_x_axis = -305
         brick_y_axis = 380
-        bricks = []
+        self.bricks = []
         brick_colors = [
             "red",
             "orange",
@@ -101,8 +110,8 @@ class Breakout:
         ]
         for row in range(7):
             for col in range (13):
-                brick = Brick((brick_x_axis,brick_y_axis),color=brick_colors[i])
-                bricks.append(brick)
+                brick = Brick((brick_x_axis,brick_y_axis),color=brick_colors[row])
+                self.bricks.append(brick)
                 brick_x_axis += 50
             brick_x_axis = -305
             brick_y_axis -= 20
