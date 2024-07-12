@@ -42,7 +42,7 @@ class Breakout:
                 self.ball.bounce_x()
                 
             # Detect Collision with paddle
-            if self.ball.distance(self.paddle) < 50 and self.ball.ycor() < -230:
+            if self.ball.distance(self.paddle) < 50 and self.ball.ycor() < -220:
                 self.ball.bounce_y()
                 
                 
@@ -99,8 +99,8 @@ class Breakout:
             "lightblue",
             "lightgreen"
         ]
-        for i in range(7):
-            for j in range (13):
+        for row in range(7):
+            for col in range (13):
                 brick = Brick((brick_x_axis,brick_y_axis),color=brick_colors[i])
                 bricks.append(brick)
                 brick_x_axis += 50
