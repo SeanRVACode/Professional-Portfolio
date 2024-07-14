@@ -1,4 +1,3 @@
-from tkinter import END
 import customtkinter as ctk
 from customtkinter import filedialog,CTkLabel,CTkEntry
 import os,sys
