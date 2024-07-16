@@ -10,7 +10,7 @@ from scoreboard import Scoreboard
 # Set up screen borders
 SCREEN_WIDTH = 660
 SCREEN_HEIGHT = 800
-TOP_BORDER = 300
+SPEED_INCREMENT = .01
 
 STARTING_POSITION = (0,-250)
 
@@ -62,7 +62,8 @@ class Breakout:
                 if self.ball.distance(brick) < 30:
                     self.ball.bounce_y()
                     # self.ball.move_speed *= .1
-                    self.increase_ball_speed(0.1)
+                    self.increase_ball_speed(0.03)
+                    self.scoreboard.increase_score()
                     brick.hideturtle()
                     self.bricks.remove(brick)
                     
