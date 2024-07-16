@@ -9,7 +9,6 @@ class Scoreboard(Turtle):
         self.penup()
         self.hideturtle()
         self.goto(-230,-330)
-        # self.write(f'Score: {self.score}',align='Center',font=('Courier',20,'bold'))
         self.keep_score()
     
     def increase_score(self):
@@ -19,3 +18,8 @@ class Scoreboard(Turtle):
     def keep_score(self):
         self.clear()
         self.write(f"Score: {self.score}",align='Center',font=('Courier',20,'bold'))
+        
+    def reset_score(self):
+        self.clear()
+        self.score = 0
+        self.keep_score()

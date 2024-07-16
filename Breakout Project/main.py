@@ -12,7 +12,7 @@ SCREEN_WIDTH = 660
 SCREEN_HEIGHT = 800
 SPEED_INCREMENT = .01
 
-STARTING_POSITION = (0,-250)
+# STARTING_POSITION = (0,-250)
 
 class Breakout:
     def __init__(self):
@@ -23,9 +23,9 @@ class Breakout:
         self.screen.tracer(0)
         self.screen.setup(width=SCREEN_WIDTH,height=SCREEN_HEIGHT)
         self.ball = Ball()
-        self.draw_border()
+        # self.draw_border()
         
-        self.paddle = Paddle(position=STARTING_POSITION)
+        self.paddle = Paddle()
         self.set_up_bricks()
         
         # Paddle Moving
@@ -38,6 +38,8 @@ class Breakout:
         self.screen.onkeypress(self.start_move_right,"Right")
         self.screen.onkeyrelease(self.stop_move,"Left")
         self.screen.onkeyrelease(self.stop_move,"Right")
+        # Reset the game
+        self.screen.onkey(self.restart_game,"r")
         
         # Ini scoreboard
         self.scoreboard = Scoreboard()
@@ -71,7 +73,6 @@ class Breakout:
                 
             # Detecting hitting top wall
             if self.ball.ycor() > SCREEN_HEIGHT /2  or self.ball.ycor() < -SCREEN_HEIGHT/2:
-                self.game_on = False
                 self.game_over()
                 # self.ball.reset_position()
                 
@@ -100,12 +101,15 @@ class Breakout:
         self.moving_right = False
     
     def game_over(self):
-        game_over_turtle = Turtle()
-        game_over_turtle.hideturtle()
-        game_over_turtle.color('white')
-        game_over_turtle.penup()
-        game_over_turtle.goto(0,0)
-        game_over_turtle.write('GAME OVER',align='center',font=('Courier',80,'normal'))
+        self.game_on = False
+        self.game_over_turtle = Turtle()
+        self.game_over_turtle.hideturtle()
+        self.game_over_turtle.color('white')
+        self.game_over_turtle.penup()
+        self.game_over_turtle.goto(0,0)
+        self.game_over_turtle.write('GAME OVER',align='center',font=('Courier',80,'normal'))
+        self.game_over_turtle.goto(0,-200)
+        self.game_over_turtle.write('Press R To Restart',align='center',font=('Courier',30,'normal'))
         
     
     def draw_border(self):
@@ -153,6 +157,13 @@ class Breakout:
             
     def increase_ball_speed(self,increment):
         self.ball.move_speed *= (1 - increment)
+        
+    def restart_game(self):
+        self.game_over_turtle.clear()
+        self.screen.clearscreen()
+        self.__init__()
+        
+        
         
         
         
