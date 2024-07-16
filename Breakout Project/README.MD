@@ -1,4 +1,4 @@
-##Break out Project
+## Break out Project
 
 Simple breakout game for my professional portfolio.
 
