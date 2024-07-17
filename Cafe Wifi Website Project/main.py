@@ -99,7 +99,7 @@ def add_cafe():
         
         if exist:
             flash('Cafe already exist!','danger')
-            return redirect(url_for('cafes_list'))
+            return render_template('addcafe.html',form=form)
         else:
             print('True')
             
