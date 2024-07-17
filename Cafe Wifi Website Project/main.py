@@ -55,7 +55,7 @@ class CafeForm(FlaskForm):
     name = StringField('Cafe Name',validators=[DataRequired()])
     map_url = URLField('Cafe Map URL',validators=[DataRequired(),url()])
     img_url = URLField('Cafe Picture URL',validators=[DataRequired(),url()])
-    location = StringField('Cafe Address',validators=[DataRequired()])
+    location = StringField('Location',validators=[DataRequired()])
     
     has_toilet = BooleanField('Has Toilets?',default=False)
     has_wifi = BooleanField('Has WiFi?',default=False)
@@ -93,24 +93,34 @@ def cafes_list():
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        print('True')
         form_data = {field.name: field.data for field in form}
-        new_cafe = Cafe(
-            name=form_data['name'],
-            map_url=form_data['map_url'],
-            img_url=form_data['img_url'],
-            location=form_data['location'],
-            seats=form_data['seats'],
-            has_toilet=bool(form_data['has_toilet']),
-            has_wifi=bool(form_data['has_wifi']),
-            has_sockets=bool(form_data['has_sockets']),
-            can_take_calls=bool(form_data['can_take_calls']),
-            coffee_price=form_data['coffee_price'],
+        print(form_data['name'])
+        exist = Cafe.query.filter_by(name=form_data['name']).first()
+        
+        if exist:
+            flash('Cafe already exist!','danger')
+            return redirect(url_for('cafes_list'))
+        else:
+            print('True')
             
-        )
-        with app.app_context():
-            db.session.add(new_cafe)
-            db.session.commit()
+            new_cafe = Cafe(
+                name=form_data['name'],
+                map_url=form_data['map_url'],
+                img_url=form_data['img_url'],
+                location=form_data['location'],
+                seats=form_data['seats'],
+                has_toilet=bool(form_data['has_toilet']),
+                has_wifi=bool(form_data['has_wifi']),
+                has_sockets=bool(form_data['has_sockets']),
+                can_take_calls=bool(form_data['can_take_calls']),
+                coffee_price=form_data['coffee_price'],
+                
+            )
+            with app.app_context():
+                db.session.add(new_cafe)
+                db.session.commit()
+            flash('Cafe Added!','success')
+            return redirect(url_for('cafes_list'))
     return render_template('addcafe.html',form=form)
     
 
