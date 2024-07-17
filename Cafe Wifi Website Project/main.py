@@ -2,7 +2,7 @@ from ast import Sub
 from types import MappingProxyType
 from flask import Flask,render_template,url_for,jsonify,request
 from flask_bootstrap import Bootstrap5
-from flask_wtf import FlaskForm,va
+from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,URLField,TimeField,BooleanField
 from wtforms.validators import DataRequired,url
 import csv
@@ -24,9 +24,11 @@ db = SQLAlchemy(model_class=Base)
 # Ini app
 app = Flask(__name__)
 
-db_name = 'cafes.db'
+db_name = 'instance\cafes.db'
 TOP_DIR = os.path.dirname(os.path.abspath(__file__))
+
 db_path = os.path.join(TOP_DIR,db_name)
+print(db_path)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+db_path
 db.init_app(app)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -51,7 +53,7 @@ class Cafe(db.Model):
         return {column.name: getattr(self,column.name) for column in self.__table__.columns}
 
 class CafeForm(FlaskForm):
-    cafe = StringField('Cafe Name',validators=[DataRequired()])
+    name = StringField('Cafe Name',validators=[DataRequired()])
     map_url = URLField('Cafe Map URL',validators=[DataRequired(),url()])
     img_url = URLField('Cafe Picture URL',validators=[DataRequired(),url()])
     location = StringField('Cafe Address',validators=[DataRequired()])
@@ -82,14 +84,17 @@ def home():
 def cafes_list():
     cafes = db.session.execute(db.select(Cafe).order_by(Cafe.name)).scalars().all()
     # cafes_json_list = [cafe for cafe in cafes]
-    print(cafes)
-    return render_template('cafes.html',cafes=cafes)
+    # cafes_list = [cafe.to_dict() for cafe in cafes]
+    cafes_list = [[cafe.name,cafe.map_url,cafe.img_url,cafe.location,cafe.has_sockets,cafe.has_toilet,cafe.has_wifi,cafe.can_take_calls,cafe.seats,cafe.coffee_price] for cafe in cafes]
+    headers = [column.name for column in Cafe.__table__.columns]
+    # for cafe in cafes_list:
+    #     print(cafe['name'])
+    return render_template('cafes.html',cafes=cafes_list,headers=headers)
 
 
 
-@app.route('/add',methods=['POST'])
+@app.route('/add',methods=['POST','GET'])
 def add_cafe():
-    
     form = CafeForm()
     if form.validate_on_submit():
         print('True')
@@ -100,8 +105,15 @@ def add_cafe():
             img_url=form_data['img_url'],
             location=form_data['location'],
             seats=form_data['seats'],
-            has_toilet=form_data['has_toilet'],
-            has_wifi=form_data['has_wifi'],
+            has_toilet=bool(form_data['has_toilet']),
+            has_wifi=bool(form_data['has_wifi']),
+            has_sockets=bool(form_data['has_sockets']),
+            can_take_calls=bool(form_data['can_take_calls']),
+            coffee_price=form_data['coffee_price'],
             
         )
+        with app.app_context():
+            db.session.add(new_cafe)
+            db.session.commit()
+    return render_template('addcafe.html',form=form)
     

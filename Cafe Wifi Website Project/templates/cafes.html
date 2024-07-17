@@ -8,9 +8,9 @@
         <table class="table table-dark table-striped table-hover">
           <tr>
             <thead>
-              {% for row in cafes[0] %}
+              {% for row in headers %} {% if row != "id" %}
               <th>{{ row }}</th>
-              {% endfor %}
+              {% endif %} {% endfor %}
             </thead>
           </tr>
           <tbody>
@@ -18,6 +18,8 @@
             <tr>
               {% for row in cafe %}{% if cafe.index(row) == 1 %}
               <td><a href="{{ row  }}">Map Link</a></td>
+              {% elif cafe.index(row) == 2 %}
+              <td><a href="{{ row }}">Img Link</a></td>
               {% else %}
               <td>{{ row }}</td>
               {% endif %}{% endfor %}
