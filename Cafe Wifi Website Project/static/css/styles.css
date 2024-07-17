@@ -23,3 +23,20 @@ a {
   margin-top: 20px;
   padding-top: 20px;
 }
+.all-cafe-heading {
+  align-items: center;
+  text-align: center;
+}
+.table {
+  align-items: center;
+}
+.custom-text-color {
+  color: #ffffff;
+}
+.custom-btn {
+  color: #ffffff;
+}
+.custom-btn:hover {
+  /* background-color: #343a40; */
+  color: #ffc107;
+}

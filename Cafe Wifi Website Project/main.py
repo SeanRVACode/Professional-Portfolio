@@ -1,16 +1,14 @@
 from ast import Sub
 from types import MappingProxyType
-from flask import Flask,render_template,url_for,jsonify,request
+from flask import Flask,render_template,url_for,jsonify,request,flash,redirect
 from flask_bootstrap import Bootstrap5
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,URLField,TimeField,BooleanField
 from wtforms.validators import DataRequired,url
-import csv
 import os.path
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase,Mapped,mapped_column
 from sqlalchemy import URL, Integer, String, Boolean
-import json
 
 
 
@@ -42,11 +40,12 @@ class Cafe(db.Model):
     map_url: Mapped[str] = mapped_column(String(500),nullable=False)
     img_url: Mapped[str] = mapped_column(String(500),nullable=False)
     location: Mapped[str] = mapped_column(String(250),nullable=False)
+    
+    has_toilet: Mapped[bool] = mapped_column(Boolean,nullable=False,default=False)
+    has_wifi: Mapped[bool] = mapped_column(Boolean,nullable=False,default=False)
+    has_sockets: Mapped[bool] = mapped_column(Boolean,nullable=False,default=False)
+    can_take_calls: Mapped[bool] = mapped_column(Boolean,nullable=False,default=False)
     seats: Mapped[str] = mapped_column(String(250),nullable=False)
-    has_toilet: Mapped[bool] = mapped_column(Boolean,nullable=False)
-    has_wifi: Mapped[bool] = mapped_column(Boolean,nullable=False)
-    has_sockets: Mapped[bool] = mapped_column(Boolean,nullable=False)
-    can_take_calls: Mapped[bool] = mapped_column(Boolean,nullable=False)
     coffee_price: Mapped[str] = mapped_column(String(250),nullable=True)
     
     def to_dict(self):
@@ -57,11 +56,12 @@ class CafeForm(FlaskForm):
     map_url = URLField('Cafe Map URL',validators=[DataRequired(),url()])
     img_url = URLField('Cafe Picture URL',validators=[DataRequired(),url()])
     location = StringField('Cafe Address',validators=[DataRequired()])
+    
+    has_toilet = BooleanField('Has Toilets?',default=False)
+    has_wifi = BooleanField('Has WiFi?',default=False)
+    has_sockets = BooleanField('Has Sockets?',default=False)
+    can_take_calls = BooleanField('Can you take calls?',default=False)
     seats = StringField('Number of Seats',validators=[DataRequired()])
-    has_toilet = BooleanField('Has Toilets?',validators=[DataRequired()])
-    has_wifi = BooleanField('Has WiFi?',validators=[DataRequired()])
-    has_sockets = BooleanField('Has Sockets?',validators=[DataRequired()])
-    can_take_calls = BooleanField('Can you take calls?',validators=[DataRequired()])
     coffee_price = StringField('Coffee Price',validators=[DataRequired()])
     submit = SubmitField('Submit')
     
@@ -83,12 +83,8 @@ def home():
 @app.route('/cafes')
 def cafes_list():
     cafes = db.session.execute(db.select(Cafe).order_by(Cafe.name)).scalars().all()
-    # cafes_json_list = [cafe for cafe in cafes]
-    # cafes_list = [cafe.to_dict() for cafe in cafes]
-    cafes_list = [[cafe.name,cafe.map_url,cafe.img_url,cafe.location,cafe.has_sockets,cafe.has_toilet,cafe.has_wifi,cafe.can_take_calls,cafe.seats,cafe.coffee_price] for cafe in cafes]
+    cafes_list = [[cafe.id,cafe.name,cafe.map_url,cafe.img_url,cafe.location,cafe.has_sockets,cafe.has_toilet,cafe.has_wifi,cafe.can_take_calls,cafe.seats,cafe.coffee_price] for cafe in cafes]
     headers = [column.name for column in Cafe.__table__.columns]
-    # for cafe in cafes_list:
-    #     print(cafe['name'])
     return render_template('cafes.html',cafes=cafes_list,headers=headers)
 
 
@@ -117,3 +113,26 @@ def add_cafe():
             db.session.commit()
     return render_template('addcafe.html',form=form)
     
+
+@app.route('/edit_cafe/<int:cafe_id>',methods=['GET','POST'])
+def edit_cafe(cafe_id):
+    cafe = db.session.get(Cafe,cafe_id)
+    form = CafeForm(obj=cafe)
+    if form.validate_on_submit():
+        form.populate_obj(cafe)
+        db.session.commit()
+        flash('Cafe updated successfully!','success')
+        return redirect(url_for('cafes_list'))
+    return render_template('edit_cafe.html',cafe=cafe,form=form,cafe_id=cafe.id)
+
+@app.route('/delete_cafe/<int:cafe_id>',methods=['GET','POST','DELETE'])
+def delete_entry(cafe_id):
+    cafe = Cafe.query.filter_by(id=cafe_id).first()
+    if cafe:
+        db.session.delete(cafe)
+        db.session.commit()
+        flash('Cafe deleted successfully!','success')
+        return redirect(url_for('cafes_list'))
+    else:
+        flash('Cafe not found.','error')
+    return redirect(url_for('cafes_list'))

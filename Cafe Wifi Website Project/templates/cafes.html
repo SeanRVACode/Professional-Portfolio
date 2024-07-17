@@ -4,25 +4,42 @@
   <div class="row">
     <div class="row">
       <div class="col-sm-12">
-        <h1>All Cafes</h1>
-        <table class="table table-dark table-striped table-hover">
+        <h1 class="all-cafe-heading">All Cafes</h1>
+        <table class="table table-dark table-striped table-hover table-active">
           <tr>
             <thead>
               {% for row in headers %} {% if row != "id" %}
-              <th>{{ row }}</th>
+              <th>{{ row.title().replace("_"," ") }}</th>
               {% endif %} {% endfor %}
+              <th>Edit</th>
             </thead>
           </tr>
           <tbody>
-            {% for cafe in cafes[1:] %}
+            {% for cafe in cafes %}
             <tr>
-              {% for row in cafe %}{% if cafe.index(row) == 1 %}
-              <td><a href="{{ row  }}" target="_blank">Map Link</a></td>
-              {% elif cafe.index(row) == 2 %}
-              <td><a href="{{ row }}" target="_blank">Img Link</a></td>
+              {% for row in cafe[1:] %}{% if cafe.index(row) == 2 %}
+              <td>
+                <a href="{{ row  }}" target="_blank" rel="noopener noreferrer"
+                  >Map Link</a
+                >
+              </td>
+              {% elif cafe.index(row) == 3 %}
+              <td>
+                <a href="{{ row }}" target="_blank" rel="noopener noreferrer"
+                  >Img Link</a
+                >
+              </td>
               {% else %}
               <td>{{ row }}</td>
+
               {% endif %}{% endfor %}
+              <td>
+                <a
+                  href="{{ url_for('edit_cafe',cafe_id=cafe[0]) }}"
+                  class="btn btn-warning btn-sm"
+                  >Edit</a
+                >
+              </td>
             </tr>
             {% endfor %}
           </tbody>
