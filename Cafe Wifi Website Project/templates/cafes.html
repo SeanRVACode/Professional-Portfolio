@@ -8,19 +8,23 @@
         <table class="table table-dark table-striped table-hover table-active">
           <tr>
             <thead>
-              {% for row in headers %} {% if row != "id" %}
+              {% for row in headers %} {% if row != "id" %} {% if row !=
+              "map_url" %}
               <th>{{ row.title().replace("_"," ") }}</th>
-              {% endif %} {% endfor %}
+              {% endif %} {% endif %} {% endfor %}
               <th>Edit</th>
             </thead>
           </tr>
           <tbody>
             {% for cafe in cafes %}
             <tr>
-              {% for row in cafe[1:] %}{% if cafe.index(row) == 2 %}
+              {% for row in cafe[1:] %}{% if cafe.index(row) == 1 %}
               <td>
-                <a href="{{ row  }}" target="_blank" rel="noopener noreferrer"
-                  >Map Link</a
+                <a
+                  href="{{ cafe[2]  }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ row }}</a
                 >
               </td>
               {% elif cafe.index(row) == 3 %}
@@ -33,7 +37,11 @@
                     rel="noopener noreferrer"
                 /></a>
               </td>
-              {% else %}
+              {% elif row == true %}
+              <td>{{ "✅" }}</td>
+              {% elif row == false %}
+              <td>{{ "🚫" }}</td>
+              {% elif cafe.index(row) == 2 %} {% else %}
               <td>{{ row }}</td>
 
               {% endif %}{% endfor %}
