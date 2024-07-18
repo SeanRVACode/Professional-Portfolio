@@ -40,3 +40,13 @@ a {
   /* background-color: #343a40; */
   color: #ffc107;
 }
+
+.cafe-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

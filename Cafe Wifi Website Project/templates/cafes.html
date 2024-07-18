@@ -25,9 +25,13 @@
               </td>
               {% elif cafe.index(row) == 3 %}
               <td>
-                <a href="{{ row }}" target="_blank" rel="noopener noreferrer"
-                  >Img Link</a
-                >
+                <a href="{{ row }}" target="_blank" rel="noopener noreferrer">
+                  <img
+                    class="cafe-image"
+                    src="{{ row }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                /></a>
               </td>
               {% else %}
               <td>{{ row }}</td>
