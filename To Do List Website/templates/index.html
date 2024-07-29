@@ -1,2 +1,32 @@
-{% extends 'base.html' %}{% block title %}ToDo List{% endblock %}{%block
-content%} {% endblock %}
+{% from "bootstrap5/form.html" import render_form %}{% extends 'base.html' %}{%
+block title %}ToDo List{% endblock %}{%block content%}
+
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/register-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading text-center">
+          <h1 class="display-4">Add Task</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="mb-4">
+  <div class="row">
+    <!-- Flash message here for errors  -->
+    {% with messages = get_flashed_messages() %}{% if messages %}{% for message
+    in messages %}
+    <p class="flash">{{ message }}</p>
+    {% endfor %}{% endif %}{% endwith %} {% if current_user.is_authenticated %}
+    <div class="col-lg-8 col-md-10 mx-auto">
+      {{ render_form(form, novalidate=True,button_map={"submit":"primary"})}}
+    </div>
+    {% endif %}
+  </div>
+</main>
+
+{% endblock %}

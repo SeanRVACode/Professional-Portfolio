@@ -9,7 +9,7 @@ from flask_bootstrap import Bootstrap5
 from sqlalchemy import ForeignKey,Integer,String,Text,Boolean
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, TodoForm
 from flask_ckeditor import CKEditor
 
 
@@ -54,7 +54,7 @@ class User(UserMixin,db.Model):
 class Todo(db.Model):
     __tablename__ = 'todos'
     id: Mapped[int] = mapped_column(db.Integer,primary_key=True)
-    title: Mapped[str] = mapped_column(db.String(100),nullable=False)
+    task: Mapped[str] = mapped_column(db.String(100),nullable=False)
     description: Mapped[str] = mapped_column(db.String(250))
     completed: Mapped[bool] = mapped_column(db.Boolean,nullable=False,default=False)
     user_id: Mapped[int] = mapped_column(db.Integer,db.ForeignKey('users.id'))
@@ -72,9 +72,10 @@ with app.app_context():
 
 
 
-@app.route("/")
+@app.route("/",methods=['GET','POST'])
 def home():
-    return render_template("index.html")
+    form = TodoForm()
+    return render_template("index.html",form=form)
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -118,6 +119,22 @@ def register():
             login_user(new_user)
             return redirect(url_for('home'))
     return render_template('register.html',form=form)
+
+@app.route('/todos',methods=['GET','POST'])
+@login_required
+def todos():
+    form = TodoForm()
+    if form.validate_on_submit():
+        new_todo = Todo(
+            task = form.task.data,
+            user = current_user
+        )
+        flash('To-Do item added!','success')
+        db.session.add(new_todo)
+        db.session.commit()
+    
+    user_todos = current_user.todos
+    return render_template('todos.html',form=form,todos=user_todos)
         
 @app.route('/logout')
 @login_required
