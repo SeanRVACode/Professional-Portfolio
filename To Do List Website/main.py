@@ -9,7 +9,7 @@ from flask_bootstrap import Bootstrap5
 from sqlalchemy import ForeignKey,Integer,String,Text,Boolean
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from forms import LoginForm
+from forms import LoginForm, RegisterForm
 from flask_ckeditor import CKEditor
 
 
@@ -93,3 +93,34 @@ def login():
             flash("Password is incorrect. Please try again.")
             return redirect(url_for('login'))
     return render_template('login.html',form=form)
+
+
+@app.route("/register",methods=['GET','POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        email_exist = User.query.filter_by(email=email).first()
+        print('Test this: ',email_exist)
+        if email_exist:
+            flash("Email already registered. Please login.")
+            return redirect(url_for('login'))
+        elif not email_exist:
+            new_user = User(
+                name = form.name.data,
+                email = form.email.data,
+                password = generate_password_hash(form.password.data,method='scrypt',salt_length=8)
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            
+            # Log the user in
+            login_user(new_user)
+            return redirect(url_for('home'))
+    return render_template('register.html',form=form)
+        
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
