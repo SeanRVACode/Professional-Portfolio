@@ -1,0 +1,15 @@
+{% from "bootstrap5/form.html" import render_form %}{% extends 'base.html' %}{%
+block title %}ToDo List{% endblock %}{%block content%}
+<main class="mb-4">
+  <div class="row">
+    <!-- Flash message here for errors  -->
+    {% with messages = get_flashed_messages() %}{% if messages %}{% for message
+    in messages %}
+    <p class="flash">{{ message }}</p>
+    {% endfor %}{% endif %}{% endwith %}
+    <div class="col-lg-8 col-md-10 mx-auto">
+      {{ render_form(form, novalidate=True,button_map={"submit":"primary"})}}
+    </div>
+  </div>
+</main>
+{% endblock %}

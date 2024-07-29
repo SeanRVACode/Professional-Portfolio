@@ -9,6 +9,10 @@ from flask_bootstrap import Bootstrap5
 from sqlalchemy import ForeignKey,Integer,String,Text,Boolean
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
+from forms import LoginForm
+from flask_ckeditor import CKEditor
+
+
 
 # Load environment file
 load_dotenv()
@@ -25,6 +29,7 @@ app = Flask(__name__)
 secret_key = os.getenv('secret_key')
 app.config['SECRET_KEY'] = secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+db_path
+ckeditor = CKEditor(app)
 Bootstrap5(app)
 
 login_manager = LoginManager()
@@ -70,3 +75,21 @@ with app.app_context():
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/login",methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        
+        user = User.query.filter_by(email=form.email.data).first()
+        
+        if user and check_password_hash(user.password,form.password.data):
+            login_user(user)
+            return redirect(url_for('home'))
+        elif not user:
+            flash("That email does not exist within our system.")
+            redirect(url_for('login'))
+        elif not check_password_hash(user.password,form.password.data):
+            flash("Password is incorrect. Please try again.")
+            return redirect(url_for('login'))
+    return render_template('login.html',form=form)
