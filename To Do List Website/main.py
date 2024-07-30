@@ -1,4 +1,4 @@
-from flask import Flask,render_template,url_for,flash,redirect
+from flask import Flask,render_template,url_for,flash,redirect,abort,request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase,Mapped,mapped_column,relationship
 import os
@@ -39,6 +39,7 @@ login_manager.init_app(app)
 
 db = SQLAlchemy(app)
 
+
 # User Database
 class User(UserMixin,db.Model):
     __tablename__ = "users"
@@ -55,7 +56,7 @@ class Todo(db.Model):
     __tablename__ = 'todos'
     id: Mapped[int] = mapped_column(db.Integer,primary_key=True)
     task: Mapped[str] = mapped_column(db.String(100),nullable=False)
-    description: Mapped[str] = mapped_column(db.String(250))
+    # description: Mapped[str] = mapped_column(db.String(250))
     completed: Mapped[bool] = mapped_column(db.Boolean,nullable=False,default=False)
     user_id: Mapped[int] = mapped_column(db.Integer,db.ForeignKey('users.id'))
     user: Mapped["User"] = relationship("User",back_populates="todos")
@@ -74,8 +75,12 @@ with app.app_context():
 
 @app.route("/",methods=['GET','POST'])
 def home():
-    form = TodoForm()
-    return render_template("index.html",form=form)
+    if current_user.is_authenticated:
+        todos = current_user.todos
+        form = TodoForm()
+        return render_template('index.html',todos=todos,form=form)
+    else:
+        return render_template("index.html")
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -88,10 +93,10 @@ def login():
             login_user(user)
             return redirect(url_for('home'))
         elif not user:
-            flash("That email does not exist within our system.")
+            flash("That email does not exist within our system.",'danger')
             redirect(url_for('login'))
         elif not check_password_hash(user.password,form.password.data):
-            flash("Password is incorrect. Please try again.")
+            flash("Password is incorrect. Please try again.",'danger')
             return redirect(url_for('login'))
     return render_template('login.html',form=form)
 
@@ -104,7 +109,7 @@ def register():
         email_exist = User.query.filter_by(email=email).first()
         print('Test this: ',email_exist)
         if email_exist:
-            flash("Email already registered. Please login.")
+            flash("Email already registered. Please login.",'danger')
             return redirect(url_for('login'))
         elif not email_exist:
             new_user = User(
@@ -120,24 +125,52 @@ def register():
             return redirect(url_for('home'))
     return render_template('register.html',form=form)
 
-@app.route('/todos',methods=['GET','POST'])
-@login_required
-def todos():
-    form = TodoForm()
-    if form.validate_on_submit():
-        new_todo = Todo(
-            task = form.task.data,
-            user = current_user
-        )
-        flash('To-Do item added!','success')
-        db.session.add(new_todo)
-        db.session.commit()
-    
-    user_todos = current_user.todos
-    return render_template('todos.html',form=form,todos=user_todos)
+# @app.route('/todos',methods=['GET','POST'])
+# @login_required
+# def todos():
+#     form = TodoForm()
+#     if form.validate_on_submit():
+#         new_todo = Todo(
+#             task = form.task.data,
+#             user = current_user
+#         )
+#         flash('To-Do item added!','success')
+#         db.session.add(new_todo)
+#         db.session.commit()
+#         return redirect(url_for('todos'))
+#     page = request.args.get('page',1,type=int)
+#     user_todos = current_user.todos
+#     return render_template('todos.html',form=form,todos=user_todos)
         
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/complete/<int:todo_id>')
+@login_required
+def complete(todo_id):
+    source = request.args.get('source','home')
+    todo = Todo.query.get_or_404(todo_id)
+    if todo.user != current_user:
+        abort(403)
+    todo.completed = not todo.completed
+    db.session.commit()
+    if source == 'index':
+        return redirect(url_for('home'))
+ 
+
+@app.route('/delete/<int:todo_id>')
+@login_required
+def delete(todo_id):
+    source = request.args.get('source','home')
+    todo = Todo.query.get_or_404(todo_id)
+    if todo.user != current_user:
+        abort(403)
+    db.session.delete(todo)
+    db.session.commit()
+    if source == 'index':
+        return redirect(url_for('home'))
+ 

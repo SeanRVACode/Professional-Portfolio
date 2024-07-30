@@ -16,13 +16,13 @@ block title %}Login{% endblock %}{%block content%}
   </div>
 </header>
 
-<main class="mb-4">
-  <div class="row">
+<main class="mt-4">
+  <div class="container position-relative">
     <!-- Flash message here for errors  -->
-    {% with messages = get_flashed_messages() %}{% if messages %}{% for message
-    in messages %}
-    <p class="flash">{{ message }}</p>
-    {% endfor %}{% endif %}{% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
     <div class="col-lg-8 col-md-10 mx-auto">
       {{ render_form(form, novalidate=True,button_map={"submit":"primary"})}}
     </div>

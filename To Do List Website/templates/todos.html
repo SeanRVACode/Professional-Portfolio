@@ -2,8 +2,14 @@
 block title %}ToDo List{% endblock %}{% block content %}
 
 <main class="mt-4">
-  <div class="container">
-    <h2>Your To-Do List</h2>
+  <div class="container position-relative">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="d-flex justify-content-center align-items-center">
+          <h2 class="display-4">Your To-Do List</h2>
+        </div>
+      </div>
+    </div>
     <!-- Flash messages for success and errors -->
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, message in messages %}
@@ -23,28 +29,20 @@ block title %}ToDo List{% endblock %}{% block content %}
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
           >
-            <span
-              {%
-              if
-              todo.completed
-              %}
-              style="text-decoration: line-through"
-              {%
-              endif
-              %}
-            >
-              {{ todo.title }}
+            {% if todo.completed %}
+            <span style="text-decoration: line-through">
+              {% endif %} {{ todo.task }}
             </span>
             <div>
               <a
-                href="{{ url_for('complete', todo_id=todo.id) }}"
+                href="{{ url_for('complete', todo_id=todo.id,source='todos') }}"
                 class="btn btn-sm btn-outline-success"
               >
                 {% if todo.completed %} Mark Incomplete {% else %} Mark Complete
                 {% endif %}
               </a>
               <a
-                href="{{ url_for('delete', todo_id=todo.id) }}"
+                href="{{ url_for('delete', todo_id=todo.id,source='todos') }}"
                 class="btn btn-sm btn-outline-danger"
               >
                 Delete

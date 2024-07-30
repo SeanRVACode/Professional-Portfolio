@@ -1,32 +1,87 @@
 {% from "bootstrap5/form.html" import render_form %}{% extends 'base.html' %}{%
-block title %}ToDo List{% endblock %}{%block content%}
+block title %}ToDo List{% endblock %} {%block content%} {% if
+current_user.is_authenticated %}
 
-<header
-  class="masthead"
-  style="background-image: url('../static/assets/img/register-bg.jpg')"
->
-  <div class="container position-relative px-4 px-lg-5">
+
+  <div class="container position-relative">
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
-        <div class="page-heading text-center">
-          <h1 class="display-4">Add Task</h1>
+        <div class="d-flex justify-content-center align-items-center">
+          <h2 class="display-4">Welcome {{ current_user.name.split()[0] }}</h2>
         </div>
       </div>
     </div>
+  <div class="container position-relative px-4 px-lg-5">
+    <!-- Flash messages for success and errors -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
   </div>
-</header>
-<main class="mb-4">
-  <div class="row">
-    <!-- Flash message here for errors  -->
-    {% with messages = get_flashed_messages() %}{% if messages %}{% for message
-    in messages %}
-    <p class="flash">{{ message }}</p>
-    {% endfor %}{% endif %}{% endwith %} {% if current_user.is_authenticated %}
-    <div class="col-lg-8 col-md-10 mx-auto">
-      {{ render_form(form, novalidate=True,button_map={"submit":"primary"})}}
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="card shadow-sm mb-4"><div class="card-body">{{ render_form(form,novalidate=True,button_map={"submit":"primary"}) }}</div></div>
+        {% if todos %}
+        <ul class="list-group">
+          {% for todo in todos %}
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span
+              {%
+              if
+              todo.completed
+              %}
+              style="text-decoration: line-through"
+              {%
+              endif
+              %}
+            >
+              {{ todo.task }}
+            </span>
+            <div>
+              <a
+                href="{{ url_for('complete',todo_id=todo.id,source='index') }}"
+                class="btn btn-sm btn-outline-success"
+              >
+                {% if todo.completed %} Mark Incomplete {% else %} Mark Complete
+                {% endif %}
+              </a>
+              <a
+                href="{{ url_for('delete',todo_id=todo.id,source='index') }}"
+                class="btn btn-sm btn-outline-danger"
+              >
+                Delete
+              </a>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+          No to-do items yet. Add your first to-do item.
+        </div>
+        {% endif %}
+      </div>
     </div>
-    {% endif %}
   </div>
 </main>
+{% else %}
 
-{% endblock %}
+<main class="mt-4">
+  <body>
+    <div class="d-flex">
+      <div
+        style="
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translateX(-50%) translateY(-50%);
+        "
+      >
+        <h1 class="display-4">Please <a href="{{ url_for('login') }}">login</a> or <a href="{{url_for('register') }}">register</a> to begin!</h1>
+      </div>
+    </div>
+  </body>
+</main>
+{% endif %} {% endblock %}
