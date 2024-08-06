@@ -30,6 +30,12 @@ class VanishingApp:
         self.root.geometry('800x600')
         self.root.protocol('WM_DELETE_WINDOW',self.on_window_close)
         # TODO need to set up grid system.
+        # Grid System
+        self.root.grid_columnconfigure(0,weight=1)
+        self.root.grid_columnconfigure(1,weight=1)
+        self.root.grid_columnconfigure(2,weight=1)
+        self.root.grid_rowconfigure(1,weight=1)
+        self.text_entry_box()
                 
     def on_window_close(self):
         '''Destroys Root'''
@@ -45,5 +51,11 @@ class VanishingApp:
     def text_entry_box(self):
         '''Text entry box for user to type in.'''
         # TODO need to finish setting up font and get it placed correctly within grid system.
-        text_entry = CTkEntry(self.root,font=(''))
-        pass
+        text_entry = CTkEntry(self.root,font=('arial',20))
+        text_entry.grid(row=1,column=1,padx=5,pady=5,sticky='news')
+        
+    
+if __name__ == '__main__':
+    root = ctk.CTk()
+    app = VanishingApp(root)
+    root.mainloop()
