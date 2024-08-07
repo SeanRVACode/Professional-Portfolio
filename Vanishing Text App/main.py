@@ -36,6 +36,7 @@ class VanishingApp:
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_columnconfigure(1,weight=1)
         self.root.grid_columnconfigure(2,weight=1)
+        self.root.grid_rowconfigure(0,weight=1)
         self.root.grid_rowconfigure(1,weight=1)
         
         # Create Frame
@@ -66,14 +67,14 @@ class TextEntryFrame(ctk.CTkFrame):
     
     def configure_grid(self):
         '''Configure the grid system for the frame.'''
-        self.grid_columnconfigure(0,weight=1)
-        self.grid_rowconfigure(0,weight=1)
-        self.grid_rowconfigure(1,weight=1)
-        self.grid_rowconfigure(2,weight=1)
+        self.grid_columnconfigure(0,weight=3)
+        self.grid_rowconfigure(0,weight=3)
+        self.grid_rowconfigure(1,weight=3)
+        self.grid_rowconfigure(2,weight=3)
     
     def text_entry_box(self):
         text_entry = CTkTextbox(self,font=('arial',20),width=self.entry_width,height=self.entry_height)
-        text_entry.grid(row=2,column=0,padx=5,pady=5,sticky='new',rowspan=3)
+        text_entry.grid(row=2,column=0,padx=5,pady=5,sticky='new',rowspan=2)
     
 if __name__ == '__main__':
     root = ctk.CTk()
