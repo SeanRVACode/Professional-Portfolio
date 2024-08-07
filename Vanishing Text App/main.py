@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from customtkinter import CTkLabel,CTkEntry
+from customtkinter import CTkLabel,CTkEntry,CTkTextbox
 from ctypes import windll
 import os,sys
 import time
@@ -18,6 +18,8 @@ def create_buttons():
 
 timer = 0
 
+        
+
 class VanishingApp:
     def __init__(self,root):
         self.root = root
@@ -35,7 +37,11 @@ class VanishingApp:
         self.root.grid_columnconfigure(1,weight=1)
         self.root.grid_columnconfigure(2,weight=1)
         self.root.grid_rowconfigure(1,weight=1)
-        self.text_entry_box()
+        
+        # Create Frame
+        self.text_entry_frame = TextEntryFrame(self.root,entry_width=300,entry_height=200)
+        self.text_entry_frame.grid(row=0,column=1,padx=5,pady=5,sticky='new')
+        
                 
     def on_window_close(self):
         '''Destroys Root'''
@@ -48,12 +54,26 @@ class VanishingApp:
     def start_button(self):
         pass
     
+
+
+class TextEntryFrame(ctk.CTkFrame):
+    def __init__(self,master=None,entry_width=200,entry_height=30,**kwargs):
+        super().__init__(master,**kwargs)
+        self.entry_width = entry_width
+        self.entry_height = entry_height
+        self.configure_grid()
+        self.text_entry_box()
+    
+    def configure_grid(self):
+        '''Configure the grid system for the frame.'''
+        self.grid_columnconfigure(0,weight=1)
+        self.grid_rowconfigure(0,weight=1)
+        self.grid_rowconfigure(1,weight=1)
+        self.grid_rowconfigure(2,weight=1)
+    
     def text_entry_box(self):
-        '''Text entry box for user to type in.'''
-        # TODO need to finish setting up font and get it placed correctly within grid system.
-        text_entry = CTkEntry(self.root,font=('arial',20))
-        text_entry.grid(row=1,column=1,padx=5,pady=5,sticky='news')
-        
+        text_entry = CTkTextbox(self,font=('arial',20),width=self.entry_width,height=self.entry_height)
+        text_entry.grid(row=2,column=0,padx=5,pady=5,sticky='new',rowspan=3)
     
 if __name__ == '__main__':
     root = ctk.CTk()
