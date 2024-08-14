@@ -13,7 +13,7 @@ class Con:
         self.language = "en-in"
         
         
-    def text_to_speech(self,src):
+    def get_mp3(self,src):
         url = f'{BASE_URL}'
         
         params = {
@@ -24,10 +24,14 @@ class Con:
         }
         
         response = requests.get(url,params=params)
+        print(response.status_code)
         
-        # Writes the response to an mp3 file for listening
-        with open('test.mp3','wb') as media:
-            media.write(response.content)
+        if response.status_code == 200:
+            # Writes the response to an mp3 file for listening
+            with open('test.mp3','wb') as media:
+                media.write(response.content)
+        else:
+            print('Error occured.')
             
             
 if __name__ == "__main__":

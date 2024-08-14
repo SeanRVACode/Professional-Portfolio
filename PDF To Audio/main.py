@@ -7,7 +7,16 @@ from api_handler import Con
 # This thought is coming from comments made by people on the course.
 # http://www.voicerss.org/login.aspx Potential Free API for text to voice.
 
-class Main:
-    def __init__(self):
-        pass
-    
+
+
+
+class TTS:
+    def __init__(self,text=""):
+        self.x = Con()
+        self.x.get_mp3(text)
+        
+        
+
+
+if __name__ == "__main__":
+    TTS("Beep Boop")
