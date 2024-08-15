@@ -1,4 +1,3 @@
-import requests
 from api_handler import Con
 from pdf_handler import PDF
 import os
