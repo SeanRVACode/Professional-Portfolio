@@ -1,10 +1,62 @@
 {% extends 'base.html' %}{% block title %}Color Palette Finder{% endblock %} {%
-block content %}
+block content %} {% from 'bootstrap5/form.html' import render_form,render_field
+%}
 <div class="container">
-  <h1>Color Palette Finder</h1>
-  <form method="POST" enctype="multipart/form-data">
-    <!-- Hidden tag protects from CRSF attacks  -->
-    {{form.hidden_tag()}} {{form.file()}} {{form.submit()}}
-  </form>
+  <h1 class="text-center fs-1" style="font-family: roboto">
+    Color Palette Finder
+  </h1>
+  <div class="d-flex flex-column align-items-center mt-3">
+    {{ render_form(form,novalidate=True,extra_classes="d-block
+    justify-content-center gap-2 col-6"
+    ,enctype="multipart/form-data",button_map={"submit":"dark"})}}
+  </div>
+  {% if image %}
+  <div class="d-flex flex-column align-items-center container mt-4">
+    <img width=300 height=auto src="{{ image }}"
+  </div>
+  {% endif %} {% if colors %}
+  <div class="container mt-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Color</th>
+          <th scope="col">R</th>
+          <th scope="col">G</th>
+          <th scope="col">B</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for color in colors %}
+        <tr>
+          <td
+            style="background-color: rgb({{color[0]}},{{color[1]}},{{color[2]}})"
+          ></td>
+          <td>{{color[0]}}</td>
+          <td>{{color[1] }}</td>
+          <td>{{color[2]}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
 </div>
+<style>
+  .control-label {
+    display: none;
+  }
+
+  label[for="file"] {
+    font-family: "roboto", monospace;
+    color: #f8f9fa;
+    font-size: 25px;
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  #submit {
+    display: block;
+    margin: auto;
+  }
+</style>
 {% endblock %}
