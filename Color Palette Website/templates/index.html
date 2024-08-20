@@ -20,9 +20,10 @@ block content %} {% from 'bootstrap5/form.html' import render_form,render_field
       <thead>
         <tr>
           <th scope="col">Color</th>
-          <th scope="col">R</th>
-          <th scope="col">G</th>
-          <th scope="col">B</th>
+          <th scope="col">Red</th>
+          <th scope="col">Green</th>
+          <th scope="col">Blue</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -34,11 +35,32 @@ block content %} {% from 'bootstrap5/form.html' import render_form,render_field
           <td>{{color[0]}}</td>
           <td>{{color[1] }}</td>
           <td>{{color[2]}}</td>
+          <td>
+            <!-- Copy Button -->
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="copyToClipBoard('rgb({{ color[0]}},{{color[1]}},{{color[2]}})')"
+            >
+              Copy
+            </button>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+  <script>
+    function copyToClipBoard(text) {
+      navigator.clipboard.writeText(text).then(
+        function () {
+          alert("Copied :" + text);
+        },
+        function (err) {
+          console.error("Could not copy text: ", err);
+        }
+      );
+    }
+  </script>
   {% endif %}
 </div>
 <style>
@@ -59,4 +81,5 @@ block content %} {% from 'bootstrap5/form.html' import render_form,render_field
     margin: auto;
   }
 </style>
+
 {% endblock %}
