@@ -44,12 +44,10 @@ def top_10_colors(img):
     img_array = np.asarray(img)
     # 3 columns for RGB -1 indicates unknown rows
     img_array = img_array.reshape(-1,3)
-    # w,h,d = tuple(img.shape)
-    # Reshape the image into a 2D array, where each row represents a pixel
-    # pixel = np.reshape(img,(w*h,d))
+ 
     
     # Desired number of colors for an image
-    n_colors = 18
+    n_colors = 10
     
     # Kmeans cluster model
     model = KMeans(n_clusters=n_colors).fit(img_array)
@@ -87,8 +85,5 @@ def home():
             return redirect(url_for('home',form=form))
     return render_template("index.html",form=form)
 
-# @app.route('/images/<img>')
-# def background(img):
-#     return redirect(f'./static/images/{img}')
 
 
