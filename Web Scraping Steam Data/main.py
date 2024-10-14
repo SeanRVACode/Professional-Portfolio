@@ -37,6 +37,7 @@ with open('./poke.csv','w',encoding='utf-8',newline='') as csvfile:
         numbers.append(mon.find('small').get_text(strip=True))
         names.append(mon.find(class_="ent-name").get_text(strip=True))
         type_links = mon.find_all('a',class_=re.compile('^itype'))
+        # Could possibly use type_links = mon.select('a.itype')
         print(type_links)
         types = [link.get_text(strip=True) for link in type_links]
         type_test.append(types)
