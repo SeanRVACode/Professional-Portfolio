@@ -24,13 +24,15 @@ type_test = []
 for mon in pokemon:
     numbers.append(mon.find('small').get_text(strip=True))
     names.append(mon.find(class_="ent-name").get_text(strip=True))
+    type_links = mon.find_all('a',class_=re.comiple('^itype'))
+    types = []
     type_test.append(mon.find(class_=re.compile("itype ")))
 
 
 # type_links = types_tag.find_all('a')
 # types = [t.get_text(strip=True) for t in type_links]
         
-print(type_test)
+type_link
     
 
 print(numbers)
