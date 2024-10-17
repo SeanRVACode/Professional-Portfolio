@@ -40,6 +40,7 @@ class Dino:
     #         return None
     #     return check_white
     def Auto_jump(self):
+        # TODO need to account for birds flying and night time cactus
         while True:
             check = self.check_pixel(x=701,y=1100)
             # check_bird = self.check_pixel(x=801,y=897)
