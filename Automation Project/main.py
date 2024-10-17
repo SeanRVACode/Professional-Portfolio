@@ -5,6 +5,7 @@ from browser import Dino
 
 def main():
     dino = Dino()
+    # dino.get_cursor()
     dino.Auto_jump()
     
     
