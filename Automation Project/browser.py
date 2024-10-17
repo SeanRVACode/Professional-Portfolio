@@ -15,10 +15,14 @@ class Dino:
         except:
             return None
         return check
+    def check_pixel(self,x,y):
+        # TODO need to figure out if its easier to just check pixels
+        pass
     
     def check_window_night(self,x,y):
         try: 
             check_white = pyautogui.locateOnScreen('./Images/white_color_of_obstacle.jpg',region=(x,y,400,100),grayscale=True)
+            
         except:
             return None
         return check_white
