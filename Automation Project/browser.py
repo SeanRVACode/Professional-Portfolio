@@ -7,35 +7,36 @@ import time
 
 class Dino:
     def __init__(self):
-        pyautogui.FAILSAFE = False
+        # pyautogui.FAILSAFE = False
         self.screenWidth,self.screenHeight = pyautogui.size()
         
-    def check_window(self,x,y):
-        # Attempts to locate the exact color in a specific region of the screen.
-        try:
-            check = pyautogui.locateOnScreen('./Images/color_of_obstacle.jpg',region=(x,y,400,100),grayscale=True)
-        except:
-            return None
-        return check
+    # def check_window(self,x,y):
+    #     # Attempts to locate the exact color in a specific region of the screen.
+    #     try:
+    #         check = pyautogui.locateOnScreen('./Images/color_of_obstacle.jpg',region=(x,y,400,100),grayscale=True)
+    #     except:
+    #         return None
+    #     return check
     def check_pixel(self,x,y):
-        # TODO need to figure out if its easier to just check pixels
-        
-            # im = pyautogui.screenshot(region=(x,y,400,100))
         while True:
-            pix = pyautogui.pixelMatchesColor(x,y,(83,83,83))
-            pix_air = pyautogui.pixelMatchesColor(x,1011,(83,83,83))
-            pix_mid = pyautogui.pixelMatchesColor(x,1152,(83,83,83))
-            pix_wh = pyautogui.pixelMatchesColor(x,y,(172,172,172))
-            pix_wh_mid = pyautogui.pixelMatchesColor(x-10,1152,(172,172,172))
-            pix_wh_air = pyautogui.pixelMatchesColor(x,1011,(172,172,172))
-            if pix or pix_air or pix_mid or pix_wh or pix_wh_mid or pix_wh_air:
+            if not self.detect_change(x,y):
+                print('Jump')
                 self.jump()
-                print(f'Pix: {pix} pix_air: {pix_air} pix_mid: {pix_mid}')
                 
-                # im = pyautogui.screenshot(region=(x-200,y-200,200,200))
-                # im.save('test_fail.png')
-            # time.sleep(.01)
-
+    def detect_change(self,x,y):
+        check_day = pyautogui.pixelMatchesColor(287,328,(32,33,36))
+        if check_day:
+            check_change_night = pyautogui.pixelMatchesColor(x,y,(32,33,36))
+            return check_change_night
+        else:
+                    
+            check_change = pyautogui.pixelMatchesColor(x,y,(255,255,255))
+            if check_change:
+                check_air = pyautogui.pixelMatchesColor(825,996,(255,255,255))
+                return check_air
+            elif not check_change:
+                return check_change
+        
     def get_cursor(self):
         '''Exists solely so I can check where my cursor is.'''
         while True:
@@ -76,6 +77,7 @@ class Dino:
     
     def jump(self):
         pyautogui.press('up')
+        # time.sleep(.1)
             
             
             
