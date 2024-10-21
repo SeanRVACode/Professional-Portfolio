@@ -1,4 +1,4 @@
-import pyautogui
+
 from browser import Dino
 
 
@@ -8,7 +8,7 @@ def main():
     # dino.get_cursor()
     # dino.check_pixel(x=625,y=1178)
     # dino.check_pixel(x=725,y=1210)
-    dino.check_pixel(x=815,y=1157)
+    dino.check_pixel(x=815,y=1135)
     
     
       
