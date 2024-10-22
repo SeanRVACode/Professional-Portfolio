@@ -75,20 +75,21 @@ class Game:
     def enemy_movement(self,enemies):
         # Check if left most enemy hits the left boundary
         if enemies[0].pos.left <= 0 and self.direction == 'left':
-            self.direction = 'right'
+            self.direction = 'right' # Change the direction to right
             for alien in enemies:
                 alien.pos.y += 10 # Move alien down
-        
+        # Check if last enemy (right most enemy) hits the right boundry
         elif enemies[-1].pos.right >= WIDTH and self.direction == 'right':
-            self.direction = 'left'
+            self.direction = 'left' # Change direction to left
             for alien in enemies:
                 alien.pos.y += 10 # Move alien down
         
+        # Move alients left to right
         for alien in enemies:
             if self.direction == 'right':
-                alien.pos.x += alien.speed
+                alien.pos.x += alien.speed # Move alien to the right at set speed
             elif self.direction == 'left':
-                alien.pos.x -= alien.speed
+                alien.pos.x -= alien.speed # Move alien to the left at set speed
         
             
         
