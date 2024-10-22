@@ -26,7 +26,7 @@ class Game:
         
 
         # Create Enemies
-        self.enemies_setup(rows=4,cols=8)
+        self.enemies_setup(rows=5,cols=8)
         
         
         
@@ -39,6 +39,7 @@ class Game:
             # Fill the screen
             self.screen.fill('black')
 
+            # Place enemies on screen
             for enemy in self.enemies:
                 self.screen.blit(enemy.graphic,enemy.pos)
             
@@ -47,7 +48,9 @@ class Game:
             # Get Player Input
             keys = pygame.key.get_pressed()
             self.ship_movement(keys)
+            collision = self.ship.colliderect()
             
+            # Enemy Movement
             self.enemy_movement(self.enemies)
             
             # flip the display to put your work on screen
