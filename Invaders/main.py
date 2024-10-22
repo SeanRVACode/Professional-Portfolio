@@ -1,5 +1,5 @@
 from ship import Ship
-# from enemies import Enemy
+from enemies import Enemy
 import pygame
 
 WIDTH = 720
@@ -12,8 +12,20 @@ def main():
     running = True
     clock = pygame.time.Clock()
     ship = Ship(315,850,10,HEIGHT,WIDTH)
-    # enemy =
     enemies = []
+    
+    
+    # # Create Enemies
+    xe = 30
+    ye = 30
+    for row in range(5):
+        for col in range(9):
+            ene = Enemy(5,HEIGHT,WIDTH,10,xe,ye)
+            enemies.append(ene)
+            xe += 80
+        xe = 30
+        ye += 40
+    
     # End the game if the user presses 'X'
     while running:
         for event in pygame.event.get():
@@ -22,6 +34,9 @@ def main():
                 
         # Fill the screen
         screen.fill('black')
+
+        for enemy in enemies:
+            screen.blit(enemy.graphic,enemy.pos)
         
         # RENDER GAME HERE
         # screen.blit(ship.graphic,(ship.position*5,0))
