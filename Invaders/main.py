@@ -7,10 +7,13 @@ HEIGHT = 1000
 
 def main():
     pygame.init()
+    pygame.display.set_caption('Invaderrrsss')
     screen = pygame.display.set_mode((WIDTH,HEIGHT))
     running = True
     clock = pygame.time.Clock()
     ship = Ship(315,850,10,HEIGHT,WIDTH)
+    # enemy =
+    enemies = []
     # End the game if the user presses 'X'
     while running:
         for event in pygame.event.get():

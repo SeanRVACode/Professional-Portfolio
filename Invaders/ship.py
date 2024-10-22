@@ -9,6 +9,7 @@ class Ship:
         # self.pos = (x,y) # Starting position of the ship
         self.pos = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
+        # self.life # TODO Add Life count?
         
         
     def move(self,left=False,right=False):
