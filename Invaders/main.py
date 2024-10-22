@@ -9,15 +9,18 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('Invaderrrsss')
+        icon = pygame.image.load('./Assets/enemy.png')
+        pygame.display.set_icon(icon)
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
         self.running = True
         self.clock = pygame.time.Clock()
         self.enemies = []
+        self.ship = Ship(315,850,10,HEIGHT,WIDTH)
         self.main()
         
     def main(self):
 
-        ship = Ship(315,850,10,HEIGHT,WIDTH)
+        # ship = Ship(315,850,10,HEIGHT,WIDTH)
 
         
 
@@ -37,17 +40,12 @@ class Game:
                 self.screen.blit(enemy.graphic,enemy.pos)
             
             # RENDER GAME HERE
-            # screen.blit(ship.graphic,(ship.position*5,0))
+
             # Get Player Input
             keys = pygame.key.get_pressed()
             
-            # Ship Movement
-            if keys[pygame.K_LEFT]:
-                ship.move(left=True)
-            if keys[pygame.K_RIGHT]:
-                ship.move(right=True)
-            self.screen.blit(ship.graphic,(ship.pos))
-            
+
+            self.ship_movement(keys)
             
             # flip the display to put your work on screen
             pygame.display.flip()
@@ -63,7 +61,13 @@ class Game:
                 xe += 80
             xe = 30
             ye += 40
-                    
+    def ship_movement(self,keys):
+        # Ship Movement
+        if keys[pygame.K_LEFT]:
+            self.ship.move(left=True)
+        if keys[pygame.K_RIGHT]:
+            self.ship.move(right=True)
+        self.screen.blit(self.ship.graphic,(self.ship.pos))
             
 if __name__=='__main__':
     Game()
