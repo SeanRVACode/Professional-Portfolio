@@ -16,6 +16,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.enemies = []
         self.ship = Ship(315,850,10,HEIGHT,WIDTH)
+        self.direction = 'right'
         self.main()
         
     def main(self):
@@ -24,8 +25,10 @@ class Game:
 
         
 
-        # # Create Enemies
+        # Create Enemies
         self.enemies_setup(rows=4,cols=8)
+        
+        
         
         # End the game if the user presses 'X'
         while self.running:
@@ -43,9 +46,9 @@ class Game:
 
             # Get Player Input
             keys = pygame.key.get_pressed()
-            
-
             self.ship_movement(keys)
+            
+            self.enemy_movement(self.enemies)
             
             # flip the display to put your work on screen
             pygame.display.flip()
@@ -56,7 +59,7 @@ class Game:
         ye = 30
         for row in range(rows+1):
             for col in range(cols+1):
-                ene = Enemy(5,HEIGHT,WIDTH,10,xe,ye)
+                ene = Enemy(1,HEIGHT,WIDTH,10,xe,ye)
                 self.enemies.append(ene)
                 xe += 80
             xe = 30
@@ -68,6 +71,32 @@ class Game:
         if keys[pygame.K_RIGHT]:
             self.ship.move(right=True)
         self.screen.blit(self.ship.graphic,(self.ship.pos))
+    
+    def enemy_movement(self,enemies):
+        # Check if left most enemy hits the left boundary
+        if enemies[0].pos.left <= 0 and self.direction == 'left':
+            self.direction = 'right'
+            for alien in enemies:
+                alien.pos.y += 10 # Move alien down
+        
+        elif enemies[-1].pos.right >= WIDTH and self.direction == 'right':
+            self.direction = 'left'
+            for alien in enemies:
+                alien.pos.y += 10 # Move alien down
+        
+        for alien in enemies:
+            if self.direction == 'right':
+                alien.pos.x += alien.speed
+            elif self.direction == 'left':
+                alien.pos.x -= alien.speed
+        
+            
+        
+           
+                 
+    
+        
+        
             
 if __name__=='__main__':
     Game()
