@@ -2,14 +2,15 @@ from ship import Ship
 # from enemies import Enemy
 import pygame
 
-
+WIDTH = 720
+HEIGHT = 1000
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((720,1000))
+    screen = pygame.display.set_mode((WIDTH,HEIGHT))
     running = True
     clock = pygame.time.Clock()
-    ship = Ship()
+    ship = Ship(315,850,10,HEIGHT,WIDTH)
     # End the game if the user presses 'X'
     while running:
         for event in pygame.event.get():
@@ -20,7 +21,16 @@ def main():
         screen.fill('black')
         
         # RENDER GAME HERE
-        screen.blit(ship.graphic,(ship.position*5,0))
+        # screen.blit(ship.graphic,(ship.position*5,0))
+        # Get Player Input
+        keys = pygame.key.get_pressed()
+        
+        # Ship Movement
+        if keys[pygame.K_LEFT]:
+            ship.move(left=True)
+        if keys[pygame.K_RIGHT]:
+            ship.move(right=True)
+        screen.blit(ship.graphic,(ship.pos))
         
         
         # flip the display to put your work on screen
