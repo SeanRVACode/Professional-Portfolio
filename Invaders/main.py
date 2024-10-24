@@ -47,7 +47,7 @@ class Game:
             for enemy in self.enemies:
                 self.screen.blit(enemy.graphic,enemy.pos)
                 # Detect Collision
-                self.game_over(collision=self.ship.detect_collide(enemy.pos))
+                self.game_over(collision=self.ship.detect_collide(enemy.pos)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
 
                     
             
