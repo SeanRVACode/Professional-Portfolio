@@ -21,3 +21,9 @@ class Ship:
             self.pos.left = 600
         if self.pos.left < 0:
             self.pos.left = 0
+    
+    def detect_collide(self,other_rect):
+        collision = self.pos.colliderect(other_rect)
+        if collision:
+            print('Collision Detected.')
+        return collision

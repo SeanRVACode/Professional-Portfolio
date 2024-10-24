@@ -1,9 +1,11 @@
+import pygame.freetype
 from ship import Ship
 from enemies import Enemy
 import pygame
 
 WIDTH = 720
 HEIGHT = 1000
+WHITE = (255,255,255)
 
 class Game:
     def __init__(self):
@@ -17,6 +19,8 @@ class Game:
         self.enemies = []
         self.ship = Ship(315,850,10,HEIGHT,WIDTH)
         self.direction = 'right'
+        self.game_font = pygame.font.SysFont('TT Fellows',110)
+        # self.clock.tick(60)
         self.main()
         
     def main(self):
@@ -42,13 +46,19 @@ class Game:
             # Place enemies on screen
             for enemy in self.enemies:
                 self.screen.blit(enemy.graphic,enemy.pos)
+                # Detect Collision
+                self.game_over(collision=self.ship.detect_collide(enemy.pos))
+
+                    
             
             # RENDER GAME HERE
 
             # Get Player Input
             keys = pygame.key.get_pressed()
             self.ship_movement(keys)
-            collision = self.ship.colliderect()
+            
+            
+            
             
             # Enemy Movement
             self.enemy_movement(self.enemies)
@@ -57,6 +67,18 @@ class Game:
             pygame.display.flip()
             
             self.clock.tick(60) # Limits the fps 60
+            
+    def game_over(self,collision):
+        position = (130,500)
+        transparent = (0,0,0,0)
+        if collision:
+            text_surface = self.game_font.render('GAME OVER',True,WHITE)
+            self.screen.fill('black')
+            self.ship.graphic.fill(transparent)
+            self.screen.blit(text_surface,position)
+            # self.clock.tick(None)
+            # self.running = False
+        pass
     def enemies_setup(self,rows,cols):
         xe = 30
         ye = 30
@@ -67,6 +89,7 @@ class Game:
                 xe += 80
             xe = 30
             ye += 40
+        
     def ship_movement(self,keys):
         # Ship Movement
         if keys[pygame.K_LEFT]:
