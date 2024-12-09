@@ -5,7 +5,7 @@ class Ship:
     def __init__(self,x,y,speed,height,width):
         self.game_height = height
         self.game_width = width
-        self.graphic = pygame.image.load('./Assets/128px-Space-Invaders-ship.png').convert()
+        self.graphic = pygame.transform.scale(pygame.image.load('./Assets/128px-Space-Invaders-ship.png').convert(),(100,100))
         # self.pos = (x,y) # Starting position of the ship
         self.pos = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
