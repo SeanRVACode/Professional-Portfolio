@@ -2,6 +2,7 @@ import pygame.freetype
 from ship import Ship
 from enemies import Enemy
 import pygame
+from title_screen import StartScreen
 
 WIDTH = 720
 HEIGHT = 1000
@@ -14,6 +15,7 @@ class Game:
         icon = pygame.image.load('./Assets/enemy.png')
         pygame.display.set_icon(icon)
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+        self.game_state = "start_menu"
         self.running = True
         self.clock = pygame.time.Clock()
         self.enemies = []
@@ -25,13 +27,8 @@ class Game:
         
     def main(self):
 
-        # ship = Ship(315,850,10,HEIGHT,WIDTH)
-
-        
-
         # Create Enemies
         self.enemies_setup(rows=5,cols=8)
-        
         
         
         # End the game if the user presses 'X'
@@ -54,15 +51,18 @@ class Game:
             # RENDER GAME HERE
 
             # Get Player Input
-            keys = pygame.key.get_pressed()
-            self.ship_movement(keys)
-            
-            
-            
-            
-            # Enemy Movement
-            self.enemy_movement(self.enemies)
-            
+            if self.game_state == "start_menu":
+                start_screen = StartScreen("Invaders",50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0))
+            elif self.game_state == "game":
+                keys = pygame.key.get_pressed()
+                self.ship_movement(keys)
+                
+                # Enemy Movement
+                self.enemy_movement(self.enemies)
+            elif self.game_state == "game_over":
+                # TODO Finish writing and setting up game over state
+                pass
+                
             # flip the display to put your work on screen
             pygame.display.flip()
             
