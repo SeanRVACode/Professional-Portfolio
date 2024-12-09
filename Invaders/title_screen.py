@@ -4,7 +4,8 @@ from pygame.sprite import Sprite
 from pygame.rect import Rect
 
 class StartScreen:
-    def __init__(self,text,font_size,text_rgb,bg_rgb,screen,screen_width,screen_height):
+    def __init__(self,text,font_size,text_rgb,bg_rgb,screen,screen_width,screen_height,mouse_pos):
+        # TODO Add Hover Effects
         """Creates the start screen with text written on it."""
         screen.fill((0,0,0))
         font = pygame.font.SysFont("Courier",font_size,bold=True)
