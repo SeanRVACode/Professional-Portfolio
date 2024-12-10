@@ -15,6 +15,7 @@ class Game:
         icon = pygame.image.load('./Assets/enemy.png')
         pygame.display.set_icon(icon)
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+        self.mouse_pos = pygame.mouse.get_pos()
         self.game_state = "start_menu"
         self.running = True
         self.clock = pygame.time.Clock()

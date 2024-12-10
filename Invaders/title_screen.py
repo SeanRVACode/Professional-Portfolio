@@ -15,4 +15,5 @@ class StartScreen:
         screen.blit(start_button,(screen_width/2 - start_button.get_width()/2,screen_height/2 + start_button.get_height()/2))
         pygame.display.update()
         # surface,_ = font.render(text=text,fgcolor=text_rgb,bgcolor=bg_rgb)
+        # TODO Feed mouse postion into here so that I can determine when to make buttons larger
         
