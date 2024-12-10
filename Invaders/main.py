@@ -27,7 +27,7 @@ class Game:
         self.enemies = []
         self.ship = Ship(315,850,10,HEIGHT,WIDTH)
         self.direction = 'right'
-        self.particle1 = ParticlePrinciple(screen=self.screen,mouse_pos=(0,0))
+        self.particle_system = ParticlePrinciple(screen=self.screen)
         self.game_font = pygame.font.SysFont('TT Fellows',110)
         # self.clock.tick(60)
         self.main()
@@ -46,10 +46,14 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == PARTICLE_EVENT:
-                    print('PARTICLE_EVENT Triggered')
-                    # Particle Stuff
-                    self.particle1.mouse_pos = pygame.mouse.get_pos()
-                    self.particle1.add_particles()
+                    if self.game_state == "start_menu":
+                        # Particle Stuff
+                        self.particle_system.add_emitter("mouse",pygame.mouse.get_pos(),color=(255,255,255))
+                        self.particle_system.add_particles("mouse")
+                    elif self.game_state == "game":
+                        print(self.ship.pos)
+                        self.particle_system.add_emitter("ship",self.ship.pos.midbottom,direction=(0,2),color=(255,165,0),spread=3)
+                        self.particle_system.add_particles("ship")
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     if self.game_state == "start_menu":
@@ -70,19 +74,25 @@ class Game:
             
             # RENDER GAME HERE
 
-            # Get Player Input
+            # Game States Determination
             if self.game_state == "start_menu":
                 
                 mouse_pos = pygame.mouse.get_pos()
                 start_screen = StartScreen(text="Invaders",font_size=50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0))
                 start_screen.draw(mouse_pos=mouse_pos)
-                self.particle1.emit() # Emits Particles from mouse.
+                self.particle_system.emit() # Emits Particles from mouse.
+                
+            # Actual State of playing the game
             elif self.game_state == "game":
                 keys = pygame.key.get_pressed()
+                
+                self.particle_system.emit()
                 self.ship_movement(keys)
                 
                 # Enemy Movement
                 self.enemy_movement(self.enemies)
+                
+                
             elif self.game_state == "game_over":
                 # TODO Finish writing and setting up game over state
                 pass
