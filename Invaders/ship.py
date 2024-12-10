@@ -29,3 +29,9 @@ class Ship:
         if collision:
             print('Collision Detected.')
         return collision
+    
+    def ship_thruster(self):
+        
+        # Emit Particles from ship
+        
+        pass

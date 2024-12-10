@@ -8,7 +8,6 @@ from particles import ParticlePrinciple
 WIDTH = 720
 HEIGHT = 1000
 WHITE = (255,255,255)
-particle1 = ParticlePrinciple()
 PARTICLE_EVENT = pygame.USEREVENT + 1
 
 
@@ -18,6 +17,8 @@ class Game:
         pygame.display.set_caption('Invaderrrsss')
         icon = pygame.image.load('./Assets/enemy.png')
         pygame.display.set_icon(icon)
+        pygame.time.set_timer(PARTICLE_EVENT,40)
+        
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
         # self.mouse_pos = pygame.mouse.get_pos()
         self.game_state = "start_menu"
@@ -35,7 +36,8 @@ class Game:
         # Create Enemies
         self.enemies_setup(rows=5,cols=8)
         
-        # Particle Event
+        # Particle Stuff
+        particle1 = ParticlePrinciple(screen=self.screen)
     
         
         # End the game if the user presses 'X'
@@ -60,6 +62,7 @@ class Game:
 
             # Get Player Input
             if self.game_state == "start_menu":
+                particle1.emit()
                 mouse_pos = pygame.mouse.get_pos()
                 start_screen = StartScreen(text="Invaders",font_size=50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0))
                 start_screen.draw(mouse_pos=mouse_pos)
