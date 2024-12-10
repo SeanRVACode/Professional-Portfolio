@@ -3,7 +3,7 @@ from particles import ParticlePrinciple
 
 
 class Ship:
-    def __init__(self,x,y,speed,height,width,particles = None):
+    def __init__(self,x,y,speed,height,width,particles = None,keys=None):
         self.game_height = height
         self.game_width = width
         self.graphic = pygame.transform.scale(pygame.image.load('./Assets/128px-Space-Invaders-ship.png').convert_alpha(),(100,100)) # Convert alpha is loading the transparent image of the file

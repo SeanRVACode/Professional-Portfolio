@@ -126,6 +126,7 @@ class Game:
             ye += 40
         
     def ship_movement(self,keys):
+        # TODO look into moving this to the ship class
         # Ship Movement
         if keys[pygame.K_LEFT]:
             self.ship.move(left=True)
