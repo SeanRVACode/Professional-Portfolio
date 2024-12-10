@@ -27,6 +27,7 @@ class Game:
         self.enemies = []
         self.ship = Ship(315,850,10,HEIGHT,WIDTH)
         self.direction = 'right'
+        self.particle1 = ParticlePrinciple(screen=self.screen,mouse_pos=(0,0))
         self.game_font = pygame.font.SysFont('TT Fellows',110)
         # self.clock.tick(60)
         self.main()
@@ -36,8 +37,7 @@ class Game:
         # Create Enemies
         self.enemies_setup(rows=5,cols=8)
         
-        # Particle Stuff
-        particle1 = ParticlePrinciple(screen=self.screen)
+
     
         
         # End the game if the user presses 'X'
@@ -46,7 +46,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.running = False
                 if event.type == PARTICLE_EVENT:
-                    particle1.add_particles()
+                    print('PARTICLE_EVENT Triggered')
+                    # Particle Stuff
+                    self.particle1.mouse_pos = pygame.mouse.get_pos()
+                    self.particle1.add_particles()
             # Fill the screen
             self.screen.fill('black')
 
@@ -62,10 +65,11 @@ class Game:
 
             # Get Player Input
             if self.game_state == "start_menu":
-                particle1.emit()
+                
                 mouse_pos = pygame.mouse.get_pos()
                 start_screen = StartScreen(text="Invaders",font_size=50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0))
                 start_screen.draw(mouse_pos=mouse_pos)
+                self.particle1.emit() # Emits Particles from mouse.
             elif self.game_state == "game":
                 keys = pygame.key.get_pressed()
                 self.ship_movement(keys)
