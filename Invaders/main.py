@@ -60,6 +60,7 @@ class Game:
                         # Check if "Start" Button is clicked
                         if start_screen.handle_click(mouse_pos):
                             print("Start Button Clicked")
+                            # Set the game state to game
                             self.game_state = "game"
             # Fill the screen
             self.screen.fill('black')
