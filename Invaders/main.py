@@ -45,11 +45,18 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                if event.type == PARTICLE_EVENT:
+                elif event.type == PARTICLE_EVENT:
                     print('PARTICLE_EVENT Triggered')
                     # Particle Stuff
                     self.particle1.mouse_pos = pygame.mouse.get_pos()
                     self.particle1.add_particles()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    if self.game_state == "start_menu":
+                        # Check if "Start" Button is clicked
+                        if start_screen.handle_click(mouse_pos):
+                            print("Start Button Clicked")
+                            self.game_state = "game"
             # Fill the screen
             self.screen.fill('black')
 

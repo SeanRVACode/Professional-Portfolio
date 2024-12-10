@@ -67,4 +67,11 @@ class StartScreen:
         
         # Update the pygame display
         pygame.display.update()
+        
+        
+    def handle_click(self,mouse_pos):
+        # Check if the mouse click is inside the "Start" button's rectangle
+        if self.start_button_rect and self.start_button_rect.collidepoint(mouse_pos):
+            return True
+        return False
     
