@@ -11,7 +11,7 @@ class Ship:
         self.pos = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
         
-        # self.life # TODO Add Life count?
+        # self.life # TODO Add Life count? Does the life even need to be held by the ship? I guess it would as we detect collision on the ship as well.
         
         
     def move(self,left=False,right=False):
