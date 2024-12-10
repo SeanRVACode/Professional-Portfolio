@@ -8,6 +8,7 @@ class ParticlePrinciple:
         
     def emit(self):
         if self.particles:
+            self.delete_particles()
             print('Emitting')
             for particle in self.particles:
                 # Move
@@ -24,7 +25,7 @@ class ParticlePrinciple:
         
         radius = 10
         
-        direction = 1
+        direction = 5
         
         particle_circle = [[pos_x,pos_y],radius,direction]
         
@@ -33,5 +34,7 @@ class ParticlePrinciple:
         
     
     def delete_particles(self):
-        pass # delete particles after a certain time
+        particles_copy = [particle for particle in self.particles if particle[1] > 0]
+        self.particles = particles_copy
+        
         

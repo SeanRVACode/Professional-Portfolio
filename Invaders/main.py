@@ -17,7 +17,7 @@ class Game:
         pygame.display.set_caption('Invaderrrsss')
         icon = pygame.image.load('./Assets/enemy.png')
         pygame.display.set_icon(icon)
-        pygame.time.set_timer(PARTICLE_EVENT,40)
+        pygame.time.set_timer(PARTICLE_EVENT,50)
         
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
         # self.mouse_pos = pygame.mouse.get_pos()
