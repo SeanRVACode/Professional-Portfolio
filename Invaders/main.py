@@ -15,7 +15,7 @@ class Game:
         icon = pygame.image.load('./Assets/enemy.png')
         pygame.display.set_icon(icon)
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
-        self.mouse_pos = pygame.mouse.get_pos()
+        # self.mouse_pos = pygame.mouse.get_pos()
         self.game_state = "start_menu"
         self.running = True
         self.clock = pygame.time.Clock()
@@ -53,7 +53,9 @@ class Game:
 
             # Get Player Input
             if self.game_state == "start_menu":
-                start_screen = StartScreen("Invaders",50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0))
+                mouse_pos = pygame.mouse.get_pos()
+                start_screen = StartScreen(text="Invaders",font_size=50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0))
+                start_screen.draw(mouse_pos=mouse_pos)
             elif self.game_state == "game":
                 keys = pygame.key.get_pressed()
                 self.ship_movement(keys)
