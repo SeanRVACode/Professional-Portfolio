@@ -3,10 +3,14 @@ from ship import Ship
 from enemies import Enemy
 import pygame
 from title_screen import StartScreen
+from particles import ParticlePrinciple
 
 WIDTH = 720
 HEIGHT = 1000
 WHITE = (255,255,255)
+particle1 = ParticlePrinciple()
+PARTICLE_EVENT = pygame.USEREVENT + 1
+
 
 class Game:
     def __init__(self):
@@ -31,13 +35,16 @@ class Game:
         # Create Enemies
         self.enemies_setup(rows=5,cols=8)
         
+        # Particle Event
+    
         
         # End the game if the user presses 'X'
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                    
+                if event.type == PARTICLE_EVENT:
+                    particle1.add_particles()
             # Fill the screen
             self.screen.fill('black')
 
