@@ -51,8 +51,11 @@ class Game:
                         self.particle_system.add_emitter("mouse",pygame.mouse.get_pos(),color=(255,255,255))
                         self.particle_system.add_particles("mouse")
                     elif self.game_state == "game":
-                        print(self.ship.pos)
-                        self.particle_system.add_emitter("ship",self.ship.pos.midbottom,direction=(0,2),color=(255,165,0),spread=3)
+                        # Debug to know midbottom of ship
+                        # print(self.ship.pos.midbottom)
+                        # Obtain position of midbottom of ship for editing
+                        ship_x,ship_y = self.ship.pos.midbottom
+                        self.particle_system.add_emitter("ship",(ship_x+10,ship_y-10),direction=(0,2),color=(255,165,0),spread=4)
                         self.particle_system.add_particles("ship")
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
