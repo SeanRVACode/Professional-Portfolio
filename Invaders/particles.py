@@ -49,7 +49,7 @@ class ParticlePrinciple:
         
         if emitter:
             pos_x,pos_y = emitter["position"]
-            particle_circle = [[pos_x-10,pos_y-10],radius,1] # Particle with position, radius, and direction
+            particle_circle = [[pos_x,pos_y],radius,1] # Particle with position, radius, and direction
             emitter["particles"].append(particle_circle)
             
         # # Temp postions in 'middle' of screen
