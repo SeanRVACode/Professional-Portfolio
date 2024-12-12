@@ -25,10 +25,11 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
         self.enemies = []
-        self.ship = Ship(315,850,10,HEIGHT,WIDTH)
+        self.ship = Ship(315,850,10,HEIGHT,WIDTH,screen=self.screen)
         self.direction = 'right'
         self.particle_system = ParticlePrinciple(screen=self.screen)
         self.game_font = pygame.font.SysFont('TT Fellows',110)
+
         # self.clock.tick(60)
         self.main()
         
@@ -91,7 +92,7 @@ class Game:
                 keys = pygame.key.get_pressed()
                 
                 self.particle_system.emit()
-                self.ship_movement(keys)
+                self.ship.move(keys)
                 
                 # Enemy Movement
                 self.enemy_movement(self.enemies)
@@ -102,7 +103,7 @@ class Game:
                 pass
                 
             # flip the display to put your work on screen
-            pygame.display.flip()
+            pygame.display.flip() # Updates the entire display at once
             
             self.clock.tick(60) # Limits the fps 60
             
@@ -127,17 +128,9 @@ class Game:
                 xe += 80
             xe = 30
             ye += 40
-        
-    def ship_movement(self,keys):
-        # TODO look into moving this to the ship class
-        # Ship Movement
-        if keys[pygame.K_LEFT]:
-            self.ship.move(left=True)
-        if keys[pygame.K_RIGHT]:
-            self.ship.move(right=True)
-        self.screen.blit(self.ship.graphic,(self.ship.pos))
     
     def enemy_movement(self,enemies):
+        # TODO Look into moving this to enemies class
         # Check if left most enemy hits the left boundary
         if enemies[0].pos.left <= 0 and self.direction == 'left':
             self.direction = 'right' # Change the direction to right

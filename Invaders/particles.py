@@ -32,16 +32,6 @@ class ParticlePrinciple:
                 particle[1] -= 0.5 # Shrink
                 if particle[1] > 0: # Only Draw Visible Particles
                     pygame.draw.circle(self.screen,emitter["color"],particle[0],int(particle[1]))
-        # if self.particles:
-        #     self.delete_particles()
-        #     print('Emitting')
-        #     for particle in self.particles:
-        #         # Move
-        #         particle[0][1] += particle[2]
-        #         # Shrink
-        #         particle[1] -= 0.2
-        #         # Draw a cirlce around the particle
-        #         pygame.draw.circle(self.screen,pygame.Color(self.color),particle[0], int(particle[1]))
                 
     def add_particles(self,emitter_id,radius=10):
         # Add particles for each specific emitter
@@ -50,19 +40,7 @@ class ParticlePrinciple:
         if emitter:
             pos_x,pos_y = emitter["position"]
             particle_circle = [[pos_x,pos_y],radius,1] # Particle with position, radius, and direction
-            emitter["particles"].append(particle_circle)
-            
-        # # Temp postions in 'middle' of screen
-        # pos_x,pos_y = self.position
-        
-        # radius = 10
-        
-        # direction = 5
-        
-        # particle_circle = [[pos_x,pos_y],radius,direction]
-        
-        # self.particles.append(particle_circle)
-        
+            emitter["particles"].append(particle_circle)        
         
     
     def delete_particles(self,particles):
