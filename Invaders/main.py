@@ -10,6 +10,7 @@ from enemies_manager import EnemiesManager
 WIDTH = 720
 HEIGHT = 1000
 WHITE = (255,255,255)
+FPS = 60
 PARTICLE_EVENT = pygame.USEREVENT + 1
 
 
@@ -114,7 +115,7 @@ class Game:
             # flip the display to put your work on screen
             pygame.display.flip() # Updates the entire display at once
             
-            self.clock.tick(60) # Limits the fps 60
+            self.clock.tick(FPS) # Limits the fps 60
 
     def update_lasers(self):
         for laser in self.ship.lasers:

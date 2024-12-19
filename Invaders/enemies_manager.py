@@ -8,6 +8,7 @@ class EnemiesManager:
         self.screen_width = screen_width
         self.scren_height = screen_height
         self.setup_enemies(rows,cols)
+        self.drop_speed = 5
         
     def setup_enemies(self,rows,cols):
         xe = 30
@@ -33,7 +34,7 @@ class EnemiesManager:
         if change_direction:
             self.direction = 'left' if self.direction == 'right' else 'right'
             for enemy in self.enemies:
-                enemy.rect.y += 5 # Move down by 10 pixels
+                enemy.rect.y += self.drop_speed # Move down by 10 pixels
                 
                 
         # Move enemies horizontally based on the current direction
