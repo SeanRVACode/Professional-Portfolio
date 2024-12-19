@@ -5,6 +5,7 @@ import pygame
 from title_screen import StartScreen
 from particles import ParticlePrinciple
 
+
 WIDTH = 720
 HEIGHT = 1000
 WHITE = (255,255,255)
@@ -69,11 +70,7 @@ class Game:
             # Fill the screen
             self.screen.fill('black')
 
-            # Place enemies on screen
-            for enemy in self.enemies:
-                self.screen.blit(enemy.graphic,enemy.pos)
-                # Detect Collision
-                self.game_over(collision=self.ship.detect_collide(enemy.pos)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
+            
 
                     
             
@@ -89,13 +86,30 @@ class Game:
                 
             # Actual State of playing the game
             elif self.game_state == "game":
+                # Get the keys pressed
                 keys = pygame.key.get_pressed()
                 
+                
+                # Shoot Laser
+                if keys[pygame.K_SPACE]:
+                    self.ship.shoot(self.enemies)
+                
+                # Ship Functions
                 self.particle_system.emit()
                 self.ship.move(keys)
                 
                 # Enemy Movement
                 self.enemy_movement(self.enemies)
+                self.update_lasers()
+                
+                # Place enemies on screen
+                for enemy in self.enemies:
+                    self.screen.blit(enemy.graphic,enemy.pos)
+                    # Detect Collision
+                    self.game_over(collision=self.ship.detect_collide(enemy.pos)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
+
+                
+                
                 
                 
             elif self.game_state == "game_over":
@@ -106,7 +120,12 @@ class Game:
             pygame.display.flip() # Updates the entire display at once
             
             self.clock.tick(60) # Limits the fps 60
-            
+
+    def update_lasers(self):
+        for laser in self.ship.lasers:
+            if not laser.update(self.screen,self.enemies):
+                self.ship.lasers.remove(laser)
+    
     def game_over(self,collision):
         position = (130,500)
         transparent = (0,0,0,0)

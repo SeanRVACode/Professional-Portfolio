@@ -1,6 +1,6 @@
 import pygame
 from particles import ParticlePrinciple
-
+from laser import Laser
 
 class Ship:
     def __init__(self,x,y,speed,height,width,screen,particles = None,keys=None):
@@ -12,21 +12,20 @@ class Ship:
         # self.pos = (x,y) # Starting position of the ship
         self.pos = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
+        self.lasers = []
+        self.shoot_cooldown = 500 # In miliseconds
+        self.last_shot_time = pygame.time.get_ticks() # Time when the last shot
         
+         
         # self.life # TODO Add Life count? Does the life even need to be held by the ship? I guess it would as we detect collision on the ship as well.
         
         
     def move(self,keys):
         if keys[pygame.K_LEFT]:
             self.pos.right -= self.speed
-            # self.ship.move(left=True)
         if keys[pygame.K_RIGHT]:
             self.pos.right += self.speed
-            # self.ship.move(right=True)
-        # if right:
-        #     self.pos.right += self.speed
-        # if left:
-        #     self.pos.right -= self.speed
+        # Boundry Check
         if self.pos.right > self.game_width:
             self.pos.left = 600
         if self.pos.left < 0:
@@ -40,8 +39,13 @@ class Ship:
             print('Collision Detected.')
         return collision
 
-    def shoot(self):
-        pass # Shoot blaster based on key press
+    def shoot(self,other_rect):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_shot_time >= self.shoot_cooldown:
+            laser = Laser(position=self.pos.midtop,speed=-10)
+            self.lasers.append(laser)
+            self.last_shot_time = current_time
+                
     
     def ship_thruster(self):
         
