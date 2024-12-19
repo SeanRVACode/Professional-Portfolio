@@ -4,6 +4,7 @@ from enemies import Enemy
 import pygame
 from title_screen import StartScreen
 from particles import ParticlePrinciple
+from enemies_manager import EnemiesManager
 
 
 WIDTH = 720
@@ -25,7 +26,7 @@ class Game:
         self.game_state = "start_menu"
         self.running = True
         self.clock = pygame.time.Clock()
-        self.enemies = []
+        self.enemies_manager = EnemiesManager(WIDTH,HEIGHT,rows=5,cols=8)
         self.ship = Ship(315,850,10,HEIGHT,WIDTH,screen=self.screen)
         self.direction = 'right'
         self.particle_system = ParticlePrinciple(screen=self.screen)
@@ -36,11 +37,6 @@ class Game:
         
     def main(self):
 
-        # Create Enemies
-        self.enemies_setup(rows=5,cols=8)
-        
-
-    
         
         # End the game if the user presses 'X'
         while self.running:
@@ -92,18 +88,17 @@ class Game:
                 
                 # Shoot Laser
                 if keys[pygame.K_SPACE]:
-                    self.ship.shoot(self.enemies)
+                    self.ship.shoot(self.enemies_manager.enemies)
                 
                 # Ship Functions
                 self.particle_system.emit()
                 self.ship.move(keys)
-                
-                # Enemy Movement
-                self.enemy_movement(self.enemies)
+                self.enemies_manager.move_enemies()
                 self.update_lasers()
+                self.enemies_manager.draw(self.screen)
                 
                 # Place enemies on screen
-                for enemy in self.enemies:
+                for enemy in self.enemies_manager.enemies:
                     self.screen.blit(enemy.graphic,enemy.pos)
                     # Detect Collision
                     self.game_over(collision=self.ship.detect_collide(enemy.pos)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
@@ -122,9 +117,7 @@ class Game:
             self.clock.tick(60) # Limits the fps 60
 
     def update_lasers(self):
-        for laser in self.ship.lasers:
-            if not laser.update(self.screen,self.enemies):
-                self.ship.lasers.remove(laser)
+        self.ship.lasers.update(self.screen,self.enemies_manager.enemies)
     
     def game_over(self,collision):
         position = (130,500)
@@ -134,39 +127,9 @@ class Game:
             self.screen.fill('black')
             self.ship.graphic.fill(transparent)
             self.screen.blit(text_surface,position)
-            # self.clock.tick(None)
-            # self.running = False
+
         pass
-    def enemies_setup(self,rows,cols):
-        xe = 30
-        ye = 30
-        for row in range(rows+1):
-            for col in range(cols+1):
-                ene = Enemy(1,HEIGHT,WIDTH,10,xe,ye)
-                self.enemies.append(ene)
-                xe += 80
-            xe = 30
-            ye += 40
-    
-    def enemy_movement(self,enemies):
-        # TODO Look into moving this to enemies class
-        # Check if left most enemy hits the left boundary
-        if enemies[0].pos.left <= 0 and self.direction == 'left':
-            self.direction = 'right' # Change the direction to right
-            for alien in enemies:
-                alien.pos.y += 10 # Move alien down
-        # Check if last enemy (right most enemy) hits the right boundry
-        elif enemies[-1].pos.right >= WIDTH and self.direction == 'right':
-            self.direction = 'left' # Change direction to left
-            for alien in enemies:
-                alien.pos.y += 10 # Move alien down
-        
-        # Move alients left to right
-        for alien in enemies:
-            if self.direction == 'right':
-                alien.pos.x += alien.speed # Move alien to the right at set speed
-            elif self.direction == 'left':
-                alien.pos.x -= alien.speed # Move alien to the left at set speed
+
         
             
         
@@ -176,5 +139,5 @@ class Game:
         
         
             
-if __name__=='__main__':
+if __name__=='__main__': 
     Game()

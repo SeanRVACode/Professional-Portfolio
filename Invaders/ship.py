@@ -12,8 +12,8 @@ class Ship:
         # self.pos = (x,y) # Starting position of the ship
         self.pos = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
-        self.lasers = []
-        self.shoot_cooldown = 500 # In miliseconds
+        self.lasers = pygame.sprite.Group() # Group lasers into sprite group
+        self.shoot_cooldown = 300 # In miliseconds
         self.last_shot_time = pygame.time.get_ticks() # Time when the last shot
         
          
@@ -43,10 +43,17 @@ class Ship:
         current_time = pygame.time.get_ticks()
         if current_time - self.last_shot_time >= self.shoot_cooldown:
             laser = Laser(position=self.pos.midtop,speed=-10)
-            self.lasers.append(laser)
+            self.lasers.add(laser) # Add laser to the sprite group
             self.last_shot_time = current_time
-                
     
+    def update_lasers(self,screen,enemies):
+        self.lasers.update() # Automatically calls 'update()' on each laser in the sprite group
+        for laser in self.lasers:
+            if laser.rect.bottom < 0:  # Remove off screen lasers
+                self.lasers.remove(laser)
+            else:
+                screen.blit(laser.image,laser.rect)
+  
     def ship_thruster(self):
         
         # Emit Particles from ship

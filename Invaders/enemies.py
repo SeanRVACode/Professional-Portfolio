@@ -2,13 +2,15 @@ import pygame
 import random
 
 
-class Enemy:
+class Enemy(pygame.sprite.Sprite):
     def __init__(self,speed,height,width,ene_height,x,y):
+        super().__init__()
         self.game_height = height
         self.game_width = width
         self.graphic = pygame.image.load('./Assets/enemy.png')
         self.graphic = pygame.transform.scale(self.graphic,(25,25))
-        self.pos = self.graphic.get_rect().move(x,y)
+        self.rect = self.graphic.get_rect()
+        self.pos = self.rect.move(x,y)
         self.speed = speed
 
     def shoot(self):
