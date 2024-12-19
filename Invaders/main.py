@@ -99,9 +99,9 @@ class Game:
                 
                 # Place enemies on screen
                 for enemy in self.enemies_manager.enemies:
-                    self.screen.blit(enemy.graphic,enemy.pos)
+                    self.screen.blit(enemy.graphic,enemy.rect)
                     # Detect Collision
-                    self.game_over(collision=self.ship.detect_collide(enemy.pos)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
+                    self.game_over(collision=self.ship.detect_collide(enemy.rect)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
 
                 
                 
@@ -117,7 +117,11 @@ class Game:
             self.clock.tick(60) # Limits the fps 60
 
     def update_lasers(self):
-        self.ship.lasers.update(self.screen,self.enemies_manager.enemies)
+        for laser in self.ship.lasers:
+            collided_enemy = laser.update(self.screen,self.enemies_manager.enemies)
+            if collided_enemy:
+                # Handle collision feed back
+                print(f'Laser hit enemy at {collided_enemy.rect}')
     
     def game_over(self,collision):
         position = (130,500)
