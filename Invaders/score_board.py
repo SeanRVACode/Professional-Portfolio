@@ -10,4 +10,12 @@ class ScoreBoard:
     def draw_scoreboard(self,screen):
         score_text = self.game_font.render(f'Score: {self.score}',True,'White')
         
+    def increase_score(self):
+        # Increase the score when an enemy is killed.
+        self.score += 1 # Temp value for now until I decide what the scoring should be.
+        
+    def reset_score(self):
+        # Possibly implement reset mechanic for score.
+        pass
+        
         
