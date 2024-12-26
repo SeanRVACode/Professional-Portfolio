@@ -14,12 +14,12 @@ class ScoreBoard:
         screen.blit(score_text,(score_x,score_y))
         
     def increase_score(self):
-        # TODO Need to figure out how to increase the score. Should the laser be in charge of it since it handles collision?
         # Increase the score when an enemy is killed.
         self.score += 1 # Temp value for now until I decide what the scoring should be.
         
     def reset_score(self):
         # Possibly implement reset mechanic for score.
         pass
+    
         
         

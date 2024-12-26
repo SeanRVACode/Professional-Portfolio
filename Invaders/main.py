@@ -127,6 +127,7 @@ class Game:
             collided_enemy = laser.update(self.screen,self.enemies_manager.enemies)
             if collided_enemy:
                 # Handle collision feed back
+                self.score.increase_score()
                 print(f'Laser hit enemy at {collided_enemy.rect}')
     
     def game_over(self,collision):
