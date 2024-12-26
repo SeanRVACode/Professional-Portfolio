@@ -5,6 +5,7 @@ import pygame
 from title_screen import StartScreen
 from particles import ParticlePrinciple
 from enemies_manager import EnemiesManager
+from score_board import ScoreBoard
 
 
 WIDTH = 720
@@ -32,6 +33,7 @@ class Game:
         self.direction = 'right'
         self.particle_system = ParticlePrinciple(screen=self.screen)
         self.game_font = pygame.font.SysFont('TT Fellows',110)
+        self.score = ScoreBoard()
 
         # self.clock.tick(60)
         self.main()
@@ -83,6 +85,9 @@ class Game:
                 
             # Actual State of playing the game
             elif self.game_state == "game":
+                
+                self.score.draw_scoreboard(self.screen)
+                
                 # Get the keys pressed
                 keys = pygame.key.get_pressed()
                 

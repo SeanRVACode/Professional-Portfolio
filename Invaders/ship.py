@@ -2,6 +2,7 @@ import pygame
 from particles import ParticlePrinciple
 from laser import Laser
 
+
 class Ship:
     def __init__(self,x,y,speed,height,width,screen,particles = None,keys=None):
         self.game_height = height
