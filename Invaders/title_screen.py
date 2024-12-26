@@ -36,6 +36,7 @@ class StartScreen:
         # TODO Feed mouse postion into here so that I can determine when to make buttons larger
         
     def draw(self,mouse_pos):
+        # TODO Maybe should have mouse effects be handled in its own class.
         """Draws the start screen with hover effects based on mouse position."""
         
         # Fill the Screen
