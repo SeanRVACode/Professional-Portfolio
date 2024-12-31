@@ -69,10 +69,6 @@ class Game:
             # Fill the screen
             self.screen.fill('black')
 
-            
-
-                    
-            
             # RENDER GAME HERE
 
             # Game States Determination
