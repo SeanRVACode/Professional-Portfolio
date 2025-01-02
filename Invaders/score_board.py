@@ -6,6 +6,7 @@ class ScoreBoard:
         self.score = 0
         self.high_score = 0
         self.game_font = pygame.font.SysFont('TT Fellows',40)
+        self.high_score_file_path = './Assets/high_score.txt'
         
     def draw_scoreboard(self,screen):
         score_text = self.game_font.render(f'Score: {self.score}',True,'White')
@@ -21,7 +22,12 @@ class ScoreBoard:
         # Possibly implement reset mechanic for score.
         pass
     def save_high_score(self):
+        scores = []
         # Save the high score to a file
+        with open(self.high_score_file_path,'r+') as file:
+            for hs in file:
+                name, counts = hs.split(",")
+                scores.a
         pass
     
         

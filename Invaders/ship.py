@@ -35,6 +35,7 @@ class Ship:
         
     
     def detect_collide(self,other_rect):
+        # Collision between ship and other_rect. This will return true or false which will either be used to reduce ship life or end the game.
         collision = self.pos.colliderect(other_rect)
         if collision:
             print('Collision Detected.')

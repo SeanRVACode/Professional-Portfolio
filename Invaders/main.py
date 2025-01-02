@@ -100,10 +100,12 @@ class Game:
                 self.enemies_manager.draw(self.screen)
                 
                 # Place enemies on screen
-                for enemy in self.enemies_manager.enemies:
+                for enemy in self.enemies_manager.enemies: 
                     self.screen.blit(enemy.graphic,enemy.rect)
                     # Detect Collision
-                    self.game_over(collision=self.ship.detect_collide(enemy.rect)) # TODO figure a way to either clear out enemies or reset the game to a game over screen
+                    if self.ship.detect_collide(enemy.rect):
+                        self.game_over(collision=True)
+                        break
 
                 
                 
@@ -111,6 +113,8 @@ class Game:
                 
             elif self.game_state == "game_over":
                 # TODO Finish writing and setting up game over state
+                # TODO add save high score on game over
+                
                 pass
                 
             # flip the display to put your work on screen
@@ -130,6 +134,7 @@ class Game:
         position = (130,500)
         transparent = (0,0,0,0)
         if collision:
+            self.game_state = "game_over"
             text_surface = self.game_font.render('GAME OVER',True,WHITE)
             self.screen.fill('black')
             self.ship.graphic.fill(transparent)
