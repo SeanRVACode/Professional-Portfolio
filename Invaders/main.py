@@ -33,7 +33,7 @@ class Game:
         self.direction = 'right'
         self.particle_system = ParticlePrinciple(screen=self.screen)
         self.game_font = pygame.font.SysFont('TT Fellows',110)
-        self.score = ScoreBoard()
+        self.score_board = ScoreBoard()
 
         # self.clock.tick(60)
         self.main()
@@ -82,7 +82,7 @@ class Game:
             # Actual State of playing the game
             elif self.game_state == "game":
                 
-                self.score.draw_scoreboard(self.screen)
+                self.score_board.draw_scoreboard(self.screen)
                 
                 # Get the keys pressed
                 keys = pygame.key.get_pressed()
@@ -102,9 +102,10 @@ class Game:
                 # Place enemies on screen
                 for enemy in self.enemies_manager.enemies: 
                     self.screen.blit(enemy.graphic,enemy.rect)
-                    # Detect Collision
+                    # Detect Collision with enemy
                     if self.ship.detect_collide(enemy.rect):
-                        self.game_over(collision=True)
+                        self.score_board.save_high_score()
+                        self.game_over(collision=True) 
                         break
 
                 
@@ -120,17 +121,17 @@ class Game:
             # flip the display to put your work on screen
             pygame.display.flip() # Updates the entire display at once
             
-            self.clock.tick(FPS) # Limits the fps 60
+            self.clock.tick(FPS) # Limits the fps to FPS global variable
 
     def update_lasers(self):
         for laser in self.ship.lasers:
             collided_enemy = laser.update(self.screen,self.enemies_manager.enemies)
             if collided_enemy:
                 # Handle collision feed back
-                self.score.increase_score()
+                self.score_board.increase_score()
                 print(f'Laser hit enemy at {collided_enemy.rect}')
     
-    def game_over(self,collision):
+    def game_over(self,collision): # TODO update this to also handle cases where ship health is 0. If an enemy collides with the ship its an instant game over
         position = (130,500)
         transparent = (0,0,0,0)
         if collision:
@@ -138,6 +139,7 @@ class Game:
             text_surface = self.game_font.render('GAME OVER',True,WHITE)
             self.screen.fill('black')
             self.ship.graphic.fill(transparent)
+            self.score_board.save_high_score()
             self.screen.blit(text_surface,position)
 
         pass
