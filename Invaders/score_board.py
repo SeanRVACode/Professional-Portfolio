@@ -28,13 +28,16 @@ class ScoreBoard:
     def save_high_score(self):
         scores = []
         # Save the high score to a file
-        with open(self.high_score_file_path,'w') as file:
-            line = file.readline() # Score is one line
-            if line:
-                high_score = int(line)
-                if self.score > high_score:
-                    file.write(str(self.score))
-                    file.truncate()
+        with open(self.high_score_file_path,'r') as file:
+            try:
+                line = file.readline().strip() # Score is one line
+                high_score = int(line) if line else 0
+            except:
+                high_score = 0
+
+        if self.score > high_score:
+            with open(self.high_score_file_path,'w') as file:
+                file.write(str(self.score))
             
             
         pass
