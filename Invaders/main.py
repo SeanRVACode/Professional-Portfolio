@@ -16,7 +16,9 @@ PARTICLE_EVENT = pygame.USEREVENT + 1
 
 
 class Game:
+    """ Main game class handling game states and loop."""
     def __init__(self):
+        """ Initialize game components and state."""
         pygame.init()
         pygame.display.set_caption('Invaderrrsss')
         icon = pygame.image.load('./Assets/enemy.png')
@@ -39,7 +41,7 @@ class Game:
         self.main()
         
     def main(self):
-
+        """ Main game loop handling events and state updates."""
         
         # End the game if the user presses 'X'
         while self.running:
@@ -81,42 +83,10 @@ class Game:
                 
             # Actual State of playing the game
             elif self.game_state == "game":
-                
-                self.score_board.draw_scoreboard(self.screen)
-                
-                # Get the keys pressed
-                keys = pygame.key.get_pressed()
-                
-                
-                # Shoot Laser
-                if keys[pygame.K_SPACE]:
-                    self.ship.shoot(self.enemies_manager.enemies)
-                
-                # Ship Functions
-                self.particle_system.emit()
-                self.ship.move(keys)
-                self.enemies_manager.move_enemies()
-                self.update_lasers()
-                self.enemies_manager.draw(self.screen)
-                
-                # Place enemies on screen
-                for enemy in self.enemies_manager.enemies: 
-                    self.screen.blit(enemy.graphic,enemy.rect)
-                    # Detect Collision with enemy
-                    if self.ship.detect_collide(enemy.rect):
-                        self.score_board.save_high_score()
-                        self.game_over(collision=True) 
-                        break
-
-                
-                
-                
+                self.handle_game_state()
                 
             elif self.game_state == "game_over":
-                # TODO Finish writing and setting up game over state
-                # TODO add save high score on game over
-                
-                pass
+                self.display_game_over()
                 
             # flip the display to put your work on screen
             pygame.display.flip() # Updates the entire display at once
@@ -131,16 +101,50 @@ class Game:
                 self.score_board.increase_score()
                 print(f'Laser hit enemy at {collided_enemy.rect}')
     
-    def game_over(self,collision): # TODO update this to also handle cases where ship health is 0. If an enemy collides with the ship its an instant game over
+    def display_game_over(self): 
+        # TODO update this to also handle cases where ship health is 0. If an enemy collides with the ship its an instant game over
         position = (130,500)
-        transparent = (0,0,0,0)
-        if collision:
-            self.game_state = "game_over"
-            text_surface = self.game_font.render('GAME OVER',True,WHITE)
-            self.screen.fill('black')
-            self.ship.graphic.fill(transparent)
+        self.screen.fill('black')
+        text_surface = self.game_font.render('GAME OVER',True,WHITE)
+        # TODO Add a restart button
+        
+        self.screen.blit(text_surface,position)
+    
+    def restart_game(self):
+        # Reset the game state to the start menu when pressed
+        self.game_state = "start_menu"
+        self.score_board.reset_score()
+        
+        
+    def handle_game_state(self):
+        self.score_board.draw_scoreboard(self.screen)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            self.ship.shoot(self.enemies_manager.enemies)
+        
+        self.particle_system.emit()
+        self.ship.move(keys)
+        self.enemies_manager.move_enemies()
+        self.update_lasers()
+        self.enemies_manager.draw(self.screen)
+        
+        if self.enemies_manager.detect_collisions(self.ship):
             self.score_board.save_high_score()
-            self.screen.blit(text_surface,position)
+            self.game_over()
+        
+    def game_over(self):
+        self.game_state = "game_over"
+        
+        # transparent = (0,0,0,0)
+        
+        # if collision:
+        #     self.game_state = "game_over"
+        #     text_surface = self.game_font.render('GAME OVER',True,WHITE)
+        #     self.screen.fill('black')
+        #     self.ship.graphic.fill(transparent)
+        #     self.screen.blit(text_surface,position)
+        #     #  Save High Score
+        #     self.score_board.save_high_score()
 
         pass
 

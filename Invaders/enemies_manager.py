@@ -49,3 +49,10 @@ class EnemiesManager:
         for enemy in self.enemies:
             screen.blit(enemy.graphic,enemy.rect)
                 
+    def detect_collisions(self,ship):
+        for enemy in self.enemies:
+            if ship.detect_collide(enemy.rect):
+                self.enemies.remove(enemy)
+                return True
+        return False
+    

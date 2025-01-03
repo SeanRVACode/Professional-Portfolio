@@ -24,7 +24,8 @@ class ScoreBoard:
         
     def reset_score(self):
         # Possibly implement reset mechanic for score.
-        pass
+        self.score = 0
+        
     def save_high_score(self):
         scores = []
         # Save the high score to a file
