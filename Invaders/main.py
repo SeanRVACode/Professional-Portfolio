@@ -84,6 +84,9 @@ class Game:
             # Actual State of playing the game
             elif self.game_state == "game":
                 self.handle_game_state()
+            
+            elif self.game_state == "victory":
+                pass
                 
             elif self.game_state == "game_over":
                 self.display_game_over()
@@ -131,6 +134,12 @@ class Game:
         if self.enemies_manager.detect_collisions(self.ship):
             self.score_board.save_high_score()
             self.game_over()
+            
+    def victory(self):
+        # Check if all enemies are defeated
+        if self.enemies_manager.enemies == []:
+            self.game_state = "victory"
+            
         
     def game_over(self):
         self.game_state = "game_over"
