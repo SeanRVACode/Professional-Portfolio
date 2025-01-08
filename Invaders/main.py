@@ -86,8 +86,7 @@ class Game:
                 self.handle_game_state()
             
             elif self.game_state == "victory":
-                print('Victory')
-                pass
+                self.display_victory()
                 
             elif self.game_state == "game_over":
                 self.display_game_over()
@@ -115,7 +114,7 @@ class Game:
         self.screen.blit(text_surface,position)
         
     def display_victory(self):
-        position = (130,500)
+        position = (150,500)
         self.screen.fill('black')
         text_surface = self.game_font.render('VICTORY',True,WHITE)
         self.screen.blit(text_surface,position)
@@ -148,10 +147,9 @@ class Game:
             
     def victory(self):
         # Check if all enemies are defeated
-        if self.enemies_manager.enemies == []:
+        if len(self.enemies_manager.enemies) == 0:
+            # Set game state to vicotry. This will result in the victory screen being displayed.
             self.game_state = "victory"
-            # Show victory screen
-            self.display_victory()
             
         
     def game_over(self):
