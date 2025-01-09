@@ -19,7 +19,7 @@ class Ship:
         self.life = 3
         
          
-        # self.life # TODO Add Life count? Does the life even need to be held by the ship? I guess it would as we detect collision on the ship as well.
+        # TODO Add Life count? Does the life even need to be held by the ship? I guess it would as we detect collision on the ship as well.
         
         
     def move(self,keys):
@@ -63,11 +63,20 @@ class Ship:
     def display_ship_life(self,screen):
         # TODO look into changing this into hearts
         # Display the life of the ship
-        text_life = f'Life: {self.life}'
-        position = (10,900)
-        font = pygame.font.SysFont('TT Fellows',40)
-        text_surface = font.render(text_life,True,'White')
-        screen.blit(text_surface,position)
+        
+        position = (10,950)
+        self.setup_hearts(screen,position=position)
+
+    def setup_hearts(self,screen,position):
+        heart = pygame.transform.scale(pygame.image.load('./Assets/heart-pixelate-png.png').convert_alpha(),(20,20))
+        rect = heart.get_rect(topleft=position)
+        # Setup the hearts for the ship
+        for col in range(self.life):
+            screen.blit(heart,rect)
+            rect.x += 40
+            
+            
+            
   
     def ship_thruster(self):
         
