@@ -145,6 +145,9 @@ class Game:
         if self.enemies_manager.detect_collisions(self.ship):
             self.score_board.save_high_score()
             self.game_over()
+        elif self.ship.life <= 0:
+            self.score_board.save_high_score()
+            self.game_over()
         
         self.victory()
             
