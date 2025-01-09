@@ -16,6 +16,7 @@ class Ship:
         self.lasers = pygame.sprite.Group() # Group lasers into sprite group
         self.shoot_cooldown = 300 # In miliseconds
         self.last_shot_time = pygame.time.get_ticks() # Time when the last shot
+        self.life = 3
         
          
         # self.life # TODO Add Life count? Does the life even need to be held by the ship? I guess it would as we detect collision on the ship as well.
@@ -39,6 +40,9 @@ class Ship:
         collision = self.pos.colliderect(other_rect)
         if collision:
             print('Collision Detected.')
+            if other_rect.name == 'laser':
+                # Lower life by one if hit by laser
+                self.life -= 1
         return collision
 
     def shoot(self,other_rect):
@@ -55,6 +59,15 @@ class Ship:
                 self.lasers.remove(laser)
             else:
                 screen.blit(laser.image,laser.rect)
+    
+    def display_ship_life(self,screen):
+        # TODO look into changing this into hearts
+        # Display the life of the ship
+        text_life = f'Life: {self.life}'
+        position = (10,900)
+        font = pygame.font.SysFont('TT Fellows',40)
+        text_surface = font.render(text_life,True,'White')
+        screen.blit(text_surface,position)
   
     def ship_thruster(self):
         

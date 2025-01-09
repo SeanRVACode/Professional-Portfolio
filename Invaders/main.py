@@ -95,6 +95,8 @@ class Game:
             pygame.display.flip() # Updates the entire display at once
             
             self.clock.tick(FPS) # Limits the fps to FPS global variable
+            
+    
 
     def update_lasers(self):
         for laser in self.ship.lasers:
@@ -132,6 +134,7 @@ class Game:
             self.ship.shoot(self.enemies_manager.enemies)
         
         self.particle_system.emit()
+        self.ship.display_ship_life(self.screen)
         self.ship.move(keys)
         self.enemies_manager.move_enemies()
         self.update_lasers()
