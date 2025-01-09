@@ -105,6 +105,13 @@ class Game:
                 # Handle collision feed back
                 self.score_board.increase_score()
                 print(f'Laser hit enemy at {collided_enemy.rect}')
+        for laser in self.enemies_manager.lasers:
+            collided_player = laser.update(self.screen,self.ship.pos,type_='enemy')
+            if collided_player:
+                # Handle collision feed back
+                self.ship.life -= 1
+                print(f'Laser hit player at {collided_player}')
+                
     
     def display_game_over(self): 
         # TODO update this to also handle cases where ship health is 0. If an enemy collides with the ship its an instant game over
@@ -139,6 +146,7 @@ class Game:
         self.enemies_manager.move_enemies()
         self.update_lasers()
         self.enemies_manager.draw(self.screen)
+        self.enemies_manager.shoot()
         
         
         

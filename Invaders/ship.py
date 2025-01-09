@@ -3,8 +3,9 @@ from particles import ParticlePrinciple
 from laser import Laser
 
 
-class Ship:
+class Ship(pygame.sprite.Sprite):
     def __init__(self,x,y,speed,height,width,screen,particles = None,keys=None):
+        super().__init__()
         self.game_height = height
         self.game_width = width
         self.keys = keys
@@ -40,9 +41,9 @@ class Ship:
         collision = self.pos.colliderect(other_rect)
         if collision:
             print('Collision Detected.')
-            if other_rect.name == 'laser':
-                # Lower life by one if hit by laser
-                self.life -= 1
+            # if other_rect.name == 'laser':
+            #     # Lower life by one if hit by laser
+            #     self.life -= 1
         return collision
 
     def shoot(self,other_rect):

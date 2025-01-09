@@ -3,12 +3,13 @@ import pygame
 
 class Laser(pygame.sprite.Sprite):
     laser_image = None
-    def __init__(self,position,speed):
+    def __init__(self,position,speed,type_='player'):
         super().__init__()
         if not Laser.laser_image: # Initialize the laser image once
             Laser.laser_image = pygame.Surface((5,10))
             Laser.laser_image.fill((255,0,0))  # Red Laser
         
+        self.type = type_
         self.image = Laser.laser_image
         self.rect = self.image.get_rect(center=position)
         self.speed = speed
@@ -21,7 +22,7 @@ class Laser(pygame.sprite.Sprite):
         print(f'Laser collision {collision}')
         return collision
     
-    def update(self,screen,enemies):
+    def update(self,screen,enemies,type_='player'):
         self.move() # Moves the laser
         screen.blit(self.image,self.rect)
         
@@ -31,10 +32,17 @@ class Laser(pygame.sprite.Sprite):
             return None
         
         # Check for collision with enemies
-        collided_enemy = pygame.sprite.spritecollideany(self,enemies)
-        if collided_enemy:
-            print('Collision with enemy')
-            collided_enemy.kill()
-            self.kill()
-            return collided_enemy # Return the collided enemy
+        if type_ == 'player':
+            collided_enemy = pygame.sprite.spritecollideany(self,enemies)
+            if collided_enemy:
+                print('Collision with enemy')
+                collided_enemy.kill()
+                self.kill()
+                return collided_enemy # Return the collided enemy
+        elif type_ == 'enemy':
+            collided_player = pygame.sprite.spritecollideany(self,[enemies])
+            if collided_player:
+                print('Collision with player')
+                self.kill()
+                return collided_player
         return None

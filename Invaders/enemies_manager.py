@@ -1,5 +1,7 @@
 import pygame
 from enemies import Enemy
+import random
+from laser import Laser
 
 class EnemiesManager:
     def __init__(self,screen_width,screen_height,rows,cols):
@@ -9,6 +11,9 @@ class EnemiesManager:
         self.scren_height = screen_height
         self.setup_enemies(rows,cols)
         self.drop_speed = 5
+        self.lasers = pygame.sprite.Group()
+        self.last_shot_time = pygame.time.get_ticks()
+        self.shoot_cooldown = 1000
         
     def setup_enemies(self,rows,cols):
         xe = 30
@@ -43,7 +48,16 @@ class EnemiesManager:
                 enemy.rect.x += enemy.speed
             elif self.direction == 'left':
                 enemy.rect.x -= enemy.speed
-                
+    
+    def shoot(self):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_shot_time >= self.shoot_cooldown:
+            chosen_enemy = self.laser_select()
+            laser = Laser(position=chosen_enemy.rect.midbottom,speed=10,type_='enemy')
+            self.lasers.add(laser)
+            self.last_shot_time = current_time
+            
+            
                 
     def draw(self,screen):
         for enemy in self.enemies:
@@ -55,4 +69,9 @@ class EnemiesManager:
                 self.enemies.remove(enemy)
                 return True
         return False
+    
+    def laser_select(self):
+        # Randomly select an enemy to shoot laser
+        chosen_enemy = random.choice(self.enemies.sprites())
+        return chosen_enemy
     
