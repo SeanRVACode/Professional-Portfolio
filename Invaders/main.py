@@ -162,6 +162,8 @@ class Game:
     def victory(self):
         # Check if all enemies are defeated
         if len(self.enemies_manager.enemies) == 0:
+            # Check high score and update it
+            self.score_board.save_high_score()
             # Set game state to vicotry. This will result in the victory screen being displayed.
             self.game_state = "victory"
             

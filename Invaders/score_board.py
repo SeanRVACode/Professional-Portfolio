@@ -7,9 +7,11 @@ class ScoreBoard:
         self.high_score = 0
         self.game_font = pygame.font.SysFont('TT Fellows',40)
         self.high_score_file_path = './Assets/high_score.txt'
+        self.high_score = self.read_high_score()
         
     def draw_scoreboard(self,screen):
-        score_text = self.game_font.render(f'Score: {self.score}',True,'White')
+        high_score = self.high_score
+        score_text = self.game_font.render(f'Score: {self.score} High-Score: {high_score}',True,'White')
         score_x = 10
         score_y = 10 # Both of these are temp values
         screen.blit(score_text,(score_x,score_y))
