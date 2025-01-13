@@ -171,19 +171,6 @@ class Game:
     def game_over(self):
         self.game_state = "game_over"
         
-        # transparent = (0,0,0,0)
-        
-        # if collision:
-        #     self.game_state = "game_over"
-        #     text_surface = self.game_font.render('GAME OVER',True,WHITE)
-        #     self.screen.fill('black')
-        #     self.ship.graphic.fill(transparent)
-        #     self.screen.blit(text_surface,position)
-        #     #  Save High Score
-        #     self.score_board.save_high_score()
-
-        pass
-
         
             
         
