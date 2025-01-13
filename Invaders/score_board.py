@@ -26,22 +26,27 @@ class ScoreBoard:
         # Possibly implement reset mechanic for score.
         self.score = 0
         
+    def read_high_score(self):
+        # Read the high score from a file
+        with open(self.high_score_file_path,'r') as file:
+            print('Reading high score file')
+            try:
+                line = file.readline().strip() # Score is currently only one line long
+                high_score = int(line) if line else 0
+            except: 
+                high_score = 0
+        
+        return high_score
+        
     def save_high_score(self):
         scores = []
-        # Save the high score to a file
-        with open(self.high_score_file_path,'r') as file:
-            try:
-                line = file.readline().strip() # Score is one line
-                high_score = int(line) if line else 0
-            except:
-                high_score = 0
-
+        high_score = self.read_high_score()
+                
+                
+        print(f"High score is: {high_score}")
         if self.score > high_score:
             with open(self.high_score_file_path,'w') as file:
                 file.write(str(self.score))
-            
-            
-        pass
     
         
         
