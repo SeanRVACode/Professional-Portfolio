@@ -6,17 +6,16 @@ class Laser(pygame.sprite.Sprite):
     def __init__(self,position,speed,type_='player'):
         super().__init__()
         self.type_ = type_
+        self.laser_image = pygame.Surface((5,10))
         if type_ == 'player':
-            laser_image.fill((255,0,0)) # Red Laser
+            self.laser_image.fill((255,0,0)) # Red Laser
         elif type_ == 'enemy':
-            laser_image.fill((0,255,0)) # Green Laser
+            self.laser_image.fill((0,255,0)) # Green Laser
         # if not Laser.laser_image: # Initialize the laser image once
     
         #     Laser.laser_image.fill((255,0,0))  # Red Laser
         
-        self.type = type_
-        self.image = Laser.laser_image
-        self.rect = self.image.get_rect(center=position)
+        self.rect = self.laser_image.get_rect(center=position)
         self.speed = speed
     
     def move(self):
@@ -29,7 +28,7 @@ class Laser(pygame.sprite.Sprite):
     
     def update(self,screen,enemies,type_='player'):
         self.move() # Moves the laser
-        screen.blit(self.image,self.rect)
+        screen.blit(self.laser_image,self.rect)
         
         # Remove the laser if it goes off-screen
         if self.rect.bottom < 0:

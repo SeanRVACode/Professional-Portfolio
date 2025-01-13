@@ -106,7 +106,6 @@ class Game:
                 self.score_board.increase_score()
                 print(f'Laser hit enemy at {collided_enemy.rect}')
         for laser in self.enemies_manager.lasers:
-            print(f'Ship rect? {self.ship.rect}')
             collided_player = laser.update(self.screen,self.ship,type_='enemy')
             if collided_player:
                 # Handle collision feed back
