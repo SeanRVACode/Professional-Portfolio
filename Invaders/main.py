@@ -55,9 +55,9 @@ class Game:
                         self.particle_system.add_particles("mouse")
                     elif self.game_state == "game":
                         # Debug to know midbottom of ship
-                        # print(self.ship.pos.midbottom)
+                        # print(self.ship.rect.midbottom)
                         # Obtain position of midbottom of ship for editing
-                        ship_x,ship_y = self.ship.pos.midbottom
+                        ship_x,ship_y = self.ship.rect.midbottom
                         self.particle_system.add_emitter("ship",(ship_x+5,ship_y-12),direction=(0,2),color=(255,165,0),spread=4)
                         self.particle_system.add_particles("ship")
                 elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -106,7 +106,8 @@ class Game:
                 self.score_board.increase_score()
                 print(f'Laser hit enemy at {collided_enemy.rect}')
         for laser in self.enemies_manager.lasers:
-            collided_player = laser.update(self.screen,self.ship.pos,type_='enemy')
+            print(f'Ship rect? {self.ship.rect}')
+            collided_player = laser.update(self.screen,self.ship,type_='enemy')
             if collided_player:
                 # Handle collision feed back
                 self.ship.life -= 1
@@ -123,7 +124,7 @@ class Game:
         self.screen.blit(text_surface,position)
         
     def display_victory(self):
-        position = (150,500)
+        position = (200,500)
         self.screen.fill('black')
         text_surface = self.game_font.render('VICTORY',True,WHITE)
         self.screen.blit(text_surface,position)

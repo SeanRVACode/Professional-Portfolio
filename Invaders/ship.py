@@ -11,8 +11,8 @@ class Ship(pygame.sprite.Sprite):
         self.keys = keys
         self.screen = screen
         self.graphic = pygame.transform.scale(pygame.image.load('./Assets/128px-Space-Invaders-ship.png').convert_alpha(),(90,90)) # Convert alpha is loading the transparent image of the file
-        # self.pos = (x,y) # Starting position of the ship
-        self.pos = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
+        # self.rect = (x,y) # Starting position of the ship
+        self.rect = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
         self.lasers = pygame.sprite.Group() # Group lasers into sprite group
         self.shoot_cooldown = 300 # In miliseconds
@@ -25,20 +25,20 @@ class Ship(pygame.sprite.Sprite):
         
     def move(self,keys):
         if keys[pygame.K_LEFT]:
-            self.pos.right -= self.speed
+            self.rect.right -= self.speed
         if keys[pygame.K_RIGHT]:
-            self.pos.right += self.speed
+            self.rect.right += self.speed
         # Boundry Check
-        if self.pos.right > self.game_width:
-            self.pos.left = 600
-        if self.pos.left < 0:
-            self.pos.left = 0
-        self.screen.blit(self.graphic,(self.pos))
+        if self.rect.right > self.game_width:
+            self.rect.left = 600
+        if self.rect.left < 0:
+            self.rect.left = 0
+        self.screen.blit(self.graphic,(self.rect))
         
     
     def detect_collide(self,other_rect):
         # Collision between ship and other_rect. This will return true or false which will either be used to reduce ship life or end the game.
-        collision = self.pos.colliderect(other_rect)
+        collision = self.rect.colliderect(other_rect)
         if collision:
             print('Collision Detected.')
             # if other_rect.name == 'laser':
@@ -49,7 +49,7 @@ class Ship(pygame.sprite.Sprite):
     def shoot(self,other_rect):
         current_time = pygame.time.get_ticks()
         if current_time - self.last_shot_time >= self.shoot_cooldown:
-            laser = Laser(position=self.pos.midtop,speed=-10)
+            laser = Laser(position=self.rect.midtop,speed=-10)
             self.lasers.add(laser) # Add laser to the sprite group
             self.last_shot_time = current_time
     
