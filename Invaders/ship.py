@@ -40,9 +40,6 @@ class Ship(pygame.sprite.Sprite):
         collision = self.rect.colliderect(other_rect)
         if collision:
             print('Collision Detected.')
-            # if other_rect.name == 'laser':
-            #     # Lower life by one if hit by laser
-            #     self.life -= 1
         return collision
 
     def shoot(self,other_rect):
