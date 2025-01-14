@@ -31,13 +31,14 @@ class Game:
         self.game_state = "start_menu"
         self.running = True
         self.clock = pygame.time.Clock()
-        self.enemies_manager = EnemiesManager(WIDTH,HEIGHT,rows=5,cols=8)
+        self.level = 1
+        self.enemies_manager = EnemiesManager(WIDTH,HEIGHT,rows=self.level,cols=8)
         self.ship = Ship(315,850,10,HEIGHT,WIDTH,screen=self.screen)
         self.direction = 'right'
         self.particle_system = ParticlePrinciple(screen=self.screen)
         self.game_font = pygame.font.SysFont('TT Fellows',110)
         self.score_board = ScoreBoard()
-        self.level = 1
+        
 
         # self.clock.tick(60)
         self.main()
@@ -138,8 +139,12 @@ class Game:
         self.screen.blit(text_surface,position)
     
     def restart_game(self):
+        # Save the high score even though player died
+        self.score_board.save_high_score()
+        
         # Reset the game state to the start menu when pressed
         self.game_state = "start_menu"
+        
         
         # Reset the score_board
         self.score_board.reset_score()
@@ -152,12 +157,14 @@ class Game:
             
         def reset_enemies(): # TODO Possibly implement this into enemies manager
             self.enemies_manager.enemies.empty()
-            self.enemies_manager.setup_enemies(5,8)
+            self.level = 1
+            self.enemies_manager.setup_enemies(self.level,8) # Manually providing rows as its a restart
             self.enemies_manager.lasers.empty() # Clear enemy lasers
+            
+        
             
         reset_ship()
         reset_enemies()
-        
         
         
     def handle_game_state(self):
@@ -183,7 +190,7 @@ class Game:
             self.score_board.save_high_score()
             self.display_game_over()
         
-        self.victory()
+        self.next_level()
     
     def next_level(self):
         # Check if all enemies are defeated
@@ -195,8 +202,23 @@ class Game:
                 self.level += 1
                 # Check high score and update it
                 self.score_board.save_high_score()
+                self.score_board.read_high_score() # Read High Score to display new value
+                self.score_board.high_score = self.score_board.read_high_score()
                 # TODO implement changes to make enemies more difficult.
                 # Play around with increase the amount of rows and how fast they fire lasers.
+                
+                # Handle Enemy Set up for level increase
+                self.enemies_manager.enemies.empty()
+                self.enemies_manager.setup_enemies(self.level,8)
+                self.enemies_manager.lasers.empty()
+                
+                # Handle Ship Reposition
+                self.ship.rect.topleft = (315,850)
+                self.ship.lasers.empty()
+                
+                # We do not reset ship life as they are not lost between levels. May increase them at later levels?
+                
+                
             
                
             

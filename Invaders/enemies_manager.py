@@ -26,6 +26,8 @@ class EnemiesManager:
             xe = 30
             ye += 40
             
+        
+            
     def move_enemies(self):
         # Check if enemies have reached the edge of the screen
         change_direction = False
