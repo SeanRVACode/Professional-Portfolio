@@ -28,7 +28,6 @@ class StartScreen:
         # Define Parts of Title
         self.title_font = pygame.font.SysFont("Courier",font_size + 20, bold=True)
         
-        # Render Start Button Once to calculate its size
         start_button_surface = self.start_button_font.render(self.start_button_text,True,self.start_button_color)
         start_button_x = screen_width // 2 - start_button_surface.get_width() // 2
         start_button_y = screen_height // 2 + start_button_surface.get_height() // 2
