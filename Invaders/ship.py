@@ -11,7 +11,6 @@ class Ship(pygame.sprite.Sprite):
         self.keys = keys
         self.screen = screen
         self.graphic = pygame.transform.scale(pygame.image.load('./Assets/128px-Space-Invaders-ship.png').convert_alpha(),(90,90)) # Convert alpha is loading the transparent image of the file
-        # self.rect = (x,y) # Starting position of the ship
         self.rect = self.graphic.get_rect().move(x,y) # TODO ask for a better explanation of this
         self.speed = speed
         self.lasers = pygame.sprite.Group() # Group lasers into sprite group
