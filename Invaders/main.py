@@ -118,10 +118,9 @@ class Game:
                 
     
     def display_game_over(self): 
-        # TODO update this to also handle cases where ship health is 0. If an enemy collides with the ship its an instant game over
-        # position = (130,500)
-        # self.screen.fill('black')
-        # text_surface = self.game_font.render('GAME OVER',True,WHITE)
+        """ Display the game over Screen."""
+        
+
 
         self.game_state = "game_over"
         # self.screen.blit(text_surface,position)
