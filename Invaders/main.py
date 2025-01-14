@@ -6,6 +6,7 @@ from title_screen import StartScreen
 from particles import ParticlePrinciple
 from enemies_manager import EnemiesManager
 from score_board import ScoreBoard
+from game_over import GameOver
 
 
 WIDTH = 720
@@ -68,6 +69,9 @@ class Game:
                             print("Start Button Clicked")
                             # Set the game state to game
                             self.game_state = "game"
+                    elif self.game_state == "game_over":
+                        if self.game_over_screen.handle_click(mouse_pos):
+                            self.restart_game()
             # Fill the screen
             self.screen.fill('black')
 
@@ -115,12 +119,17 @@ class Game:
     
     def display_game_over(self): 
         # TODO update this to also handle cases where ship health is 0. If an enemy collides with the ship its an instant game over
-        position = (130,500)
-        self.screen.fill('black')
-        text_surface = self.game_font.render('GAME OVER',True,WHITE)
-        # TODO Add a restart button
+        # position = (130,500)
+        # self.screen.fill('black')
+        # text_surface = self.game_font.render('GAME OVER',True,WHITE)
+
+        self.game_state = "game_over"
+        # self.screen.blit(text_surface,position)
+        mouse_pos = pygame.mouse.get_pos()
+        self.game_over_screen = GameOver(text="GAME OVER",font_size=50,screen=self.screen,screen_height=HEIGHT,screen_width=WIDTH,text_rgb=(255,255,255),bg_rgb=(0,0,0),button_text="Restart",score=self.score_board.score,high_score=self.score_board.high_score)
+
+        self.game_over_screen.draw(mouse_pos)
         
-        self.screen.blit(text_surface,position)
         
     def display_victory(self):
         position = (200,500)
@@ -131,7 +140,24 @@ class Game:
     def restart_game(self):
         # Reset the game state to the start menu when pressed
         self.game_state = "start_menu"
+        
+        # Reset the score_board
         self.score_board.reset_score()
+        
+        
+        def reset_ship():
+            self.ship.rect.topleft = (315,850)
+            self.ship.life = 3
+            self.ship.lasers.empty()
+            
+        def reset_enemies():
+            self.enemies_manager.enemies.empty()
+            self.enemies_manager.setup_enemies(5,8)
+            self.enemies_manager.lasers.empty() # Clear enemy lasers
+            
+        reset_ship()
+        reset_enemies()
+        
         
         
     def handle_game_state(self):
@@ -152,10 +178,10 @@ class Game:
         
         if self.enemies_manager.detect_collisions(self.ship):
             self.score_board.save_high_score()
-            self.game_over()
+            self.display_game_over()
         elif self.ship.life <= 0:
             self.score_board.save_high_score()
-            self.game_over()
+            self.display_game_over()
         
         self.victory()
             
@@ -169,7 +195,8 @@ class Game:
             
         
     def game_over(self):
-        self.game_state = "game_over"
+        # self.game_state = "game_over"
+        print('Unused game over function used.')
         
         
             

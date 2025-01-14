@@ -25,7 +25,7 @@ class GameOver:
         self.restart_button_color = text_rgb # Same as game over text color
         
         # Define parts of title
-        self.title_font - pygame.font.SysFont("Courier",font_size + 20,bold=True)
+        self.title_font = pygame.font.SysFont("Courier",font_size + 20,bold=True)
         
         # Render Restart Button Once to calculate its size
         restart_button_surface = self.restart_button_font.render(self.restart_button_text,True,self.restart_button_color)
@@ -53,10 +53,12 @@ class GameOver:
         
         # We need the -100 on this to move the title higher up on the screen so we can make room for the restart button below it.
         
+        self.screen.blit(title_surface,(title_x,title_y))
+        
         # Check if the mouse is hovering over the restart button 
         is_hovered = self.restart_button_rect and self.restart_button_rect.collidepoint(mouse_pos)
         # Button font determined by if statement
-        button_font = self.restart_button_hover_font if is_hovered else self.restart_button_font
+        button_font = self.restart_button_hover if is_hovered else self.restart_button_font
         
         # Render the restart button
         restart_button_surface = button_font.render(self.restart_button_text,True,self.restart_button_color)
