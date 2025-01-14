@@ -204,7 +204,7 @@ class Game:
                 self.score_board.save_high_score()
                 self.score_board.read_high_score() # Read High Score to display new value
                 self.score_board.high_score = self.score_board.read_high_score()
-                # TODO implement changes to make enemies more difficult.
+                # TODO Look into making enemy lasers fire faster in higher levels
                 # Play around with increase the amount of rows and how fast they fire lasers.
                 
                 # Handle Enemy Set up for level increase
