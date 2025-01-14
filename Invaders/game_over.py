@@ -55,7 +55,27 @@ class GameOver:
         
         # Check if the mouse is hovering over the restart button 
         is_hovered = self.restart_button_rect and self.restart_button_rect.collidepoint(mouse_pos)
+        # Button font determined by if statement
+        button_font = self.restart_button_hover_font if is_hovered else self.restart_button_font
         
+        # Render the restart button
+        restart_button_surface = button_font.render(self.restart_button_text,True,self.restart_button_color)
+        restart_button_x = self.screen_width // 2 - restart_button_surface.get_width() // 2
+        restart_button_y = self.screen_height // 2 + restart_button_surface.get_height() // 2
+        # Create Restart Button rectangle
+        self.restart_button_rect = Rect(restart_button_x,restart_button_y,restart_button_surface.get_width(),restart_button_surface.get_height())
+        # Blit the restart button to the screen
+        self.screen.blit(restart_button_surface,(restart_button_x,restart_button_y))
+        
+        # Update the pygame display
+        pygame.display.update()
+        
+    def handle_click(self,mouse_pos):
+        # Check if the mouse click is inside the "Restart" button's rectangle
+        
+        if self.restart_button_rect and self.restart_button_rect.collidepoint(mouse_pos):
+            return True
+        return False       
         
         
         
