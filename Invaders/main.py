@@ -37,6 +37,7 @@ class Game:
         self.particle_system = ParticlePrinciple(screen=self.screen)
         self.game_font = pygame.font.SysFont('TT Fellows',110)
         self.score_board = ScoreBoard()
+        self.level = 1
 
         # self.clock.tick(60)
         self.main()
@@ -144,12 +145,12 @@ class Game:
         self.score_board.reset_score()
         
         
-        def reset_ship():
+        def reset_ship(): # TODO Possibly implement into ship class
             self.ship.rect.topleft = (315,850)
             self.ship.life = 3
             self.ship.lasers.empty()
             
-        def reset_enemies():
+        def reset_enemies(): # TODO Possibly implement this into enemies manager
             self.enemies_manager.enemies.empty()
             self.enemies_manager.setup_enemies(5,8)
             self.enemies_manager.lasers.empty() # Clear enemy lasers
@@ -183,6 +184,21 @@ class Game:
             self.display_game_over()
         
         self.victory()
+    
+    def next_level(self):
+        # Check if all enemies are defeated
+        if len(self.enemies_manager.enemies) == 0:
+            if self.level == 5:
+                self.victory()
+            elif self.level < 5:
+                # Increase the level
+                self.level += 1
+                # Check high score and update it
+                self.score_board.save_high_score()
+                # TODO implement changes to make enemies more difficult.
+                # Play around with increase the amount of rows and how fast they fire lasers.
+            
+               
             
     def victory(self):
         # Check if all enemies are defeated
