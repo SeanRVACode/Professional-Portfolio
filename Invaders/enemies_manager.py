@@ -51,12 +51,20 @@ class EnemiesManager:
             elif self.direction == 'left':
                 enemy.rect.x -= enemy.speed
     
-    def shoot(self):
+    def shoot(self,level):
         current_time = pygame.time.get_ticks()
-        if current_time - self.last_shot_time >= self.shoot_cooldown:
+        if current_time - self.last_shot_time >= self.shoot_cooldown and len(self.enemies) > 0:
+            # Select an enemy to shoot laser
             chosen_enemy = self.laser_select()
-            laser = Laser(position=chosen_enemy.rect.midbottom,speed=10,type_='enemy')
+            # Determine laser speed based on level
+            laser_speed = 10 if level == 1 else 10 + level
+            # Determine Laser Cool down based on level
+            self.shoot_cooldown = 1000 if level == 1 else 1000 - (level * 100)
+            # Create a laser object
+            laser = Laser(position=chosen_enemy.rect.midbottom,speed=laser_speed,type_='enemy')
+            # Add the laser to the sprite group
             self.lasers.add(laser)
+            # Update the last shot time
             self.last_shot_time = current_time
             
             

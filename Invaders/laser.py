@@ -11,10 +11,7 @@ class Laser(pygame.sprite.Sprite):
             self.laser_image.fill((255,0,0)) # Red Laser
         elif type_ == 'enemy':
             self.laser_image.fill((0,255,0)) # Green Laser
-        # if not Laser.laser_image: # Initialize the laser image once
-    
-        #     Laser.laser_image.fill((255,0,0))  # Red Laser
-        
+
         self.rect = self.laser_image.get_rect(center=position)
         self.speed = speed
     

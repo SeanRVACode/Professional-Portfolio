@@ -18,9 +18,6 @@ class Ship(pygame.sprite.Sprite):
         self.last_shot_time = pygame.time.get_ticks() # Time when the last shot
         self.life = 3
         
-         
-        # TODO Add Life count? Does the life even need to be held by the ship? I guess it would as we detect collision on the ship as well.
-        
         
     def move(self,keys):
         if keys[pygame.K_LEFT]:

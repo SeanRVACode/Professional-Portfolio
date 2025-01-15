@@ -179,7 +179,7 @@ class Game:
         self.enemies_manager.move_enemies()
         self.update_lasers()
         self.enemies_manager.draw(self.screen)
-        self.enemies_manager.shoot()
+        self.enemies_manager.shoot(level=self.level)
         
         
         
