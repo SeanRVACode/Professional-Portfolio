@@ -8,11 +8,11 @@ Bootstrap5(app)
 
 
 @app.route('/brewery_lookup')
-def home(method=['GET']):
+def home():
     
         
     data = get_single_brewery()
-    
+    print(data)
     return render_template('brewery_lookup.html',data=data)
 
 
@@ -20,6 +20,6 @@ def get_single_brewery():
     url = 'https://api.openbrewerydb.org/v1/breweries/random'
     print('Running Data')
     r = requests.get(url)
-    json_data = json(r)
-    return r.text
+    json_data = r.json()
+    return json_data
 
