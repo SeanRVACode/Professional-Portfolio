@@ -17,7 +17,8 @@ def home():
     print('This is the data type beep boop', type(data[0]))
     # data_dict = proper_names(data)
     # print('These are the values',data_dict.values())
-    return render_template('brewery_lookup.html',data=data)
+    headers_list = proper_names(data)
+    return render_template('brewery_lookup.html',data=data,headers=headers_list)
 
 
 def get_brewery_list():

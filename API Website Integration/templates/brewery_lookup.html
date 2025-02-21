@@ -7,18 +7,19 @@ block content %}
   <table class="table">
     <thead>
       <tr>
-        {% for key in data[0].keys() %}
-        {% if key != 'Id' %}
-        <th scope="col">{{ key }}</th>
+        {% for header in headers %}
+        {% if header != 'Id' %}
+        <th scope="col">{{ header }}</th>
        {%endif%}{% endfor %}
       </tr>
     </thead>
     <tbody>
         {% for brewery in data %}
       <tr>
-        {% for value in brewery.values()%}
+        {% for key,value in brewery.items() %}
+        {% if key != 'id' %}
             <td>{{ value }}</td>
-       {% endfor %}{%endfor%}
+       {% endif %}{% endfor %}{%endfor%}
       </tr>
     </tbody>
   </table>
