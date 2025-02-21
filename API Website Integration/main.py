@@ -1,4 +1,4 @@
-from flask import Flask,redirect,render_template,jsonify
+from flask import Flask,redirect,render_template,jsonify,request
 from flask_bootstrap import Bootstrap5
 import requests
 import json
@@ -20,10 +20,10 @@ def home():
     headers_list = proper_names(data)
     return render_template('brewery_lookup.html',data=data,headers=headers_list)
 
-@app.route('/search_brew')
+@app.route('/search_brew',methods=['GET','POST'])
 def search():
-    
-    return render_template('search.html')
+    if request.method == 'POST':
+        return render_template('search.html')
 
 def get_brewery_list():
     #TODO worry about how I'm going to add multiple filters or not filter by something
