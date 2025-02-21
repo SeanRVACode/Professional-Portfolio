@@ -38,7 +38,7 @@ def proper_names(json_data):
     # Create a new dictionary with modified keys
     new_json_data = {}
     for key, value in json_data.items():
-        key_new = re.sub(r'[_\d]+', ' ', key).strip().title()
+        key_new = re.sub(r'[_]+', ' ', key).strip().title()
         new_json_data[key_new] = value
     
     return new_json_data
