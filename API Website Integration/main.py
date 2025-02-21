@@ -26,7 +26,8 @@ def search():
     return render_template('search.html')
 
 def get_brewery_list():
-    url = 'https://api.openbrewerydb.org/v1/breweries?per_page=100'
+    #TODO worry about how I'm going to add multiple filters or not filter by something
+    url = 'https://api.openbrewerydb.org/v1/breweries?by_city=richmond&by_state=virginia&per_page=100'
     print('Running Data')
     r = requests.get(url)
     print(r)
