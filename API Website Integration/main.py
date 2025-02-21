@@ -30,6 +30,7 @@ def get_brewery_list():
     
     # Convert to dict
     # brewery_dict = {brewery['id']: brewery for brewery in json_data}
+    
     return json_data
 
 def proper_names(json_data):
