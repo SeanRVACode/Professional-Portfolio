@@ -4,7 +4,7 @@ content %}
   <h1>Search A Brew</h1>
 </div>
 <div class="container d-flex justify-content-center">
-  <form>
+  <form method="POST">
     <div class="row">
       <div class="col">
         <div class="form-group">
@@ -13,6 +13,7 @@ content %}
             type="text"
             class="form-control"
             id="brewNameInput"
+            name="brewName"
             aria-describedby="brewName"
             placeholder="Search Brewery Name"
           />
@@ -24,6 +25,7 @@ content %}
           type="text"
           class="form-control"
           id="cityNameInput"
+          name="cityName"
           placeholder="Search/Filter By City"
         />
       </div>

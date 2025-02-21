@@ -3,10 +3,12 @@ from flask_bootstrap import Bootstrap5
 import requests
 import json
 import re
+from urllib.parse import urlencode
 
 app = Flask(__name__)
 Bootstrap5(app)
 
+DEFAULT_URL = 'https://api.opehnbrewerydb.org/v1/breweries'
 
 @app.route('/brewery_lookup')
 def home():
@@ -23,7 +25,18 @@ def home():
 @app.route('/search_brew',methods=['GET','POST'])
 def search():
     if request.method == 'POST':
+        params = {}
+        b_name = request.form['brewName']
+        b_city = request.form['cityName']
+        if b_name:
+            params['by_name'] = b_name
+        if b_city:
+            params['by_city'] = b_city
+            
+        r = requests.get(DEFAULT_URL,params=params)
+        print(r)
         return render_template('search.html')
+    return render_template('search.html')
 
 def get_brewery_list():
     #TODO worry about how I'm going to add multiple filters or not filter by something
