@@ -20,9 +20,13 @@ def home():
     headers_list = proper_names(data)
     return render_template('brewery_lookup.html',data=data,headers=headers_list)
 
+@app.route('/search_brew')
+def search():
+    
+    return render_template('search.html')
 
 def get_brewery_list():
-    url = 'https://api.openbrewerydb.org/v1/breweries?per_page=10'
+    url = 'https://api.openbrewerydb.org/v1/breweries?per_page=100'
     print('Running Data')
     r = requests.get(url)
     print(r)

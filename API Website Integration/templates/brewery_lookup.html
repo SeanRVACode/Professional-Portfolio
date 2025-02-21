@@ -4,7 +4,7 @@ block content %}
   <h1>Sean's Brewery Search</h1>
 </div>
 <div class="container d-flex justify-content-center" id="brew_table">
-  <table class="table table-responsive-lg table-dark table-hover">
+  <table class="table table-responsive-sm table-dark table-hover">
     <thead>
       <tr>
         {% for header in headers %} {% if header != 'Id' %}
@@ -15,7 +15,8 @@ block content %}
     <tbody>
       {% for brewery in data %}
       <tr>
-        {% for key,value in brewery.items() %} {% if key != 'id' %}
+        {% for key,value in brewery.items() %} {% if
+        key.isin(['id','latitude','longitude']) %}
         <td>{{ value }}</td>
         {% endif %}{% endfor %}{%endfor%}
       </tr>
