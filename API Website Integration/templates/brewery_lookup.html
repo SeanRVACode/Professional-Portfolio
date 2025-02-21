@@ -1,5 +1,30 @@
 {% extends 'header.html' %} {% block title %}Brewery Lookup{% endblock %} {%
 block content %}
-
-<div class="container"></div>
+<div class="containter text-center">
+  <h1>Sean's Brewery Search</h1>
+</div>
+<div class="container center-text">
+  <table class="table">
+    <thead>
+      <tr>
+        {% for key in data.keys() %}
+        {% if key == 'Id' %}
+        {{ pass}}
+        {% else %}
+        <th scope="col">{{ key }}</th>
+       {% endif %}{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        {% for value in data.values() %}
+        {% if loop.index > 1 %}
+        <td>{{ value }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
 {% endblock %}
