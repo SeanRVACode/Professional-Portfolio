@@ -6,3 +6,12 @@
   margin-bottom: auto;
   margin-top: auto;
 }
+
+body {
+  background: linear-gradient(135deg, #1e1e2f, #2e2e3e);
+  color: #ffffff;
+}
+
+h1 {
+  color: white !important;
+}
