@@ -4,11 +4,11 @@ content %}
   <h1>Brew-sults</h1>
 </div>
 <div class="container d-flex justify-content-center" id="brew_table">
-  <table class="table table-responsive-sm table-dark table-hover">
+  <table class="table table-responsive-sm table-dark table-hover text-nowrap">
     <thead>
       <tr>
         {% for header in headers %} {% if not header in
-        ['Id','Longitude','Latitude','Address 2','Address 3'] %}
+        ['Id','Longitude','Latitude','Address 2','Address 3','Phone'] %}
         <th scope="col">{{ header }}</th>
         {%endif%}{% endfor %}
       </tr>
@@ -17,9 +17,12 @@ content %}
       {% for brewery in data %}
       <tr>
         {% for key,value in brewery.items() %} {% if not key in
-        ['id','longitude','latitude','address_2','address_3'] %}
+        ['id','longitude','latitude','address_2','address_3','phone'] %} {% if
+        key == 'website_url' %}
+        <td><a href="{{ value }}">🍺</a></td>
+        {% else %}
         <td>{{ value }}</td>
-        {% endif %}{% endfor %}{%endfor%}
+        {% endif %}{% endif %}{% endfor %}{%endfor%}
       </tr>
     </tbody>
   </table>

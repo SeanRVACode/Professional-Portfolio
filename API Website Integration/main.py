@@ -1,4 +1,4 @@
-from flask import Flask,redirect,render_template,jsonify,request
+from flask import Flask,redirect,render_template,jsonify,request,url_for
 from flask_bootstrap import Bootstrap5
 import requests
 import json
@@ -8,39 +8,36 @@ from urllib.parse import urlencode
 app = Flask(__name__)
 Bootstrap5(app)
 
-DEFAULT_URL = 'https://api.opehnbrewerydb.org/v1/breweries'
+DEFAULT_URL = 'https://api.openbrewerydb.org/v1/breweries'
 
 @app.route('/brewery_lookup')
 def home():
-    
-        
     data = get_brewery_list()
-    print(data)
-    print('This is the data type beep boop', type(data[0]))
-    # data_dict = proper_names(data)
-    # print('These are the values',data_dict.values())
     headers_list = proper_names(data)
-    return render_template('brewery_lookup.html',data=data,headers=headers_list)
+    return render_template('brewery_lookup.html', data=data, headers=headers_list)
 
-@app.route('/search_brew',methods=['GET','POST'])
+@app.route('/search_brew', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
         params = {}
-        b_name = request.form['brewName']
-        b_city = request.form['cityName']
+        b_name = request.form.get('brewName')
+        b_city = request.form.get('cityName')
         if b_name:
             params['by_name'] = b_name
         if b_city:
             params['by_city'] = b_city
-            
-        r = requests.get(DEFAULT_URL,params=params)
-        print(r)
-        return render_template('search.html')
+
+        query_string = urlencode(params)
+        url = f"{DEFAULT_URL}?{query_string}"
+        r = requests.get(url)
+        json_data = r.json()
+        headers_list = proper_names(json_data)
+        return render_template('brewery_lookup.html', data=json_data, headers=headers_list)
     return render_template('search.html')
 
 def get_brewery_list():
     #TODO worry about how I'm going to add multiple filters or not filter by something
-    url = 'https://api.openbrewerydb.org/v1/breweries?by_city=richmond&by_state=virginia&per_page=100'
+    url = 'https://api.openbrewerydb.org/v1/breweries?&per_page=10'
     print('Running Data')
     r = requests.get(url)
     print(r)
