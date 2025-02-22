@@ -7,22 +7,28 @@ content %}
   <table class="table table-responsive-sm table-dark table-hover text-nowrap">
     <thead>
       <tr>
-        {% for header in headers %} {% if not header in
-        ['Id','Longitude','Latitude','Address 2','Address 3','Phone'] %}
+        <!-- prettier-ignore -->
+        {% for header in headers %} {% if not header in ['Id','Longitude','Latitude','Address 2','Address 3','Phone','Address 1','City','State','State Province','Country','Street','Postal Code'] %}
         <th scope="col">{{ header }}</th>
-        {%endif%}{% endfor %}
+        {% endif %} {% endfor %}
       </tr>
     </thead>
     <tbody>
       {% for brewery in data %}
       <tr>
         {% for key,value in brewery.items() %} {% if not key in
-        ['id','longitude','latitude','address_2','address_3','phone'] %} {% if
-        key == 'website_url' %}
+        ['id','longitude','latitude','address_2','address_3','phone','address_1','city','state','state_province','country','postal_code','street']
+        %} {% if key == 'website_url' %}
         <td><a href="{{ value }}">🍺</a></td>
+        {% else %} {% if key == 'address' %}
+        <td>
+          <a href="https://www.google.com/maps/search/?api=1&query={{value}}"
+            >🗺️</a
+          >
+        </td>
         {% else %}
         <td>{{ value }}</td>
-        {% endif %}{% endif %}{% endfor %}{%endfor%}
+        {% endif %}{% endif %}{% endif %}{% endfor %}{%endfor%}
       </tr>
     </tbody>
   </table>

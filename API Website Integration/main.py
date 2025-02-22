@@ -31,7 +31,9 @@ def search():
         url = f"{DEFAULT_URL}?{query_string}"
         r = requests.get(url)
         json_data = r.json()
+        create_map_link(json_data)
         headers_list = proper_names(json_data)
+        
         return render_template('brewery_lookup.html', data=json_data, headers=headers_list)
     return render_template('search.html')
 
@@ -47,6 +49,18 @@ def get_brewery_list():
     # brewery_dict = {brewery['id']: brewery for brewery in json_data}
     
     return json_data
+
+def create_map_link(json_data):
+    new_data = json_data
+    for brewery in json_data:
+        street = brewery['address_1']
+        city = brewery['city']
+        state = brewery['state']
+        postal_code = brewery['postal_code']
+        address = f'{street} {city} {state}, {postal_code}'
+        
+        brewery['address'] = address.replace(' ','+')
+    print(json_data)
 
 def proper_names(json_data):
     json_data = json_data[0]
