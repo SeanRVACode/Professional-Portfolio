@@ -8,6 +8,7 @@ from urllib.parse import urlencode
 app = Flask(__name__)
 Bootstrap5(app)
 
+# Default URL for Openbrewerydb
 DEFAULT_URL = 'https://api.openbrewerydb.org/v1/breweries'
 
 @app.route('/brewery_lookup')
