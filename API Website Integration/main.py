@@ -13,7 +13,7 @@ DEFAULT_URL = 'https://api.openbrewerydb.org/v1/breweries'
 
 @app.route('/brewery_lookup')
 def home():
-    data = get_brewery_list()
+    data = get_random_breweries()
     headers_list = proper_names(data)
     return render_template('brewery_lookup.html', data=data, headers=headers_list)
 
@@ -28,6 +28,8 @@ def search():
         if b_city:
             params['by_city'] = b_city
 
+        # The reason this works without the get_brewery_list function is that it is basically doing the same thing as the get_brewery_list function. Would it be better to have it run through that function? 
+        # Currently it doesn't even look like we use that function as the get_random_breweries is its own function now.
         query_string = urlencode(params)
         url = f"{DEFAULT_URL}?{query_string}"
         r = requests.get(url)
@@ -48,6 +50,15 @@ def get_brewery_list():
     
     # Convert to dict
     # brewery_dict = {brewery['id']: brewery for brewery in json_data}
+    
+    return json_data
+
+def get_random_breweries():
+    url = 'https://api.openbrewerydb.org/v1/breweries/random?size=10'
+    
+    r = requests.get(url)
+    print(r)
+    json_data = r.json()
     
     return json_data
 
