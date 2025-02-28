@@ -34,37 +34,39 @@ def search():
         url = f"{DEFAULT_URL}?{query_string}"
         r = requests.get(url)
         json_data = r.json()
-        create_map_link(json_data)
+        json_data = create_map_link(json_data)
         headers_list = proper_names(json_data)
         
         return render_template('brewery_lookup.html', data=json_data, headers=headers_list)
     return render_template('search.html')
 
-def get_brewery_list():
-    #TODO worry about how I'm going to add multiple filters or not filter by something
-    url = 'https://api.openbrewerydb.org/v1/breweries?&per_page=10'
-    print('Running Data')
-    r = requests.get(url)
-    print(r)
-    json_data = r.json()
+# def get_brewery_list():
+#     #TODO worry about how I'm going to add multiple filters or not filter by something
+#     url = 'https://api.openbrewerydb.org/v1/breweries?&per_page=10'
+#     print('Running Data')
+#     r = requests.get(url)
+#     print(r.content)
+#     json_data = r.json()
     
-    # Convert to dict
-    # brewery_dict = {brewery['id']: brewery for brewery in json_data}
+#     # Convert to dict
+#     # brewery_dict = {brewery['id']: brewery for brewery in json_data}
     
-    return json_data
+#     return json_data
 
 def get_random_breweries():
     url = 'https://api.openbrewerydb.org/v1/breweries/random?size=10'
     
     r = requests.get(url)
-    print(r)
+    print(r.content)
     json_data = r.json()
+    # Creates the map link that will be utilized in the HTML code to create a clickable google maps link for users.
+    json_data = create_map_link(json_data)
     
     return json_data
 
 def create_map_link(json_data):
-    new_data = json_data
-    for brewery in json_data:
+    modified_data = json_data.copy()
+    for brewery in modified_data:
         street = brewery['address_1']
         city = brewery['city']
         state = brewery['state']
@@ -72,7 +74,8 @@ def create_map_link(json_data):
         address = f'{street} {city} {state}, {postal_code}'
         
         brewery['address'] = address.replace(' ','+')
-    print(json_data)
+    return modified_data
+
 
 def proper_names(json_data):
     json_data = json_data[0]

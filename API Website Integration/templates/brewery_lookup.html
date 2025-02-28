@@ -8,7 +8,7 @@ content %}
     <thead>
       <tr>
         <!-- prettier-ignore -->
-        {% for header in headers %} {% if not header in ['Id','Longitude','Latitude','Address 2','Address 3','Phone','Address 1','City','State','State Province','Country','Street','Postal Code'] %}
+        {% for header in headers %} {% if not header in ['Id','Longitude','Latitude','Address 2','Address 3','Phone','State','Address 1','Country','Street','Postal Code'] %}
         <th scope="col">{{ header }}</th>
         {% endif %} {% endfor %}
       </tr>
@@ -17,7 +17,7 @@ content %}
       {% for brewery in data %}
       <tr>
         {% for key,value in brewery.items() %} {% if not key in
-        ['id','longitude','latitude','address_2','address_3','phone','address_1','city','state','state_province','country','postal_code','street']
+        ['id','longitude','latitude','address_2','address_3','phone','address_1','country','state','postal_code','street']
         %} {% if key == 'website_url' %}
         <td><a href="{{ value }}">🍺</a></td>
         {% else %} {% if key == 'address' %}
@@ -27,7 +27,7 @@ content %}
           >
         </td>
         {% else %}
-        <td>{{ value }}</td>
+        <td>{{ value|title }}</td>
         {% endif %}{% endif %}{% endif %}{% endfor %}{%endfor%}
       </tr>
     </tbody>
