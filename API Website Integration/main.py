@@ -23,10 +23,13 @@ def search():
         params = {}
         b_name = request.form.get('brewName')
         b_city = request.form.get('cityName')
+        b_state = request.form.get('stateName')
         if b_name:
             params['by_name'] = b_name
         if b_city:
             params['by_city'] = b_city
+        if b_state:
+            params['by_state'] = b_state
 
         # The reason this works without the get_brewery_list function is that it is basically doing the same thing as the get_brewery_list function. Would it be better to have it run through that function? 
         # Currently it doesn't even look like we use that function as the get_random_breweries is its own function now.
