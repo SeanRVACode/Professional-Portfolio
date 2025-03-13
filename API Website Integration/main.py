@@ -44,18 +44,9 @@ def search():
         return render_template('brewery_lookup.html', data=json_data, headers=headers_list)
     return render_template('search.html')
 
-# def get_brewery_list():
-#     #TODO worry about how I'm going to add multiple filters or not filter by something
-#     url = 'https://api.openbrewerydb.org/v1/breweries?&per_page=10'
-#     print('Running Data')
-#     r = requests.get(url)
-#     print(r.content)
-#     json_data = r.json()
-    
-#     # Convert to dict
-#     # brewery_dict = {brewery['id']: brewery for brewery in json_data}
-    
-#     return json_data
+def get_brewery_list():
+    pass
+
 
 def get_random_breweries():
     url = 'https://api.openbrewerydb.org/v1/breweries/random?size=10'
