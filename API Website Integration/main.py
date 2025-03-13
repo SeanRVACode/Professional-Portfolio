@@ -20,6 +20,7 @@ def home():
 @app.route('/search_brew', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
+        # TODO turn this into its own function.
         params = {}
         b_name = request.form.get('brewName')
         b_city = request.form.get('cityName')
