@@ -20,32 +20,51 @@ def home():
 @app.route('/search_brew', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
-        # TODO turn this into its own function.
-        params = {}
-        b_name = request.form.get('brewName')
-        b_city = request.form.get('cityName')
-        b_state = request.form.get('stateName')
-        if b_name:
-            params['by_name'] = b_name
-        if b_city:
-            params['by_city'] = b_city
-        if b_state:
-            params['by_state'] = b_state
-
-        # The reason this works without the get_brewery_list function is that it is basically doing the same thing as the get_brewery_list function. Would it be better to have it run through that function? 
-        # Currently it doesn't even look like we use that function as the get_random_breweries is its own function now.
-        query_string = urlencode(params)
-        url = f"{DEFAULT_URL}?{query_string}"
-        r = requests.get(url)
-        json_data = r.json()
+        json_data = get_brewery_list(request)
         json_data = create_map_link(json_data)
         headers_list = proper_names(json_data)
         
         return render_template('brewery_lookup.html', data=json_data, headers=headers_list)
     return render_template('search.html')
 
-def get_brewery_list():
-    pass
+def get_brewery_list(request = None) -> dict:
+    """Query the API based on parameters provided by user and return Json data as results. Also handles creating the map URL link."""
+    params = {}
+    
+    
+    if request:
+        # Handle form data if request is provided
+        if request.method == 'POST':
+            b_name = request.form.get('brewName')
+            b_city = request.form.get('cityName')
+            b_state = request.form.get('stateName')
+            if b_name:
+                params['by_name'] = b_name
+            if b_city:
+                params['by_city'] = b_city
+            if b_state:
+                params['by_state'] = b_state
+        # elif request.method == 'GET':
+        #     # Handle GET parameters if needed
+        #     b_name = request.args.get('brewName')
+        #     b_city = request.args.get('cityName')
+        #     b_state = request.args.get('stateName')
+        #     if b_name:
+        #         params['by_name'] = b_name
+        #     if b_city:
+        #         params['by_city'] = b_city
+        #     if b_state:
+        #         params['by_state'] = b_state
+    
+    # Make the API request
+    query_string = urlencode(params)
+    url = f"{DEFAULT_URL}?{query_string}"
+    r = requests.get(url)
+    json_data = r.json()
+    json_data = create_map_link(json_data)
+    
+    return json_data
+    
 
 
 def get_random_breweries():
