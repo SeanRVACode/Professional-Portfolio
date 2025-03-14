@@ -44,17 +44,7 @@ def get_brewery_list(request = None) -> dict:
                 params['by_city'] = b_city
             if b_state:
                 params['by_state'] = b_state
-        # elif request.method == 'GET':
-        #     # Handle GET parameters if needed
-        #     b_name = request.args.get('brewName')
-        #     b_city = request.args.get('cityName')
-        #     b_state = request.args.get('stateName')
-        #     if b_name:
-        #         params['by_name'] = b_name
-        #     if b_city:
-        #         params['by_city'] = b_city
-        #     if b_state:
-        #         params['by_state'] = b_state
+
     
     # Make the API request
     query_string = urlencode(params)
