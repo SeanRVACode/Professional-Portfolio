@@ -215,3 +215,23 @@ button::after {
   filter: blur(5px);
   opacity: 0.5;
 }
+.flash-message {
+  color: white;
+  background-color: #f44336;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+.flash-message-container {
+  position: fixed;
+  top: 20px;
+  left: 50%; 
+  z-index: 1000;
+  max-width: fit-content;
+  /* margin-left: auto;
+  margin-right: auto; */
+  transform: translateX(-50%);
+  text-align: center;
+}
