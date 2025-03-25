@@ -73,15 +73,29 @@ def get_brewery_list(request=None) -> dict:
     if request:
         # Handle form data if request is provided
         if request.method == "POST":
-            b_name = request.form.get("brewName")
-            b_city = request.form.get("cityName")
-            b_state = request.form.get("stateName")
-            if b_name:
-                params["by_name"] = b_name
-            if b_city:
-                params["by_city"] = b_city
-            if b_state:
-                params["by_state"] = b_state
+            # This dictionary maps the form field names (e.g., `brewName`) to the query parameter names expected by the API (e.g., `by_name`)
+            form_fields = {
+                "brewName": "by_name",
+                "cityName": "by_city",
+                "stateName": "by_state",
+            }
+
+            # Build params dictionary including only non-empty form fields
+            params = {
+                param_name: request.form.get(form_field)
+                for form_field, param_name in form_fields.item()
+                if request.form.get(form_field)
+            }
+            # Old way of doing search
+            # b_name = request.form.get("brewName")
+            # b_city = request.form.get("cityName")
+            # b_state = request.form.get("stateName")
+            # if b_name:
+            #     params["by_name"] = b_name
+            # if b_city:
+            #     params["by_city"] = b_city
+            # if b_state:
+            #     params["by_state"] = b_state
 
     # Make the API request
     query_string = urlencode(params)
