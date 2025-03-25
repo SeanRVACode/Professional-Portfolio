@@ -28,12 +28,14 @@ def search():
     if request.method == "POST":
         json_data = get_brewery_list(request)
         print(json_data)
+        # If there is json data render the results
         if json_data and len(json_data) > 0:
             headers_list = proper_names(json_data)
             return render_template(
                 "brewery_lookup.html", data=json_data, headers=headers_list
             )
         else:
+            # If there isn't json data it creates a flash message
             print("Attempting Flash Message")
             # Handle no results case
             flash("Invalid Search Parameter")
@@ -58,16 +60,16 @@ def handle_exception(e):
     return response
 
 
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     # note that we set the 404 status explicitly
-#     return render_template("404.html")
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("404.html")
 
 
 def get_brewery_list(request=None) -> dict:
     """Query the API based on parameters provided by user and return Json data as results. Also handles creating the map URL link."""
     params = {}
-
+    # TODO look into handling this better for no search results? Maybe having it just bring stuff up is fine?
     if request:
         # Handle form data if request is provided
         if request.method == "POST":
