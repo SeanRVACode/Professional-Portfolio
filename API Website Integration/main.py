@@ -113,7 +113,7 @@ def get_random_breweries():
     url = "https://api.openbrewerydb.org/v1/breweries/random?size=10"
 
     r = requests.get(url)
-    print(r.content)
+    # print(r.content)
     json_data = r.json()
     # Creates the map link that will be utilized in the HTML code to create a clickable google maps link for users.
     json_data = create_map_link(json_data)
