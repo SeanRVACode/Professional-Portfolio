@@ -83,7 +83,7 @@ def get_brewery_list(request=None) -> dict:
             # Build params dictionary including only non-empty form fields
             params = {
                 param_name: request.form.get(form_field)
-                for form_field, param_name in form_fields.item()
+                for form_field, param_name in form_fields.items()
                 if request.form.get(form_field)
             }
             # Old way of doing search
