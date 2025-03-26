@@ -2,7 +2,7 @@ import re
 from urllib.parse import urlencode
 
 import requests
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash
 from flask_bootstrap import Bootstrap5
 from werkzeug.exceptions import HTTPException
 import json
