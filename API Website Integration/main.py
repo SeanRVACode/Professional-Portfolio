@@ -27,20 +27,21 @@ def home():
 def search():
     if request.method == "POST":
         json_data = get_brewery_list(request)
-        print(json_data)
-        # If there is json data render the results
-        if json_data and len(json_data) > 0:
+
+        if json_data == "No Search":
+            flash("Please enter at least one search criterion")
+            return render_template("search.html")
+        elif not json_data or len(json_data) == 0:
+            flash("No breweries found matching your search criteria")
+            return render_template("search.html")
+        else:
             headers_list = proper_names(json_data)
             return render_template(
                 "brewery_lookup.html", data=json_data, headers=headers_list
             )
-        else:
-            # If there isn't json data it creates a flash message
-            print("Attempting Flash Message")
-            # Handle no results case
-            flash("Invalid Search Parameter")
-            return redirect("search_brew")
-    return render_template("search.html")
+    else:
+        # Default case for GET request
+        return render_template("search.html")
 
 
 @app.errorhandler(HTTPException)
@@ -96,17 +97,21 @@ def get_brewery_list(request=None) -> dict:
             #     params["by_city"] = b_city
             # if b_state:
             #     params["by_state"] = b_state
+    print(params)
 
-    # Make the API request
-    query_string = urlencode(params)
-    url = f"{DEFAULT_URL}?{query_string}"
-    r = requests.get(url)
-    json_data = r.json()
-    json_data = create_map_link(json_data)
-    if json_data:
-        return json_data
+    if params:
+        # Make the API request
+        query_string = urlencode(params)
+        url = f"{DEFAULT_URL}?{query_string}"
+        r = requests.get(url)
+        json_data = r.json()
+        json_data = create_map_link(json_data)
+        if json_data:
+            return json_data
+        else:
+            return None
     else:
-        return None
+        return "No Search"
 
 
 def get_random_breweries():
