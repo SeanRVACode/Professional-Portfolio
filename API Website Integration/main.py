@@ -97,7 +97,6 @@ def get_brewery_list(request=None) -> dict:
             #     params["by_city"] = b_city
             # if b_state:
             #     params["by_state"] = b_state
-    print(params)
 
     if params:
         # Make the API request
