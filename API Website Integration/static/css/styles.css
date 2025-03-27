@@ -7,12 +7,12 @@
   margin-top: 20px;
 }
 
-body {
+.brew-bod {
   background: linear-gradient(135deg, #1e1e2f, #2e2e3e);
   color: #ffffff !important;
 }
 
-h1 {
+.brew-title {
   color: white !important;
   margin-top: 10px !important;
 }
