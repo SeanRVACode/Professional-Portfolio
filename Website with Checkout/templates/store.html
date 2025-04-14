@@ -1,16 +1,29 @@
 {% extends "header.html" %} {% block title %}Store{% endblock %} {% block
-content %} {# Cards #} {% if products %} {% for item in products %}
+content %}
 
-<div class="container">
-  <
-  <div class="card" style="width: 18rem">
-    <img src="..." alt="" class="card-img-top" />
-    <div class="card-body">
-      <h5 class="card-title">{{ item.name}}</h5>
-      <p class="card-text">Product Description</p>
-      <a href="" class="btn btn-primary">Add to Cart</a>
-    </div>
-  </div>
+<div class="container-fluid p-4">
+  <h1 class="display-1 text-center">Big Store Lot Max</h1>
 </div>
 
-{% endfor %} {% endif %} {% endblock %}
+{# Cards #} {% if products %}
+<div class="container-md">
+  <div class="row">
+    {% for item in products %}
+    <div class="col-md-4 p-2">
+      <div class="card" style="width: 18rem">
+        <img src="..." alt="" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">{{ item.name}}</h5>
+          <p class="card-text">Product Description</p>
+          <div class="d-flex flex-row justify-content-between">
+            <p class="price fw-bold">${{"%0.2f" | format(item.price) }}</p>
+            <a href="" class="btn btn-primary">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+{% endif %} {% endblock %}
