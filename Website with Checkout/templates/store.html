@@ -11,7 +11,11 @@ content %}
     {% for item in products %}
     <div class="col-md-4 p-2">
       <div class="card" style="width: 18rem">
-        <img src="..." alt="" class="card-img-top" />
+        <img
+          src="../static/assets/{{ item.source }}"
+          alt=""
+          class="card-img-top"
+        />
         <div class="card-body">
           <h5 class="card-title">{{ item.name}}</h5>
           <p class="card-text">Product Description</p>

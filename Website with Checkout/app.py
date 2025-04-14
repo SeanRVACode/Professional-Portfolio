@@ -27,10 +27,11 @@ db.init_app(app)
 
 # Shop Table
 class Products(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
     name: Mapped[str] = mapped_column()
     amount: Mapped[int] = mapped_column()
     price: Mapped[float] = mapped_column()
+    source: Mapped[str] = mapped_column()
 
 
 with app.app_context():
