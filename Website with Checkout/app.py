@@ -46,8 +46,13 @@ def home():
 
 
 @app.route("/checkout")
-def cart():
+def checkout_page():
     return render_template("checkout.html")
+
+
+@app.route("/cart/<int:id>", methods=["POST"])
+def add_to_cart(id):
+    product = Products.query.filter(Products.id == id)
 
 
 def get_products():
