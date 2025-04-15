@@ -1,10 +1,9 @@
-from flask import Flask, get_flashed_messages, render_template
+from flask import Flask, render_template, session, request, redirect, url_for
 from flask_bootstrap import Bootstrap5
-import os
 from dotenv import load_dotenv
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, Text
+from datetime import timedelta
 
 
 load_dotenv()
@@ -20,6 +19,7 @@ class Base(DeclarativeBase):  # TODO Figure out what this does and why
 
 
 # Config App
+app.permanent_session_lifetime = timedelta(minutes=30)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"  # TODO Need to finish this with an actual database?
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
@@ -40,19 +40,52 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    # FIXME Currently rendering checkout.html for testing purposes
     products = get_products()
     return render_template("store.html", products=products)
 
 
 @app.route("/checkout")
-def checkout_page():
-    return render_template("checkout.html")
+def checkout():
+    subtotal = 0
+    if "cart" in session:
+        cart_items = []
+        for item in session["cart"]:
+            print("this is the item ", item)
+            item_descriptions = Products.query.filter_by(id=item).first()
+            print(session["cart"][item])
+            cart_items.append(
+                {
+                    "name": item_descriptions.name,
+                    "price": item_descriptions.price,
+                    "quantity": session["cart"][item],
+                    "subtotal": session["cart"][item] * item_descriptions.price,
+                }
+            )
+            print(cart_items)
+            subtotal += session["cart"][item] * item_descriptions.price
+            print(subtotal)
+    else:
+        return redirect(url_for("home"))
+    return render_template("checkout.html", cart_items=cart_items, subtotal=subtotal)
 
 
-@app.route("/cart/<int:id>", methods=["POST"])
-def add_to_cart(id):
-    product = Products.query.filter(Products.id == id)
+@app.route("/cart", methods=["POST"])
+def add_to_cart():
+    item_id = request.form.get("item_id")
+    # product = Products.query.filter_by(id=item_id).first()
+    # Convert item_id to string since dictionary keys must be strings
+    item_id_str = str(item_id)
+    if "cart" not in session:
+        session["cart"] = {}
+    if item_id_str in session["cart"]:
+        session["cart"][item_id_str] += 1
+    else:
+        session["cart"][item_id_str] = 1
+
+    session.modified = True
+    print(session["cart"])
+    # product = Products.query.filter(Products.id == id)
+    return redirect(url_for("home"))
 
 
 def get_products():

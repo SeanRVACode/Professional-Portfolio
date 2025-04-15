@@ -22,7 +22,10 @@ content %}
           <p class="card-text">Product Description</p>
           <div class="d-flex flex-row justify-content-between">
             <p class="price fw-bold">${{"%0.2f" | format(item.price) }}</p>
-            <a href="" class="btn btn-primary">Add to Cart</a>
+            <form action="{{ url_for('add_to_cart')}}" method="POST">
+              <input type="hidden" name="item_id" value="{{ item.id }}" />
+              <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
           </div>
         </div>
       </div>
