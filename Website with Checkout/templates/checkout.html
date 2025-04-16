@@ -20,6 +20,8 @@ content %}
           >
             <div>
               <h6 class="my-0">{{item.name}}</h6>
+              <small class="text-muted">x{{ item.quantity }}</small>
+              {# TODO reduce item button #}
             </div>
             <span class="text-muted">${{"%0.2f"| format(item.price)}}</span>
           </li>
