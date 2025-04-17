@@ -84,7 +84,7 @@ def stripe_checkout():
         ic("Trying checkout_session")
         ic(session["cart"])
         checkout_session = stripe.create_checkout_session(
-            line_items=[convert_to_line_item()],
+            line_items=convert_to_line_item(),
             mode="payment",
             success_url=url_for(
                 "success", _external=True
@@ -134,11 +134,11 @@ def get_products():
 
 
 def convert_to_line_item():
-    cart_dict = {}
+    line_items = []
+    ic(f"Current Items in Cart:{session['cart']}")
     for _ in session["cart"]:
         ic(_)
-        cart_dict["price"] = stripe.get_single_product(_)["default_price"]
-        cart_dict["quantity"] = session["cart"][_]
-
-    ic(cart_dict)
-    return cart_dict
+        line_item = {"price": stripe.get_single_product(_)["default_price"], "quantity": session["cart"][_]}
+        line_items.append(line_item)
+    ic(line_items)
+    return line_items

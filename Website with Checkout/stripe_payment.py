@@ -42,8 +42,8 @@ class Stripe:
         return product
 
     def create_checkout_session(self, **kwargs):
-        for k, val in kwargs.items():
-            ic(k, val)
+        # for k, val in kwargs.items():
+        #     ic(k, val)
         thing = stripe.checkout.Session.create(**kwargs)
         ic(thing)
         return thing
