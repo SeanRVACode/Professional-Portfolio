@@ -58,22 +58,52 @@ def checkout():
         cart_items = []
         for item in session["cart"]:
             ic("this is the item ", item)
-            item_descriptions = Products.query.filter_by(id=item).first()
+            item_descriptions = stripe.get_single_product(id=item)
             ic(session["cart"][item])
+            price = stripe.get_price(item_descriptions.default_price)
+            ic(price)
             cart_items.append(
                 {
                     "name": item_descriptions.name,
-                    "price": item_descriptions.price,
+                    "price": price,
                     "quantity": session["cart"][item],
-                    "subtotal": session["cart"][item] * item_descriptions.price,
+                    "subtotal": session["cart"][item] * price,
                 }
             )
             ic(cart_items)
-            subtotal += session["cart"][item] * item_descriptions.price
+            subtotal += session["cart"][item] * price
             ic(subtotal)
     else:
         return redirect(url_for("home"))
     return render_template("checkout.html", cart_items=cart_items, subtotal=subtotal)
+
+
+@app.route("/create_checkout_session", methods=["POST"])
+def stripe_checkout():
+    try:
+        ic("Trying checkout_session")
+        ic(session["cart"])
+        checkout_session = stripe.create_checkout_session(
+            line_items=[convert_to_line_item()],
+            mode="payment",
+            success_url=url_for("success"),
+            cancel_url=url_for("cancel"),
+        )
+        ic(checkout_session)
+    except Exception as e:
+        return str(e)
+
+    return redirect(checkout_session.url, code=303)
+
+
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
+@app.route("/cancel")
+def cancel():
+    return render_template("cancel.html")
 
 
 @app.route("/cart", methods=["POST"])
@@ -99,3 +129,14 @@ def get_products():
     products = stripe.get_products()
     # products = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
     return products
+
+
+def convert_to_line_item():
+    cart_dict = {}
+    for _ in session["cart"]:
+        ic(_)
+        cart_dict["price"] = stripe.get_single_product(_)["default_price"]
+        cart_dict["quantity"] = session["cart"][_]
+
+    ic(cart_dict)
+    return cart_dict

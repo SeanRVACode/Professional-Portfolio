@@ -36,7 +36,19 @@ class Stripe:
         prices = stripe.Price.list()
         ic(prices)
 
+    def get_single_product(self, id):
+        product = stripe.Product.retrieve(id)
+        ic(product)
+        return product
+
+    def create_checkout_session(self, **kwargs):
+        for k, val in kwargs.items():
+            ic(k, val)
+        thing = stripe.checkout.Session.create(**kwargs)
+        ic(thing)
+        return thing
+
 
 if __name__ == "__main__":
     payment = Stripe()
-    payment.get_products()
+    payment.create_checkout_session("https://127.0.0.1:5000/checkout")
