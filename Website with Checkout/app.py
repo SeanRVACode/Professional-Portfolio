@@ -86,8 +86,10 @@ def stripe_checkout():
         checkout_session = stripe.create_checkout_session(
             line_items=[convert_to_line_item()],
             mode="payment",
-            success_url=url_for("success"),
-            cancel_url=url_for("cancel"),
+            success_url=url_for(
+                "success", _external=True
+            ),  # by having _external=True this ensures that Flask generates full URLs including the domain which is what stripe requires.
+            cancel_url=url_for("home", _external=True),  # Takes you back to the store home page
         )
         ic(checkout_session)
     except Exception as e:
