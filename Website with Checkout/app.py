@@ -1,7 +1,6 @@
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_bootstrap import Bootstrap5
 from dotenv import load_dotenv
-from sqlalchemy.orm import Mapped, mapped_column
 from datetime import timedelta
 from stripe_payment import Stripe
 from icecream import ic
