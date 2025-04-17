@@ -20,7 +20,9 @@ class Base(DeclarativeBase):  # TODO Figure out what this does and why
 
 # Config App
 app.permanent_session_lifetime = timedelta(minutes=30)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"  # TODO Need to finish this with an actual database?
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "sqlite:///D:\Databases\Checkout Database\instance\project.db"  # Points to Portable Hard Drive
+)
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
