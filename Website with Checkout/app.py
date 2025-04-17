@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta
-
+from stripe_payment import Stripe
+from icecream import ic
 
 load_dotenv()
 
@@ -18,10 +19,13 @@ class Base(DeclarativeBase):  # TODO Figure out what this does and why
     pass
 
 
+# Ini Stripe
+stripe = Stripe()
+
 # Config App
 app.permanent_session_lifetime = timedelta(minutes=30)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "sqlite:///D:\Databases\Checkout Database\instance\project.db"  # Points to Portable Hard Drive
+    r"sqlite:///D:\Databases\Checkout Database\instance\project.db"  # Points to Portable Hard Drive
 )
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
@@ -43,7 +47,8 @@ with app.app_context():
 @app.route("/")
 def home():
     products = get_products()
-    return render_template("store.html", products=products)
+
+    return render_template("store.html", products=products["data"])
 
 
 @app.route("/checkout")
@@ -52,9 +57,9 @@ def checkout():
     if "cart" in session:
         cart_items = []
         for item in session["cart"]:
-            print("this is the item ", item)
+            ic("this is the item ", item)
             item_descriptions = Products.query.filter_by(id=item).first()
-            print(session["cart"][item])
+            ic(session["cart"][item])
             cart_items.append(
                 {
                     "name": item_descriptions.name,
@@ -63,9 +68,9 @@ def checkout():
                     "subtotal": session["cart"][item] * item_descriptions.price,
                 }
             )
-            print(cart_items)
+            ic(cart_items)
             subtotal += session["cart"][item] * item_descriptions.price
-            print(subtotal)
+            ic(subtotal)
     else:
         return redirect(url_for("home"))
     return render_template("checkout.html", cart_items=cart_items, subtotal=subtotal)
@@ -85,11 +90,12 @@ def add_to_cart():
         session["cart"][item_id_str] = 1
 
     session.modified = True
-    print(session["cart"])
+    ic(session["cart"])
     # product = Products.query.filter(Products.id == id)
     return redirect(url_for("home"))
 
 
 def get_products():
-    products = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
+    products = stripe.get_products()
+    # products = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
     return products
