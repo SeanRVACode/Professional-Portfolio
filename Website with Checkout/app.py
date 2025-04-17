@@ -1,8 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_bootstrap import Bootstrap5
 from dotenv import load_dotenv
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Mapped, mapped_column
 from datetime import timedelta
 from stripe_payment import Stripe
 from icecream import ic
@@ -14,9 +13,9 @@ app.config["SECRET_KEY"] = "development"
 Bootstrap5(app)
 
 
-# Create Database
-class Base(DeclarativeBase):  # TODO Figure out what this does and why
-    pass
+# # Create Database
+# class Base(DeclarativeBase):  # TODO Figure out what this does and why
+#     pass
 
 
 # Ini Stripe
@@ -24,24 +23,24 @@ stripe = Stripe()
 
 # Config App
 app.permanent_session_lifetime = timedelta(minutes=30)
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    r"sqlite:///D:\Databases\Checkout Database\instance\project.db"  # Points to Portable Hard Drive
-)
-db = SQLAlchemy(model_class=Base)
-db.init_app(app)
+# app.config["SQLALCHEMY_DATABASE_URI"] = (
+#     r"sqlite:///D:\Databases\Checkout Database\instance\project.db"  # Points to Portable Hard Drive
+# )
+# db = SQLAlchemy(model_class=Base)
+# db.init_app(app)
 
 
-# Shop Table
-class Products(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
-    name: Mapped[str] = mapped_column()
-    amount: Mapped[int] = mapped_column()
-    price: Mapped[float] = mapped_column()
-    source: Mapped[str] = mapped_column()
+# # Shop Table
+# class Products(db.Model):
+#     id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
+#     name: Mapped[str] = mapped_column()
+#     amount: Mapped[int] = mapped_column()
+#     price: Mapped[float] = mapped_column()
+#     source: Mapped[str] = mapped_column()
 
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 
 @app.route("/")
