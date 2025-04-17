@@ -109,7 +109,7 @@ def cancel():
 
 
 @app.route("/cart", methods=["POST"])
-def add_to_cart():
+def add_to_cart() -> str:
     item_id = request.form.get("item_id")
     # product = Products.query.filter_by(id=item_id).first()
     # Convert item_id to string since dictionary keys must be strings
@@ -127,13 +127,13 @@ def add_to_cart():
     return redirect(url_for("home"))
 
 
-def get_products():
+def get_products() -> list:
     products = stripe.get_products()
     # products = db.session.execute(db.select(Products).order_by(Products.name)).scalars()
     return products
 
 
-def convert_to_line_item():
+def convert_to_line_item() -> list:
     line_items = []
     ic(f"Current Items in Cart:{session['cart']}")
     for _ in session["cart"]:
