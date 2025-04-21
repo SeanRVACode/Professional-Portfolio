@@ -115,6 +115,7 @@
                 >
                   {{ session['cart'].values()|sum }}
                 </span>
+                {% endif %}
                 <li class="nav-item dropwdown">
                   <a
                     class="nav-link dropdown-toggle"
@@ -123,19 +124,24 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     >Cart</a
+                  >{% if session['cart'] %}
+                  <ul
+                    class="dropdown-menu dropdown-menu-end"
+                    style="max-height: 300px; overflow-y: auto"
                   >
-                  <ul class="dropdown-menu dropdown-menu-end" style="max-height: 300px; overflow-y: auto;">
                     {% for product_id, quantity in session['cart'].items() %}
                     <li>
-                      <a href="" class="dropdown-item">{{product_id}}<span class="ms-2">Qty: {{quantity}}</span></a>
+                      <a href="" class="dropdown-item"
+                        >{{product_id}}<span class="ms-2"
+                          >Qty: {{quantity}}</span
+                        ></a
+                      >
                     </li>
                     {% if not loop.last %}
-                    <li><hr class="dropdown-divider"></li>
-                    {% endif %}
-                    {% endfor %}
+                    <li><hr class="dropdown-divider" /></li>
+                    {% endif %} {% endfor %} {% endif%}
                   </ul>
                 </li>
-                {% endif %}
               </form>
             </li>
           </ul>
