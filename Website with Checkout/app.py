@@ -109,19 +109,55 @@ def cancel():
 @app.route("/cart", methods=["POST"])
 def add_to_cart() -> str:
     item_id = request.form.get("item_id")
+
+    if "cart_details" not in session:
+        # Set up cart details
+        session["cart_details"] = {}
     # product = Products.query.filter_by(id=item_id).first()
     # Convert item_id to string since dictionary keys must be strings
+
     item_id_str = str(item_id)
+    product_data = stripe.get_single_product(id=item_id_str)
+    ic(product_data)
+
     if "cart" not in session:
         session["cart"] = {}
     if item_id_str in session["cart"]:
         session["cart"][item_id_str] += 1
     else:
         session["cart"][item_id_str] = 1
+        # Store Product Details
+        session["cart_details"][item_id_str] = {
+            "name": product_data.name,
+            "price": stripe.get_price(product_data.default_price),
+        }
 
+    ic(session["cart_details"])
     session.modified = True
     ic(session["cart"])
     # product = Products.query.filter(Products.id == id)
+    return redirect(url_for("home"))
+
+
+@app.route("/update_cart", methods=["POST"])
+def update_cart():
+    product_id = request.form.get("product_id")
+    action = request.form.get("action")
+    if product_id and action and "cart" in session:
+        if action == "increase":
+            session["cart"][product_id] += 1
+        elif action == "decrease":
+            if session["cart"][product_id] > 1:
+                session["cart"][product_id] -= 1
+            else:
+                # Remove the item completely
+                session["cart"].pop(product_id)
+        elif action == "remove":
+            # Completely removes the item regardless of quantity
+            session["cart"].pop(product_id)
+
+        session.modified = True
+
     return redirect(url_for("home"))
 
 
