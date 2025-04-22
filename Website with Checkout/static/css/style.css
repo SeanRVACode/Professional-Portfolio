@@ -3,7 +3,7 @@
     top: 20px;
     left:50%;
     /* right: 20px; */
-    z-index: 1000; /* Above Bootstrap navbars */
+    z-index: 1050; /* Above Bootstrap navbars */
     max-width: fit-content; /* Prevent overly wide messages */
     width: 90%; /* Responsive width for smaller screens */
   }
