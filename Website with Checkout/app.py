@@ -27,7 +27,6 @@ def home():
     return render_template("store.html", products=products["data"])
 
 
-@app.route("/static")
 @app.route("/checkout")
 def checkout():
     subtotal = 0
