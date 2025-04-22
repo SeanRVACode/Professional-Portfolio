@@ -82,14 +82,13 @@
                   />
                 </svg>
 
-                {% if session['cart'] and session['cart']|length > 0 %}
-                <span
-                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                >
-                  {{ session['cart'].values()|sum }}
-                </span>
-                {% endif %}
-                <span class="ms-1">Cart</span> </a
+                <span class="ms-1"
+                  >Cart {% if session['cart'] and session['cart']|length > 0 %}
+                  <span class="badge bg-danger">
+                    {{ session['cart'].values()|sum }}
+                  </span>
+                  {% endif %}</span
+                > </a
               >{% if session['cart'] and session['cart_details'] %}
               <ul
                 class="dropdown-menu dropdown-menu-end"
