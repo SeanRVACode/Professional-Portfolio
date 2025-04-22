@@ -39,6 +39,8 @@ class Stripe:
     def get_single_product(self, id):
         product = stripe.Product.retrieve(id)
         ic(product)
+        if not product:
+            return "Invalid Product ID", 400
         return product
 
     def create_checkout_session(self, **kwargs):

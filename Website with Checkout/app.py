@@ -1,9 +1,10 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
 from dotenv import load_dotenv
 from datetime import timedelta
 from stripe_payment import Stripe
 from icecream import ic
+
 
 load_dotenv()
 
@@ -12,34 +13,11 @@ app.config["SECRET_KEY"] = "development"
 Bootstrap5(app)
 
 
-# # Create Database
-# class Base(DeclarativeBase):  # TODO Figure out what this does and why
-#     pass
-
-
 # Ini Stripe
 stripe = Stripe()
 
 # Config App
 app.permanent_session_lifetime = timedelta(minutes=30)
-# app.config["SQLALCHEMY_DATABASE_URI"] = (
-#     r"sqlite:///D:\Databases\Checkout Database\instance\project.db"  # Points to Portable Hard Drive
-# )
-# db = SQLAlchemy(model_class=Base)
-# db.init_app(app)
-
-
-# # Shop Table
-# class Products(db.Model):
-#     id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
-#     name: Mapped[str] = mapped_column()
-#     amount: Mapped[int] = mapped_column()
-#     price: Mapped[float] = mapped_column()
-#     source: Mapped[str] = mapped_column()
-
-
-# with app.app_context():
-#     db.create_all()
 
 
 @app.route("/")
@@ -49,6 +27,7 @@ def home():
     return render_template("store.html", products=products["data"])
 
 
+@app.route("/static")
 @app.route("/checkout")
 def checkout():
     subtotal = 0
@@ -58,20 +37,19 @@ def checkout():
             ic("this is the item ", item)
             item_descriptions = stripe.get_single_product(id=item)
             ic(session["cart"][item])
-            price = stripe.get_price(item_descriptions.default_price)
-            ic(price)
             cart_items.append(
                 {
                     "name": item_descriptions.name,
-                    "price": price,
+                    "price": session["cart_details"][item]["price"],
                     "quantity": session["cart"][item],
-                    "subtotal": session["cart"][item] * price,
+                    "subtotal": session["cart"][item] * session["cart_details"][item]["price"],
                 }
             )
             ic(cart_items)
-            subtotal += session["cart"][item] * price
+            subtotal += session["cart"][item] * session["cart_details"][item]["price"]
             ic(subtotal)
     else:
+        flash("Your cart is empty. Add items to continue", "Warning")
         return redirect(url_for("home"))
     return render_template("checkout.html", cart_items=cart_items, subtotal=subtotal)
 
@@ -110,15 +88,25 @@ def cancel():
 def add_to_cart() -> str:
     item_id = request.form.get("item_id")
 
+    if not item_id:
+        flash("No product selected. Please choose a product.", "error")
+        return redirect(url_for("home"))
+
     if "cart_details" not in session:
         # Set up cart details
         session["cart_details"] = {}
-    # product = Products.query.filter_by(id=item_id).first()
-    # Convert item_id to string since dictionary keys must be strings
 
     item_id_str = str(item_id)
-    product_data = stripe.get_single_product(id=item_id_str)
-    ic(product_data)
+    try:
+        product_data = stripe.get_single_product(id=item_id_str)
+        if not product_data:
+            flash("The selected product is invalid. Please try again.", "error")
+            return redirect(url_for("home"))
+
+    except Exception as e:
+        ic(e)
+        flash("Unable to validate product. Please try again later.", "error")
+        return redirect(url_for("home"))
 
     if "cart" not in session:
         session["cart"] = {}
@@ -134,6 +122,7 @@ def add_to_cart() -> str:
 
     ic(session["cart_details"])
     session.modified = True
+    flash(f"{product_data.name} added to cart!", "success")
     ic(session["cart"])
     # product = Products.query.filter(Products.id == id)
     return redirect(url_for("home"))
@@ -168,11 +157,16 @@ def get_products() -> list:
 
 
 def convert_to_line_item() -> list:
-    line_items = []
-    ic(f"Current Items in Cart:{session['cart']}")
-    for _ in session["cart"]:
-        ic(_)
-        line_item = {"price": stripe.get_single_product(_)["default_price"], "quantity": session["cart"][_]}
-        line_items.append(line_item)
-    ic(line_items)
+    line_items = [
+        {"price": stripe.get_single_product(item_id)["default_price"], "quantity": quantity}
+        for item_id, quantity in session["cart"].items()
+    ]
+
+    # line_items = []
+    # ic(f"Current Items in Cart:{session['cart']}")
+    # for _ in session["cart"]:
+    #     ic(_)
+    #     line_item = {"price": stripe.get_single_product(_)["default_price"], "quantity": session["cart"][_]}
+    #     line_items.append(line_item)
+    # ic(line_items)
     return line_items

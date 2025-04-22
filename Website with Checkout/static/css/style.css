@@ -1,0 +1,73 @@
+.flash-message-container {
+    position: fixed;
+    top: 20px;
+    left:50%;
+    /* right: 20px; */
+    z-index: 1000; /* Above Bootstrap navbars */
+    max-width: fit-content; /* Prevent overly wide messages */
+    width: 90%; /* Responsive width for smaller screens */
+  }
+  
+  .flash-message {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: all 0.3s ease-in-out;
+    border: none; /* Remove default Bootstrap border for a cleaner look */
+  }
+  
+  /* Modern color scheme */
+  .alert-success {
+    background-color: #e6ffed;
+    color: #1a3c34;
+  }
+  
+  .alert-error, .alert-danger {
+    background-color: #ffe6e6;
+    color: #5c1c1c;
+  }
+  
+  .alert-info {
+    background-color: #e6faff;
+    color: #1c3c5c;
+  }
+  
+  .alert-warning {
+    background-color: #fff5e6;
+    color: #5c3c1c;
+  }
+  
+  /* Subtle slide-in animation */
+  .flash-message {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  
+  .flash-message.show {
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+  
+  /* Close button styling */
+  .alert .btn-close {
+    filter: opacity(0.6);
+    transition: filter 0.2s ease;
+  }
+  
+  .alert .btn-close:hover {
+    filter: opacity(1);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .flash-message-container {
+      top: 10px;
+      right: 10px;
+      left: 10px;
+      width: auto;
+      max-width: none;
+    }
+  }
