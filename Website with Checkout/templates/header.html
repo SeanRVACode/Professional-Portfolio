@@ -84,7 +84,7 @@
 
                 <span class="ms-1"
                   >Cart {% if session['cart'] and session['cart']|length > 0 %}
-                  <span class="badge bg-danger">
+                  <span class="badge bg-danger m-1">
                     {{ session['cart'].values()|sum }}
                   </span>
                   {% endif %}</span
