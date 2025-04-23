@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from datetime import timedelta
 from stripe_payment import Stripe
 from icecream import ic
-
+from forms import LoginForm
+from flask_login import LoginManager
 
 load_dotenv()
 
@@ -12,12 +13,14 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "development"
 Bootstrap5(app)
 
-
 # Ini Stripe
 stripe = Stripe()
 
 # Config App
 app.permanent_session_lifetime = timedelta(minutes=30)
+
+# Ini Login Manager
+# login = LoginManager(app)
 
 
 @app.route("/")
@@ -27,9 +30,16 @@ def home():
     return render_template("store.html", products=products["data"])
 
 
-@app.route("/login")
-def login():
-    pass
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        remember_me = form.remember_me.data
+        flash(f"Welcome, {username}!", "success")
+        return redirect(url_for("home"))
+    return render_template("login.html", form=form)
 
 
 @app.route("/register")
