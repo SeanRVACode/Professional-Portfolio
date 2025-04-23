@@ -27,6 +27,16 @@ def home():
     return render_template("store.html", products=products["data"])
 
 
+@app.route("/login")
+def login():
+    pass
+
+
+@app.route("/register")
+def register():
+    pass
+
+
 @app.route("/checkout")
 def checkout():
     subtotal = 0
