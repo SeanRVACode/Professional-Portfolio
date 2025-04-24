@@ -1,11 +1,12 @@
 from shop import app
 from shop.forms import LoginForm
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user
 import sqlalchemy as sa
 from shop import db
 from shop.models import User
 from shop import stripe
+from shop.utils.cart import Cart
 
 
 @app.route("/")
@@ -31,5 +32,14 @@ def login_page():
     return render_template("login.html", form=form)
 
 
-@app.route("/add_to_cart",methods=["POST"])
-def add_to_cart()
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart_route():
+    product_id = request.form.get("product_id")
+    if not product_id:
+        # Handle missing product_id (e.g., flash error)
+        flash("Non-Valid Product ID", "danger")
+        return redirect(url_for("index"))
+
+    product_data = stripe.get_single_product(product_id)
+    cart = Cart(session)
+    cart.add_to_cart(product_id, product_data)

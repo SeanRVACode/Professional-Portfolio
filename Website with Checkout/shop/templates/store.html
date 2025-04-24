@@ -22,13 +22,15 @@ content %}
         />
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">{{ item.name}}</h5>
-          <p class="card-text" style="height: 4.5rem; overflow: hidden;">{{item.description}}</p>
+          <p class="card-text" style="height: 4.5rem; overflow: hidden">
+            {{item.description}}
+          </p>
           <div class="d-flex flex-row justify-content-between mt-auto">
             <p class="price fw-bold">
               ${{"%0.2f" | format(item.default_price) }}
             </p>
 
-            <form action="{{ url_for('add_to_cart')}}" method="POST">
+            <form action="{{ url_for('add_to_cart_route')}}" method="POST">
               <input type="hidden" name="item_id" value="{{ item.id }}" />
               <button type="submit" class="btn btn-primary">Add to Cart</button>
             </form>
