@@ -1,5 +1,5 @@
 from shop import app
-from shop.forms import LoginForm
+from shop.forms import LoginForm, RegisterForm
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user
 import sqlalchemy as sa
@@ -49,8 +49,9 @@ def logout():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
-    # TODO Fix this to go to actual register page. Currently for debugging purposes.
-    return redirect(url_for("index"))
+    else:
+        # TODO Fix this to go to actual register page. Currently for debugging purposes.
+        return render_template("register.html")
 
 
 @app.route("/add_to_cart", methods=["POST"])
