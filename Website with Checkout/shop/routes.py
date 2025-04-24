@@ -1,5 +1,5 @@
 from shop import app
-from shop.forms import LoginForm, RegisterForm
+from shop.forms import LoginForm, RegistrationForm
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user
 import sqlalchemy as sa
@@ -51,7 +51,8 @@ def register():
         return redirect(url_for("index"))
     else:
         # TODO Fix this to go to actual register page. Currently for debugging purposes.
-        return render_template("register.html")
+        form = RegistrationForm()
+        return render_template("register.html", form=form)
 
 
 @app.route("/add_to_cart", methods=["POST"])
