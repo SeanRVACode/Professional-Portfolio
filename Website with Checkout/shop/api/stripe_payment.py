@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from icecream import ic
 from decimal import Decimal
 
-load_dotenv()
+
+load_dotenv()  # Load environment variables from .env file
 
 
 class Stripe:

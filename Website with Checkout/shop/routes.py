@@ -1,7 +1,7 @@
 from shop import app
 from shop.forms import LoginForm
 from flask import render_template, flash, redirect, url_for, request, session
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 import sqlalchemy as sa
 from shop import db
 from shop.models import User
@@ -17,7 +17,8 @@ def index():
 
 
 @app.route("/login", methods=["GET", "POST"])
-def login_page():
+def login():
+    # Prevents logged-in users from accessing the login page.
     if current_user.is_authenticated:
         return redirect(url_for("index"))
 
@@ -30,6 +31,26 @@ def login_page():
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
     return render_template("login.html", form=form)
+
+
+@app.route("/logout")
+def logout():
+    # TODO Verify that the user actually gets logged out.
+    if current_user.is_authenticated:
+        logout_user()
+        # TODO should I clear the cart session on logout?
+        flash("You have been logged out", "success")
+    else:
+        flash("You were not logged in", "warning")
+    return redirect(url_for("index"))
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    # TODO Fix this to go to actual register page. Currently for debugging purposes.
+    return redirect(url_for("index"))
 
 
 @app.route("/add_to_cart", methods=["POST"])
