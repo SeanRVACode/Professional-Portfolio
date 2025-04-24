@@ -5,12 +5,21 @@ from datetime import timedelta
 from stripe_payment import Stripe
 from icecream import ic
 from forms import LoginForm
-from flask_login import LoginManager
+from flask_login import LoginManager, UserMixin
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 load_dotenv()
-
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "development"
+app.config.from_object(Config)
+
+
+# Ini Database
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+
 Bootstrap5(app)
 
 # Ini Stripe
@@ -20,7 +29,7 @@ stripe = Stripe()
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # Ini Login Manager
-# login = LoginManager(app)
+login = LoginManager(app)
 
 
 @app.route("/")
