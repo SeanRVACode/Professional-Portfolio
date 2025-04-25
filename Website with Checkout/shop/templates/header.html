@@ -243,6 +243,16 @@
               </ul>
               {% endif%}
             </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a
+                class="nav-link position-relative d-flex align-items-center"
+                href="{{ url_for('logout')}}"
+              >
+                Log Out</a
+              >
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>

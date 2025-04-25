@@ -5,16 +5,18 @@
     <form method="post">
       {{ form.hidden_tag()}}
       <div class="form-floating">
-        {{ form.username.label(for="floatingInput")}} {{
-        form.username(class="form-control",placeholder="Enter
-        Username",type="username")}} {% for error in form.username.errors %}
+        {{ form.username(class="form-control",placeholder="Enter
+        Username",type="username")}} {{
+        form.username.label(for="floatingInput")}} {% for error in
+        form.username.errors %}
         <div class="text-danger">{{ error }}</div>
         {% endfor %}
       </div>
       <div class="form-floating">
-        {{form.password.label(for="floatingInput")}} {{
-        form.password(class="form-control",placeholder="Enter
-        Password",type="password")}} {% for error in form.password.errors %}
+        {{ form.password(class="form-control",placeholder="Enter
+        Password",type="password")}}
+        {{form.password.label(for="floatingInput")}} {% for error in
+        form.password.errors %}
         <div class="text-danger">{{ error }}</div>
         {% endfor %}
       </div>
