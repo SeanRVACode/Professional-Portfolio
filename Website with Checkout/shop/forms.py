@@ -21,13 +21,13 @@ class RegistrationForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired()])
     last_name = StringField("Last Name", validators=[DataRequired()])
 
-    # Address Info
-    address_line1 = StringField("Address Line 1", validators=[DataRequired()])
-    address_line2 = StringField("Address Line 2")
-    city = StringField("City", validators=[DataRequired()])
-    state = StringField("State", validators=[DataRequired()])
-    postal_code = StringField("Postal Code", validators=[DataRequired()])
-    country = StringField("Country", validators=[DataRequired()])
+    # # Address Info
+    # address_line1 = StringField("Address Line 1", validators=[DataRequired()])
+    # address_line2 = StringField("Address Line 2")
+    # city = StringField("City", validators=[DataRequired()])
+    # state = StringField("State", validators=[DataRequired()])
+    # postal_code = StringField("Postal Code", validators=[DataRequired()])
+    # country = StringField("Country", validators=[DataRequired()])
 
     password = PasswordField("Password", validators=[DataRequired()])
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired(), EqualTo("password")])

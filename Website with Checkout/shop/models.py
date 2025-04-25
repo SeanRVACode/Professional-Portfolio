@@ -45,7 +45,7 @@ class User(UserMixin, db.Model):
 
     # Relationships
     orders: so.Mapped[list["Order"]] = so.relationship(back_populates="user")
-    payment_methods: so.Mapped[list["PaymentMethod"]] = so.relationship(back_populates="user")
+    payment_methods: so.Mapped[list["StoredPaymentMethod"]] = so.relationship(back_populates="user")
 
     def __repr__(self):
         return f"<User {self.username}"
