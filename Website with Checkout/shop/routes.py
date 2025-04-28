@@ -7,6 +7,7 @@ from shop import db
 from shop.models import User
 from shop import stripe
 from shop.utils.cart import Cart
+from icecream import ic
 
 
 @app.route("/")
@@ -69,12 +70,60 @@ def register():
 
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart_route():
-    product_id = request.form.get("product_id")
+    product_id = request.form.get("item_id")
+    ic(product_id)
     if not product_id:
         # Handle missing product_id (e.g., flash error)
         flash("Non-Valid Product ID", "danger")
         return redirect(url_for("index"))
 
-    product_data = stripe.get_single_product(product_id)
+    if "cart_details" not in session:
+        # Set up cart details
+        session["cart_details"] = {}
+
+    try:
+        product_details = stripe.get_single_product(product_id)
+        if not product_details:
+            flash("Invalid Item ID", "danger")
+            return redirect(url_for("index"))
+
+    except Exception as e:
+        ic(e)
+        flash("Unable to validate product. Please try again later.", "danger")
+
+    if "cart" not in session:
+        # Set up cart
+        session["cart"] = {}
+
+    # Check if product_id is already in the cart
+    if product_id in session["cart"]:
+        session["cart"][product_id] += 1
+    else:
+        session["cart"][product_id] = 1
+        # Store Product Details
+        session["cart_details"][product_id] = {
+            "name": product_details.name,
+            "price": stripe.get_price(product_details.default_price),
+        }
+
     cart = Cart(session)
-    cart.add_to_cart(product_id, product_data)
+    cart.add_to_cart(product_id, product_details)
+    return redirect(url_for("index"))
+
+
+@app.route("/update_cart", methods=["POST"])
+def update_cart():
+    product_id = request.form.get("product_id")
+    action = request.form.get("action")
+    cart = Cart()
+    cart.update_cart(product_id_str=product_id, action=action)
+    return redirect(url_for("index"))
+
+
+@app.route("/checkout",methods=["POST"])
+def stripe_checkout():
+    try:
+        ic("Starting Checkout Session")
+        checkout_session = stripe.create_checkout_session(
+            line_items = 
+        )
