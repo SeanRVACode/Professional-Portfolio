@@ -38,3 +38,10 @@ class Cart:
                 self.session["cart"].pop(product_id_str)
 
             self.session.modified = True
+
+    def convert_to_line_item(self):
+        line_items = [
+            {"price": stripe.get_single_product(item_id)["default_price"], "quantity": quantity}
+            for item_id, quantity in self.session["cart"].items()
+        ]
+        return line_items

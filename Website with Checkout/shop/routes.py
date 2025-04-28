@@ -2,7 +2,6 @@ from shop import app
 from shop.forms import LoginForm, RegistrationForm
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user
-import sqlalchemy as sa
 from shop import db
 from shop.models import User
 from shop import stripe
@@ -91,21 +90,6 @@ def add_to_cart_route():
         ic(e)
         flash("Unable to validate product. Please try again later.", "danger")
 
-    if "cart" not in session:
-        # Set up cart
-        session["cart"] = {}
-
-    # Check if product_id is already in the cart
-    if product_id in session["cart"]:
-        session["cart"][product_id] += 1
-    else:
-        session["cart"][product_id] = 1
-        # Store Product Details
-        session["cart_details"][product_id] = {
-            "name": product_details.name,
-            "price": stripe.get_price(product_details.default_price),
-        }
-
     cart = Cart(session)
     cart.add_to_cart(product_id, product_details)
     return redirect(url_for("index"))
@@ -115,15 +99,35 @@ def add_to_cart_route():
 def update_cart():
     product_id = request.form.get("product_id")
     action = request.form.get("action")
-    cart = Cart()
+    cart = Cart(session)
     cart.update_cart(product_id_str=product_id, action=action)
     return redirect(url_for("index"))
 
 
-@app.route("/checkout",methods=["POST"])
+@app.route("/checkout", methods=["POST"])
 def stripe_checkout():
+    cart = Cart()
     try:
         ic("Starting Checkout Session")
         checkout_session = stripe.create_checkout_session(
-            line_items = 
+            line_items=cart.convert_to_line_item(),
+            mode="payment",
+            success_url=url_for(
+                "success", _external=True
+            ),  # By having _external=True this ensures that flask generates full URLs including the domain which is what stripe requires.
+            cancel_url=url_for("cancel", _external=True),
         )
+    except Exception as e:
+        ic(e)
+
+    return redirect(checkout_session.url, code=303)
+
+
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
+@app.route("/cancel")
+def cancel():
+    return render_template("cancel.html")

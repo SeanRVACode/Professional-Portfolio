@@ -20,8 +20,6 @@
       crossorigin="anonymous"
     ></script>
 
-    {% block styles %}{{ bootstrap.load_css()}}{{bootstrap.load_js()}}{%
-    endblock %}
     <title>{% block title%}{% endblock %}</title>
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %}
@@ -130,7 +128,7 @@
               <!-- Cart Icon -->
               <a
                 href="#"
-                class="nav-link position-relative d-flex align-items-center"
+                class="nav-link position-relative d-flex align-items-center dropdown-toggle"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
