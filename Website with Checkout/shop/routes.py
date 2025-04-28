@@ -106,7 +106,7 @@ def update_cart():
 
 @app.route("/checkout", methods=["POST"])
 def stripe_checkout():
-    cart = Cart()
+    cart = Cart(session)
     try:
         ic("Starting Checkout Session")
         checkout_session = stripe.create_checkout_session(
@@ -130,4 +130,5 @@ def success():
 
 @app.route("/cancel")
 def cancel():
-    return render_template("cancel.html")
+    # Send them back to the home page instead of cancel page.
+    return redirect(url_for("index"))
