@@ -80,6 +80,10 @@ def add_to_cart_route():
         # Set up cart details
         session["cart_details"] = {}
 
+    if "cart" not in session:
+        # Set up cart
+        session["cart"] = {}
+
     try:
         product_details = stripe.get_single_product(product_id)
         if not product_details:
