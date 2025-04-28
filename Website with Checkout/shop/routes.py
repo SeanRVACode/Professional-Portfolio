@@ -1,7 +1,7 @@
 from shop import app
 from shop.forms import LoginForm, RegistrationForm
 from flask import render_template, flash, redirect, url_for, request, session
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from shop import db
 from shop.models import User
 from shop import stripe
@@ -68,6 +68,7 @@ def register():
 
 
 @app.route("/add_to_cart", methods=["POST"])
+@login_required
 def add_to_cart_route():
     product_id = request.form.get("item_id")
     ic(product_id)
@@ -100,6 +101,7 @@ def add_to_cart_route():
 
 
 @app.route("/update_cart", methods=["POST"])
+@login_required
 def update_cart():
     product_id = request.form.get("product_id")
     action = request.form.get("action")
@@ -109,6 +111,7 @@ def update_cart():
 
 
 @app.route("/checkout", methods=["POST"])
+@login_required
 def stripe_checkout():
     cart = Cart(session)
     try:
