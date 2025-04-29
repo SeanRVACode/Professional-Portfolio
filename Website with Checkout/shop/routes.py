@@ -130,6 +130,12 @@ def stripe_checkout():
     return redirect(checkout_session.url, code=303)
 
 
+@app.route("/myaccount", methods=["GET", "POST"])
+@login_required
+def account():
+    return render_template("account.html")
+
+
 @app.route("/success")
 def success():
     return render_template("success.html")

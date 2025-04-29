@@ -116,11 +116,7 @@
                 >Register</a
               >
             </li>
-            {% else %}
-            <li class="nav-item">
-              <a href="{{url_for('logout')}}" class="nav-link active"></a>
-            </li>
-            {% endif %}
+            {% else %} {% endif %}
           </ul>
 
           <ul class="navbar-nav">
@@ -242,6 +238,13 @@
               {% endif%}
             </li>
             {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a
+                href="{{url_for('account')}}"
+                class="nav-link position-relative d-flex align-items-center"
+                >My Account</a
+              >
+            </li>
             <li class="nav-item">
               <a
                 class="nav-link position-relative d-flex align-items-center"
