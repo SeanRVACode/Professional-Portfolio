@@ -9,6 +9,7 @@ from flask_login import UserMixin
 from shop import login
 
 
+# This is the user loader function
 @login.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
