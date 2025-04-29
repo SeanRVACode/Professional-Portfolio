@@ -16,7 +16,7 @@ def load_user(user_id):
 
 
 if TYPE_CHECKING:
-    from .payment_method import PaymentMethod  # type: ignore
+    from .payment_method import PaymentMethod  # type: ignore  # noqa: F401
     from .order import Order  # type: ignore
 
 

@@ -1,1 +1,43 @@
-{% extends "header.html"%} {% block content %} {% endblock %}
+{% extends "header.html"%} {% block title%} Your Account {% endblock%} {% block
+content %}
+
+<div class="container-md">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Update Email Address</div>
+      <div class="card-body">
+        <form action="#" method="post">
+          {# Email Changes #}
+          <div class="mb-3">
+            <label for="current_email" class="form-label">Current Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="current_email"
+              name="current_email"
+              value="{{ current_user.email }}"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="new_email" class="form-label">New Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="new_email"
+              name="new_email"
+              required
+            />
+          </div>
+
+          {# Submit button #}
+          <div class="mb-2">
+            <button class="btn btn-primary">Submit Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
