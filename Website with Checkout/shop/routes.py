@@ -50,9 +50,9 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     else:
-        # TODO Fix this to go to actual register page. Currently for debugging purposes.
         form = RegistrationForm()
         if form.validate_on_submit():
+            ic("Attempting to register.")
             user = User(
                 username=form.username.data,
                 first_name=form.first_name.data,
@@ -147,6 +147,10 @@ def account():
         if user is None:
             ic("Could not find user.")
             flash("Issue validating user.", "danger")
+            return redirect(url_for("account"))
+
+        if form.new_email.data == "" and form.new_password.data == "":
+            flash("No new information provided.", "danger")
             return redirect(url_for("account"))
         # Handle Email being the same as old email
         if form.confirm_email(form.new_email):

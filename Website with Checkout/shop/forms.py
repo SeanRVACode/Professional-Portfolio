@@ -47,7 +47,7 @@ class RegistrationForm(FlaskForm):
 class AccountForm(FlaskForm):
     new_email = EmailField("New Email")
     new_password = PasswordField("New Password")
-    confirm_password = PasswordField("New Password")
+    confirm_password = PasswordField("Confirm Password")
     submit = SubmitField("Update")
 
     # TODO add address information to form
