@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from .order import Order  # type: ignore
 
 
+# `db.model` has declarativebase within in it.
 class User(UserMixin, db.Model):
     # These are not instance variables, but class variables with type annotations
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
