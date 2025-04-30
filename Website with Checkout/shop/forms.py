@@ -45,12 +45,17 @@ class RegistrationForm(FlaskForm):
 
 
 class AccountForm(FlaskForm):
-    new_email = EmailField("New Email", validators=[Email()])
+    new_email = EmailField("New Email")
     new_password = PasswordField("New Password")
-    confirm_password = PasswordField("New Password", validators=[EqualTo(new_password)])
+    confirm_password = PasswordField("New Password")
+    submit = SubmitField("Update")
 
     # TODO add address information to form
 
     def confirm_email(self, new_email):
-        if new_email == db.session.query(User).filter(User.email == new_email.data).first():
+        if new_email == db.session.query(User).filter(User.email).first():
             raise ValidationError("Please use a different email address.")
+
+    def check_password_match(self, new_password, confirm_password):
+        if new_password != confirm_password:
+            raise ValidationError("Passwords do not match.")

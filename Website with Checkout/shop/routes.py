@@ -134,36 +134,50 @@ def stripe_checkout():
 @login_required
 def account():
     form = AccountForm()
-
+    ic("Hello")
+    ic(request.method)
+    ic(form.validate_on_submit())
     if request.method == "POST" and form.validate_on_submit():
-        user = db.session.query(User).filter(User.email == form.current_email.data).first()
+        ic("Submitted Action")
+        ic(form.new_email.data)
+        ic(form.new_password.data)
+        user = db.session.query(User).filter(User.email == current_user.email).first()
+        ic(user)
         # Handle user is none or the password they are supplying is the same as an old one
-        if user is None or user.check_password(form.new_password):
-            flash("Invalid username or password", "danger")
+        if user is None:
+            ic("Could not find user.")
+            flash("Issue validating user.", "danger")
             return redirect(url_for("account"))
         # Handle Email being the same as old email
-        if form.confirm_email(form.new_email.data):
+        if form.confirm_email(form.new_email):
+            ic("Email issue.")
             flash("Please choose an email you haven't used before.", "danger")
             return redirect(url_for("account"))
         # Passed other checks now commit changes to database.
-        if form.new_email and form.new_password:
-            user.set_password(form.new_password)
-            user.email = form.new_email
+        if form.new_email.data is not None and (form.new_password.data is not None and form.new_password.data != ""):
+            ic("New password and new email")
+            ic(form.new_password.data)
+            form.check_password_match(form.new_password.data, form.confirm_password.data)
+            user.set_password(form.new_password.data)
+            user.email = form.new_email.data
             db.session.commit()
             flash("Email and Password Updated!", "success")
             return redirect(url_for("index"))
-        elif form.new_email and form.new_password is None:
-            user.email = form.new_email
+        elif form.new_email.data and (form.new_password.data is None or form.new_password.data == ""):
+            ic("Setting New Email!")
+            user.email = form.new_email.data
             db.session.commit()
             flash("Email updated!", "success")
             db.session.commit()
-        elif form.new_email is None and form.new_password:
+            return redirect(url_for("index"))
+        elif form.new_email.data is None and form.new_password.data:
+            ic("Setting only password.")
             user.set_password(form.new_password)
             db.session.commit()
             flash("Password Updated!", "success")
             return redirect(url_for("index"))
-
-    return render_template("account.html")
+    ic("God knows")
+    return render_template("account.html", form=form)
 
 
 @app.route("/success")
