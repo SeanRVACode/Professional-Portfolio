@@ -1,5 +1,5 @@
 from shop import app
-from shop.forms import LoginForm, RegistrationForm
+from shop.forms import LoginForm, RegistrationForm, AccountForm
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from shop import db
@@ -133,6 +133,36 @@ def stripe_checkout():
 @app.route("/myaccount", methods=["GET", "POST"])
 @login_required
 def account():
+    form = AccountForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        user = db.session.query(User).filter(User.email == form.current_email.data).first()
+        # Handle user is none or the password they are supplying is the same as an old one
+        if user is None or user.check_password(form.new_password):
+            flash("Invalid username or password", "danger")
+            return redirect(url_for("account"))
+        # Handle Email being the same as old email
+        if form.confirm_email(form.new_email.data):
+            flash("Please choose an email you haven't used before.", "danger")
+            return redirect(url_for("account"))
+        # Passed other checks now commit changes to database.
+        if form.new_email and form.new_password:
+            user.set_password(form.new_password)
+            user.email = form.new_email
+            db.session.commit()
+            flash("Email and Password Updated!", "success")
+            return redirect(url_for("index"))
+        elif form.new_email and form.new_password is None:
+            user.email = form.new_email
+            db.session.commit()
+            flash("Email updated!", "success")
+            db.session.commit()
+        elif form.new_email is None and form.new_password:
+            user.set_password(form.new_password)
+            db.session.commit()
+            flash("Password Updated!", "success")
+            return redirect(url_for("index"))
+
     return render_template("account.html")
 
 

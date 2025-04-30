@@ -38,7 +38,19 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError("Please use a different username.")
 
-        def validate_email(self, email):
-            user = db.session.query(User).filter(User.email == email.data).first()
-            if user is not None:
-                raise ValidationError("Please use a different email address.")
+    def validate_email(self, email):
+        user = db.session.query(User).filter(User.email == email.data).first()
+        if user is not None:
+            raise ValidationError("Please use a different email address.")
+
+
+class AccountForm(FlaskForm):
+    new_email = EmailField("New Email", validators=[Email()])
+    new_password = PasswordField("New Password")
+    confirm_password = PasswordField("New Password", validators=[EqualTo(new_password)])
+
+    # TODO add address information to form
+
+    def confirm_email(self, new_email):
+        if new_email == db.session.query(User).filter(User.email == new_email.data).first():
+            raise ValidationError("Please use a different email address.")
