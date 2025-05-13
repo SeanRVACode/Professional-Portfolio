@@ -6,31 +6,28 @@
     <link rel="stylesheet" href="../static/css/styles.css" />
     {% block styles %}{{ bootstrap.load_css()}}{{bootstrap.load_js()}}
     {%endblock%}
-    <title>{% block title %}{% endblock%}</title>{% with messages = get_flashed_messages() %}
-    {% if messages %}
+    <title>{% block title %}{% endblock%}</title>
+    {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="flash-message-container">
       {% for message in messages %}
-      <div class="flash-message">
-        {{ message }}
-      </div>
+      <div class="flash-message">{{ message }}</div>
       {% endfor %}
     </div>
     <script>
       // Make flash messages fade away after 3 seconds
-      document.addEventListener('DOMContentLoaded', function() {
-        const flashMessages = document.querySelectorAll('.flash-message');
-        flashMessages.forEach(function(message) {
-          setTimeout(function() {
-            message.style.opacity = '0';
-            setTimeout(function() {
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashMessages = document.querySelectorAll(".flash-message");
+        flashMessages.forEach(function (message) {
+          setTimeout(function () {
+            message.style.opacity = "0";
+            setTimeout(function () {
               message.remove();
             }, 500);
           }, 3000);
         });
       });
     </script>
-    {% endif %}
-    {% endwith %}
+    {% endif %} {% endwith %}
   </head>
   <body class="brew-bod">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -49,11 +46,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/search_brew"
-                >Search</a
-              >
-            </li> -->
             <li class="nav-item">
               <a href="/brewery_lookup" class="nav-link active"
                 >10 Random Breweries</a
