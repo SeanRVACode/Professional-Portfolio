@@ -1,23 +1,71 @@
+from flask import Flask, render_template, redirect, request, flash
+from flask_bootstrap import Bootstrap5
+import os
 import re
 from urllib.parse import urlencode
-
-import requests
-from flask import Flask, render_template, request, flash
-from flask_bootstrap import Bootstrap5
 from werkzeug.exceptions import HTTPException
 import json
+import requests
+import sys
 
 app = Flask(__name__)
-app.secret_key = "testkey"
+app.secret_key = os.environ.get("SECRET_KEY")
 Bootstrap5(app)
-
 
 # Default URL for Openbrewerydb
 DEFAULT_URL = "https://api.openbrewerydb.org/v1/breweries"
 
 
-@app.route("/brewery_lookup")
+@app.route("/")
 def home():
+    thumb_path = ".static/assets/img/portfolio/thumbnails/"
+    full_path = ".static/assets/img/portfolio/fullsize/"
+    return render_template("index.html", thumb_path=thumb_path, full_path=full_path)
+
+
+# Handles the redirect for thumbnail images so I don't have to type url_for a ton
+@app.route("/assets/img/portfolio/thumbnails/<img>")
+def thumbnails(img):
+    return redirect(f"/static/assets/portfolio/thumbnails/{img}")
+
+
+@app.route("/assets/img/portfolio/fullsize/<img>")
+def fullsize(img):
+    return redirect("/static/assets/portfolio/fullsize/img")
+
+
+@app.route("/returnchecker")
+def taxReturnChecker():
+    return render_template("taxReturnchecker.html", status="In Progress")
+
+
+@app.route("/getstatus", methods=["GET", "POST"])
+def getStatus():
+    # status_messages = ['Training Room Is Down. Delays expected.',
+    # 'In the Dumpster on Fire','Sent to the wrong Client.',
+    # 'Still waiting for you to sign that Engagement Letter.',
+    # 'Lost in the Bermuda Triangle of Paperwork.',
+    # "Currently on a lunch date with Murphy's law.",
+    # 'Stuck in the "Quick Question" rabbit hole.']
+    # if request.method == 'POST':
+
+    #     status = random.choice(status_messages)
+    #     return render_template('taxReturnchecker.html',status=status)
+    return render_template("taxReturnchecker.html", status="In Progress")
+
+
+@app.route("/verification", methods=["GET", "POST"])
+def login():
+    return render_template("verification.html")
+
+
+@app.route("/logout")
+def logout():
+    return render_template("login.html")
+
+
+@app.route("/brewery_lookup")
+def lookup():
     data = get_random_breweries()
     headers_list = proper_names(data)
     return render_template("brewery_lookup.html", data=data, headers=headers_list)
@@ -36,9 +84,7 @@ def search():
             return render_template("search.html")
         else:
             headers_list = proper_names(json_data)
-            return render_template(
-                "brewery_lookup.html", data=json_data, headers=headers_list
-            )
+            return render_template("brewery_lookup.html", data=json_data, headers=headers_list)
     else:
         # Default case for GET request
         return render_template("search.html")
