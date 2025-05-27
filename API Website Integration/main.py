@@ -84,7 +84,7 @@ def search():
             return render_template("search.html")
         else:
             headers_list = proper_names(json_data)
-            return render_template("brewery_lookup.html", data=json_data, headers=headers_list)
+            return render_template("search-a-brew.html", data=json_data, headers=headers_list)
     else:
         # Default case for GET request
         return render_template("search.html")
